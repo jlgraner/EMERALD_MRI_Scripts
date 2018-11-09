@@ -4,19 +4,19 @@ import logging, time
 import emerald_dwi_preproc as edp
 
 
-base_input_dir = '[Subject BIDS DWI]'
-base_output_dir = '[BIDS dwiprep sub ses]'
+base_input_dir = '[subject BIDS dwi]'
+base_output_dir = '[subject dwiprep dir]'
 
 
 sub_list = [
-            'EM9999'
+            'UT9999'
             ]
 
 
 session = 'usertest'
 
 #Create log file
-log_dir = '[BIDS dwiprep logs]'
+log_dir = '[dwiprep logs]'
 if not os.path.exists(log_dir):
     print('Creating log file output directory: {}'.format(log_dir))
     os.makedirs(log_dir)
@@ -66,6 +66,17 @@ for subject in sub_list:
     bvec_file = os.path.join(input_dir, bvec_name)
     bval_file = os.path.join(input_dir, bval_name)
 
+    #Put together the reverse-phase-encode file name and make sure it is there
+    rpe_name = 'sub-{sub}_ses-{ses}_acq-rpe_dwi.nii.gz'.format(sub=subject, ses=session)
+    rpe_file = os.path.join(input_dir, rpe_name)
+    if os.path.exists(rpe_file):
+        rpe_there = 1
+        logging.info('Reverse-phase-encode image found.')
+    else:
+        rpe_there = 0
+        logging.warning('No reverse-phase-encode image found!')
+        logging.warning('Distortion correction will not be done!')
+
     try:
         #Make sure the necessary input files exist
         for element in [input_file, bvec_file, bval_file]:
@@ -83,6 +94,16 @@ for subject in sub_list:
         #Create a variable for the current version of the data of interest
         working_file = input_file
 
+        #Create a NIFTI file of b0 images for distortion correction
+        if rpe_there:
+            b0_image_file = edp.create_b0(input_file, rpe_file, output_dir)
+            if b0_image_file is None:
+                logging.error('b0 image file creationg failed for subject {}, session {}!'.format(subject,session))
+                failed_runs.append([subject, session, 'b0 creation'])
+                raise RuntimeError
+        else:
+            b0_image_file = None
+
         #Run initial denoising
         working_file = edp.denoise(input_file, output_dir)
         if working_file is None:
@@ -98,7 +119,7 @@ for subject in sub_list:
             raise RuntimeError
 
         #Preprocess the dwi data
-        working_file, working_bvec, working_bval = edp.preproc(working_file, output_dir, bvec_file, bval_file)
+        working_file, working_bvec, working_bval = edp.preproc(working_file, output_dir, bvec_file, bval_file, b0_image_file)
         for element in [working_file, working_bvec, working_bval]:
             if element is None:
                 logging.error('Preprocessing of DWI data failed for subject {}, session {}!'.format(subject, session))

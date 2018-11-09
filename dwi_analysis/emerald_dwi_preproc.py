@@ -5,6 +5,29 @@ import subprocess
 import string
 
 
+def create_b0(input_file, rpe_file, output_dir):
+    #This function creates an image file with two volumes. The
+    #first volume is a b=0 volume from the DTI data set, the second
+    #volume is a b=0 volumes from a reverse-phase-encode-direction
+    #data set.
+
+    #Check for inputs
+    for element in [input_file, rpe_file]:
+        if not os.path.exists(element):
+            logging.error('Needed image cannot be found: {}'.format(element))
+            return None
+
+    #Create output file name
+    b0_image_name = 'sub-{sub}_ses-{ses}_dwi_b0s.nii.gz'
+    b0_image_file = os.path.join(output_dir, b0_image_name)
+
+    #Pull out the first volume of each image and put them into a single NIFTI
+    call_parts = ['3dTcat', '-prefix', b0_image_file, input_file+'[0]', rpe_file+'[0]']
+    if error_flag = subprocess.call(call_parts):
+        logging.error('Process failed: {}'.string.join(call_parts))
+        return None
+
+    return b0_image_file
 
 
 def create_output_name(input_name, suffix, output_dir):
@@ -70,7 +93,7 @@ def skull_strip(input_file, output_dir):
     return output_file
 
 
-def preproc(input_file, output_dir, bvec_file, bval_file):
+def preproc(input_file, output_dir, bvec_file, bval_file, b0_image_file):
     #Run the input data through dwipreproc
 
     #Make sure the input file exists
@@ -79,13 +102,22 @@ def preproc(input_file, output_dir, bvec_file, bval_file):
             logging.error('Input file cannot be found: {}'.format(element))
             return None, None, None
 
+    #Check for the b0 image if it should be there
+    if b0_image_file is not None:
+        if not os.path.exists(b0_image_file):
+            logging.error('b0 image should be there but cannot be found: {}'.format(b0_image_file))
+            return None, None, None
+
     #Put together the output file name
     output_file = create_output_name(input_file, '_prep', output_dir)
     output_bvec = create_output_name(bvec_file, '_prep', output_dir)
     output_bval = create_output_name(bval_file, '_prep', output_dir)
 
-    #Put together the skull strip call
-    call_parts = ['dwipreproc', input_file, output_file, '-rpe_none', '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
+    #Put together the preprocessing call
+    if b0_image_file is None:
+        call_parts = ['dwipreproc', input_file, output_file, '-rpe_none', '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
+    else:
+        call_parts = ['dwipreproc', input_file, output_file, '-rpe_pair', '-se_epi', b0_image_file, '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
     logging.info('Running: {}'.format(string.join(call_parts)))
 
     error_flag = subprocess.call(call_parts)
