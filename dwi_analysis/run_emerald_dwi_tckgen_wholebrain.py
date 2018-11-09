@@ -4,6 +4,7 @@ import os
 import logging, time
 import emerald_dwi_analysis as eda
 
+this_env = os.environ
 
 ses = 'day3'
 
@@ -12,23 +13,49 @@ ses = 'day3'
 #             ]
 
 sub_list = [
-            'EM9999'
+            'EM0001',
+            'EM0033',
+            'EM0036',
+            'EM0038',
+            'EM0066',
+            'EM0071',
+            'EM0088',
+            'EM0126',
+            'EM0153',
+            'EM0155',
+            'EM0162',
+            'EM0164',
+            'EM0174',
+            'EM0179',
+            'EM0182',
+            'EM0184',
+            'EM0187',
+            # 'EM0188',
+            'EM0192',
+            'EM0202',
+            'EM0206',
+            'EM0217',
+            # 'EM0219',
+            'EM0220',
+            'EM0223',
+            # 'EM0229',
+            'EM0240'
             ]
 
 track_num = '1M'
 sift_num = '100K'
 
 
-log_dir = '[Analysis MRI/tckgen_logs]'
+log_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/tckgen_logs/')
 if not os.path.exists(log_dir):
      print('Log directory not found, creating it: {}'.format(log_dir))
      os.makedirs(log_dir)
 
-base_input_dir = '[BIDS dwiprep sub ses]'
-base_output_dir = '[Analysis MRI sub DWI]'
-base_anat_dir = '[fmriprep sub anat]'
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
+base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
 
-tract_mask_dir = '[Analysis MRI tract creationg masks]'
+tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
 
 #Templates for input file names
 dti_in_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_mask.nii.gz'

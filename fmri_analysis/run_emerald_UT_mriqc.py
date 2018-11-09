@@ -3,13 +3,14 @@ import subprocess
 import os
 import string
 
+
 this_env = os.environ
 
-input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
-output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/mriqc')
+input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD_UT')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/mriqc_UT')
 
 subs_to_run = [
-               'EM0291'
+               'UT0052'
                ]
 
 

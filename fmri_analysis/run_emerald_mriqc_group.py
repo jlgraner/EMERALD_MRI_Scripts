@@ -3,10 +3,10 @@ import subprocess
 import os
 import string
 
+this_env = os.environ
 
-
-input_dir = '[BIDS EMERALD]'
-output_dir = '[BIDS mriqc]'
+input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/mriqc')
 
 
 call_parts = [

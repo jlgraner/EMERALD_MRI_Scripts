@@ -3,9 +3,10 @@ import os, sys
 import logging, time
 import emerald_dwi_preproc as edp
 
+this_env = os.environ
 
-base_input_dir = '[subject BIDS dwi]'
-base_output_dir = '[subject dwiprep dir]'
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD/sub-{sub}/ses-{ses}/dwi')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}')
 
 
 sub_list = [
@@ -16,7 +17,7 @@ sub_list = [
 session = 'usertest'
 
 #Create log file
-log_dir = '[dwiprep logs]'
+log_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/logs')
 if not os.path.exists(log_dir):
     print('Creating log file output directory: {}'.format(log_dir))
     os.makedirs(log_dir)

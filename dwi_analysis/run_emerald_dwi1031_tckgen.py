@@ -6,41 +6,9 @@ import emerald_dwi_analysis as eda
 
 this_env = os.environ
 
-ses = 'day3'
-
 sub_list = [
-            'EM0206'
+            'UT0100'
             ]
-
-# sub_list = [
-            # 'EM0001',
-            # 'EM0033',
-            # 'EM0036',
-            # 'EM0038',
-            # 'EM0066',
-            # 'EM0071',
-            # 'EM0088',
-            # 'EM0126',
-            # 'EM0153',
-            # 'EM0155',
-            # 'EM0162',
-            # 'EM0164',
-            # 'EM0174',
-            # 'EM0179',
-            # 'EM0182',
-            # 'EM0184',
-            # 'EM0187',
-            # # 'EM0188',
-            # 'EM0192',
-            # 'EM0202',
-            # 'EM0206',
-            # 'EM0217',
-            # 'EM0219',
-            # 'EM0220',
-            # 'EM0223',
-            # 'EM0229',
-            # 'EM0240'
-            # ]
 
 tract_list = [
               'R_SLFII',
@@ -58,17 +26,17 @@ if not os.path.exists(log_dir):
      print('Log directory not found, creating it: {}'.format(log_dir))
      os.makedirs(log_dir)
 
-base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
-base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/User_Test_Data/UserTest_10312018_BIDS/dwi_preproc_test/')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/User_Test_Data/UserTest_10312018_BIDS/dwi_preproc_test/')
+base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/User_Test_Data/fmriprep/sub-{sub}/anat/')
 
 tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
 
 #Templates for input file names
-dti_in_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_mask.nii.gz'
-fod_in_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_FOD.nii.gz'
-bvec_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bvec'
-bval_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bval'
+dti_in_temp = 'dwi_dn_ss_prepnorpe_ss_bc_mask.nii.gz'
+fod_in_temp = 'dwi_dn_ss_prepnorpe_ss_bc_FOD.nii.gz'
+bvec_temp = 'fsl_prepnorpe.bvec'
+bval_temp = 'fsl_prepnorpe.bval'
 
 #Standard space tract mask and inclusion spheres
 tract_mask_temp = '{tract}_mask.nii.gz'
@@ -79,10 +47,12 @@ sub_tract_mask_temp = '{tract}_mask_sub-{sub}.nii.gz'
 sub_tract_spheres_temp = '{tract}_spheres_sub-{sub}.nii.gz'
 
 #Previously generated FA; used as reference image for Ants transforms
-fa_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
-transform_temp = 'sub-{sub}_ses-{ses}_T1w_space-MNI152NLin2009cAsym_target-T1w_warp.h5'
+# fa_temp = 'sub-{sub}_ses-{ses}_run-{run}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
+transform_temp = 'sub-{sub}_T1w_space-MNI152NLin2009cAsym_target-T1w_warp.h5'
 
-tckgen_out_temp = 'sub-{sub}_ses-{ses}_{tract}.tck'
+fa_temp = 'dwi_dn_ss_prepnorpe_ss_bc_tensor_FA.nii.gz'
+
+tckgen_out_temp = 'sub-{sub}_{tract}_norpe.tck'
 
 good_runs = []
 failed_runs = []
@@ -110,15 +80,16 @@ for sub in sub_list:
      rootlogger.addHandler(fileHandler)
 
      #Set up input file names
-     sub_input_dir = base_input_dir.format(sub=sub, ses=ses)
-     sub_output_dir = base_output_dir.format(sub=sub)
-     sub_anat_dir = base_anat_dir.format(sub=sub, ses=ses)
-     input_dti = os.path.join(sub_input_dir, dti_in_temp.format(sub=sub,ses=ses))
-     input_fod = os.path.join(sub_input_dir, fod_in_temp.format(sub=sub,ses=ses))
-     bvec = os.path.join(sub_input_dir, bvec_temp.format(sub=sub,ses=ses))
-     bval = os.path.join(sub_input_dir, bval_temp.format(sub=sub,ses=ses))
-     transform_file = os.path.join(sub_anat_dir, transform_temp.format(sub=sub, ses=ses))
-     ref_image = os.path.join(sub_input_dir, fa_temp.format(sub=sub,ses=ses))
+     sub_input_dir = base_input_dir
+     sub_output_dir = base_output_dir
+     # sub_anat_dir = base_anat_dir.format(sub=sub, ses=ses)
+     sub_anat_dir = base_anat_dir.format(sub=sub)
+     input_dti = os.path.join(sub_input_dir, dti_in_temp)
+     input_fod = os.path.join(sub_input_dir, fod_in_temp)
+     bvec = os.path.join(sub_input_dir, bvec_temp)
+     bval = os.path.join(sub_input_dir, bval_temp)
+     transform_file = os.path.join(sub_anat_dir, transform_temp.format(sub=sub))
+     ref_image = os.path.join(sub_input_dir, fa_temp)
 
      #Create output directory if it is not there
      if not os.path.exists(sub_output_dir):
@@ -136,18 +107,24 @@ for sub in sub_list:
                sub_tract_mask = os.path.join(sub_output_dir, sub_tract_mask_temp.format(tract=tract, sub=sub))
                sub_sphere_mask = os.path.join(sub_output_dir, sub_tract_spheres_temp.format(tract=tract, sub=sub))
 
-               tckgen_out = os.path.join(sub_output_dir, tckgen_out_temp.format(sub=sub, ses=ses, tract=tract))
+               tckgen_out = os.path.join(sub_output_dir, tckgen_out_temp.format(sub=sub, tract=tract))
 
                #Transform mask and spheres into subject space
-               okay = eda.transform_roi(in_image=tract_mask, out_image=sub_tract_mask, ref=ref_image, transform=transform_file)
-               if okay is None:
-                    logging.error('Transforming tract mask to subject space failed!')
-                    raise RuntimeError('Transforming tract mask to subject space failed!')
+               if not os.path.exists(sub_tract_mask):
+                 okay = eda.transform_roi(in_image=tract_mask, out_image=sub_tract_mask, ref=ref_image, transform=transform_file)
+                 if okay is None:
+                      logging.error('Transforming tract mask to subject space failed!')
+                      raise RuntimeError('Transforming tract mask to subject space failed!')
+               else:
+                 logging.info('Subject tract mask already exists: {}'.format(sub_tract_mask))
 
-               okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
-               if okay is None:
-                    logging.error('Transforming sphere mask to subject space failed!')
-                    raise RuntimeError('Transforming sphere mask to subject space failed!')
+               if not os.path.exists(sub_sphere_mask):
+                 okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
+                 if okay is None:
+                      logging.error('Transforming sphere mask to subject space failed!')
+                      raise RuntimeError('Transforming sphere mask to subject space failed!')
+               else:
+                logging.info('Subject sphere mask already exists: {}'.format(sub_sphere_mask))
 
                #Run tckgen to generate tracks
                okay = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=sub_tract_mask, include=sub_sphere_mask, bval=bval, bvec=bvec, track_num=track_num)

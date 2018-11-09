@@ -5,12 +5,14 @@ import string
 
 this_env = os.environ
 
-input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
-output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/TEMP')
+input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD_UT')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT')
 fs_license = '/usr/local/freesurfer/license.txt'
 
 subs_to_run = [
-               'EM0291'
+               # 'UT0003',
+               # 'UT0004',
+               'UT0052'
                ]
 
 
@@ -32,7 +34,6 @@ for sub in subs_to_run:
                   '/data',
                   '/out',
                   'participant',
-                  '--task', 'emoreg',
                   '--use-aroma',
                   '--ignore-aroma-denoising-errors',
                   '--output-space',
@@ -40,8 +41,8 @@ for sub in subs_to_run:
                   '--template-resampling-grid',
                   'native',
                   '--nthreads',
-                  '4',
-                  # '--low-mem',
+                  '2',
+                  '--low-mem',
                   # '-vvv',
                   '--fs-no-reconall',
                   '--participant_label',

@@ -4,9 +4,37 @@ import numpy
 import math
 import string
 
+this_env = os.environ
+
 def main():
     sub_list = [
-                'EM9999'
+                'EM0001',
+                'EM0033',
+                'EM0036',
+                'EM0038',
+                'EM0066',
+                'EM0071',
+                'EM0088',
+                'EM0126',
+                'EM0153',
+                'EM0155',
+                'EM0162',
+                'EM0164',
+                'EM0174',
+                'EM0179',
+                'EM0182',
+                'EM0184',
+                'EM0187',
+                # 'EM0188',
+                'EM0192',
+                'EM0202',
+                'EM0206',
+                'EM0217',
+                # 'EM0219',
+                'EM0220',
+                'EM0223',
+                # 'EM0229',
+                'EM0240'
                 ]
 
 
@@ -20,11 +48,11 @@ def main():
     sift_prefix = 'sift5K_'
     wholebrain_sift_prefix = 'sift100K_'
 
-    base_input_dir = '[Analysis subject DWI dir]'
+    base_input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI')
     input_file_template = 'sub-{sub}_ses-day3_{tract}_{sift}meanFA.txt'
     wholebrain_input_file_template = 'sub-{sub}_ses-day3_wholebrain_{wbsift}meanFA.txt'
 
-    output_dir = '[Analysis MRI/DTI_Tract_Metrics]'
+    output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_Tract_Metrics')
     subwise_output_file_template = '{tract}_sub-wise_group_FA.csv'
 
     fa_dict = {}

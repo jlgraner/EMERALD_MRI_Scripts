@@ -5,21 +5,21 @@ import emerald_csvconvert as ecc
 
 this_env = os.environ
 
-base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Orig/Data/Func/')
-base_fsl_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{em_id}/Func/Condition_files')
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/UT_Orig/Data/Func/')
+base_fsl_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{}/Func/Condition_files')
 
 em_to_biac_file = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/EM_to_BIAC.json')
 with open(em_to_biac_file) as fd:
     em_to_biac = json.loads(fd.read())
 
 em_to_run = [
-            'EM0291'
+            'UT0014'
             ]
 
 for em_id in em_to_run:
     biac_ses = em_to_biac['em_to_biac'][em_id]
 
-    output_dir = base_fsl_output_dir.format(em_id=em_id)
+    output_dir = base_fsl_output_dir.format(em_id)
 
     for run_num in ['run1', 'run2', 'run3', 'run4']:
         file_search_string = 'emerald_emoregData_{}_{}_'.format(em_id, run_num)
