@@ -10,11 +10,11 @@ base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{su
 
 
 sub_list = [
-            'UT9999'
+            'EM0291'
             ]
 
 
-session = 'usertest'
+session = 'day3'
 
 #Create log file
 log_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/logs')
