@@ -4,7 +4,7 @@ import logging
 
 this_env = os.environ
 
-input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/{sub}/Func/Second_level_allruns.gfeat')
+input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/Second_level_allruns.gfeat')
 output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
 
 output_file_template = 'Group_ROI_means_{cope}.txt'
@@ -23,34 +23,36 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'Test_area', 'ROI_t
 
 ses = 'day3'
 
-# subs_to_run = [
-#               'sub-EM0001',
-#               'sub-EM0033',
-#               'sub-EM0036',
-#               'sub-EM0038',
-#               'sub-EM0066',
-#               'sub-EM0071',
-#               'sub-EM0088',
-#               'sub-EM0126',
-#               'sub-EM0153',
-#               'sub-EM0155',
-#               'sub-EM0162',
-#               'sub-EM0164',
-#               'sub-EM0174',
-#               'sub-EM0179',
-#               'sub-EM0184',
-#               'sub-EM0187',
-#               'sub-EM0192',
-#               'sub-EM0202',
-#               'sub-EM0206',
-#               'sub-EM0217',
-#               'sub-EM0219',
-#               'sub-EM0220',
-#               'sub-EM0223',
-#               'sub-EM0240'
-#                ]
+subs_to_run = [
+              'EM0001',
+              'EM0033',
+              'EM0036',
+              'EM0038',
+              'EM0066',
+              'EM0071',
+              'EM0088',
+              'EM0126',
+              'EM0153',
+              'EM0155',
+              'EM0162',
+              'EM0164',
+              'EM0174',
+              'EM0179',
+              'EM0184',
+              'EM0187',
+              # 'EM0188',
+              'EM0192',
+              'EM0202',
+              'EM0206',
+              'EM0217',
+              'EM0219',
+              'EM0220',
+              'EM0223',
+              'EM0229',
+              'EM0240'
+                  ]
 
-subs_to_run = ['sub-EM0179']
+# subs_to_run = ['sub-EM0179']
 
 #Create a dictionary of all ROI files.
 #Keys will be region names, values will be full file path/names.
@@ -73,7 +75,7 @@ if not os.path.exists(roi_dir):
 else:
     for element in os.listdir(roi_dir):
         file_parts = element.split('_')
-        if (len(file_parts)==4) and (file_parts[0]=='ROI') and (file_parts[-1]=='resamp.nii.gz'):
+        if (len(file_parts)==4) and (file_parts[0]=='ROI') and (file_parts[-1]=='2mmresamp.nii.gz'):
             #We've found an ROI image file
             print('Found ROI file: {}'.format(element))
             roi_dict[file_parts[1]] = os.path.join(roi_dir, element)
