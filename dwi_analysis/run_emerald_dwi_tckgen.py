@@ -82,7 +82,7 @@ sub_tract_spheres_temp = '{tract}_spheres_sub-{sub}.nii.gz'
 #Previously generated FA; used as reference image for Ants transforms
 fa_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
 # transform_temp = 'sub-{sub}_ses-{ses}_T1w_space-MNI152NLin2009cAsym_target-T1w_warp.h5'
-transform_temp = 'sub-{sub}_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5'
+transform_temp = 'sub-{sub}_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5'
 
 tckgen_out_temp = 'sub-{sub}_ses-{ses}_{tract}.tck'
 
