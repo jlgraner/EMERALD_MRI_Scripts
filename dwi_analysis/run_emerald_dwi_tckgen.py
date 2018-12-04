@@ -9,7 +9,7 @@ this_env = os.environ
 ses = 'day3'
 
 sub_list = [
-            'EM0206'
+            'EM0291'
             ]
 
 # sub_list = [
@@ -60,7 +60,8 @@ if not os.path.exists(log_dir):
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
 base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
-base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
+# base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
+base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
 tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
 
@@ -80,7 +81,8 @@ sub_tract_spheres_temp = '{tract}_spheres_sub-{sub}.nii.gz'
 
 #Previously generated FA; used as reference image for Ants transforms
 fa_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
-transform_temp = 'sub-{sub}_ses-{ses}_T1w_space-MNI152NLin2009cAsym_target-T1w_warp.h5'
+# transform_temp = 'sub-{sub}_ses-{ses}_T1w_space-MNI152NLin2009cAsym_target-T1w_warp.h5'
+transform_temp = 'sub-{sub}_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5'
 
 tckgen_out_temp = 'sub-{sub}_ses-{ses}_{tract}.tck'
 

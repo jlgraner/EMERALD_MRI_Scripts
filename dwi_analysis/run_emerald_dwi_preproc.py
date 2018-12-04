@@ -97,7 +97,9 @@ for subject in sub_list:
 
         #Create a NIFTI file of b0 images for distortion correction
         if rpe_there:
-            b0_image_file = edp.create_b0(input_file, rpe_file, output_dir)
+            logging.info('Creating B0 image NIFTI...')
+            b0_image_file = edp.create_b0(input_file, rpe_file, output_dir, subject, session)
+            b0_image_file = b0_image_file.format(sub=subject, ses=session)
             if b0_image_file is None:
                 logging.error('b0 image file creationg failed for subject {}, session {}!'.format(subject,session))
                 failed_runs.append([subject, session, 'b0 creation'])

@@ -5,7 +5,7 @@ import subprocess
 import string
 
 
-def create_b0(input_file, rpe_file, output_dir):
+def create_b0(input_file, rpe_file, output_dir, sub, ses):
     #This function creates an image file with two volumes. The
     #first volume is a b=0 volume from the DTI data set, the second
     #volume is a b=0 volumes from a reverse-phase-encode-direction
@@ -18,12 +18,13 @@ def create_b0(input_file, rpe_file, output_dir):
             return None
 
     #Create output file name
-    b0_image_name = 'sub-{sub}_ses-{ses}_dwi_b0s.nii.gz'
+    b0_image_name = 'sub-{sub}_ses-{ses}_dwi_b0s.nii.gz'.format(sub=sub, ses=ses)
     b0_image_file = os.path.join(output_dir, b0_image_name)
 
     #Pull out the first volume of each image and put them into a single NIFTI
     call_parts = ['3dTcat', '-prefix', b0_image_file, input_file+'[0]', rpe_file+'[0]']
-    if error_flag = subprocess.call(call_parts):
+    error_flag = subprocess.call(call_parts)
+    if error_flag:
         logging.error('Process failed: {}'.string.join(call_parts))
         return None
 
