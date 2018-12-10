@@ -28,26 +28,34 @@ def transform_roi(in_image, out_image, ref, transform):
     else:
         return 1
 
-def generate_tracks(in_dwi, in_fod, out_tck, mask, include, bval, bvec, track_num):
+def generate_tracks(in_dwi, in_fod, out_tck, mask, include_list, bval, bvec, track_num):
     #Generate tracktography
-    call_parts = [
-                  'tckgen',
-                  '-seed_image', in_dwi, in_fod, out_tck,
-                  '-mask', mask,
-                  '-include', include,
-                  '-select', track_num,
-                  '-maxlength', '250',
-                  '-fslgrad', bvec, bval,
-                  '-seeds', '0'
+    call_beginning = [
+                      'tckgen',
+                      '-seed_image', in_dwi, in_fod, out_tck,
+                      '-mask', mask
+                      ]
+
+    for element in include_list:
+        call_beginning.append('-include')
+        call_beginning.append(element)
+
+    call_ending = [
+                   '-select', track_num,
+                   '-maxlength', '250',
+                   '-fslgrad', bvec, bval,
+                   '-seeds', '0'
                   # '-force'
                   ]
+
+    call_parts = call_beginning + call_ending
 
     logging.info('Generating tracks...')
     logging.info('in_dwi: {}'.format(in_dwi))
     logging.info('in_fod: {}'.format(in_fod))
     logging.info('out_tck: {}'.format(out_tck))
     logging.info('mask: {}'.format(mask))
-    logging.info('include: {}'.format(include))
+    logging.info('include: {}'.format(include_list))
     logging.info('bval: {}'.format(bval))
     logging.info('bvec: {}'.format(bvec))
     logging.info('track_num: {}'.format(track_num))

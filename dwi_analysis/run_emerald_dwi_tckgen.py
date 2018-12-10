@@ -9,7 +9,7 @@ this_env = os.environ
 ses = 'day3'
 
 sub_list = [
-            'EM0291'
+            'EM0001'
             ]
 
 # sub_list = [
@@ -49,8 +49,10 @@ tract_list = [
               'L_UNC'
               ]
 
-track_num = '20K'
-sift_num = '5K'
+# track_num = '20K'
+track_num = '2'
+# sift_num = '5K'
+sift_num = '1'
 
 
 log_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/tckgen_logs/')
@@ -59,7 +61,8 @@ if not os.path.exists(log_dir):
      os.makedirs(log_dir)
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
+# base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/sub-{sub}/DWI/')
 # base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
 base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
@@ -71,13 +74,19 @@ fod_in_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_FOD.nii.gz'
 bvec_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bvec'
 bval_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bval'
 
-#Standard space tract mask and inclusion spheres
-tract_mask_temp = '{tract}_mask.nii.gz'
-tract_sphere_temp = '{tract}_spheres.nii.gz'
+#Standard space tract mask and inclusion spheres (input to transform function)
+tract_mask_temp = os.path.join(tract_mask_dir, '{tract}_mask.nii.gz')
+tract_sphere1_temp = os.path.join(tract_mask_dir, '{tract}_sphere1.nii.gz')
+tract_sphere2_temp = os.path.join(tract_mask_dir, '{tract}_sphere2.nii.gz')
+tract_sphere3_temp = os.path.join(tract_mask_dir, '{tract}_sphere3.nii.gz')
+mask_list=[tract_mask_temp, tract_sphere1_temp, tract_sphere2_temp, tract_sphere3_temp]
 
-#Subject-space tract mask and inclusion spheres
-sub_tract_mask_temp = '{tract}_mask_sub-{sub}.nii.gz'
-sub_tract_spheres_temp = '{tract}_spheres_sub-{sub}.nii.gz'
+#Subject-space tract mask and inclusion spheres (output of transform function)
+sub_tract_mask_temp = os.path.join(base_output_dir, '{tract}_mask_sub-{sub}.nii.gz')
+sub_tract_sphere1_temp = os.path.join(base_output_dir, '{tract}_sphere1_sub-{sub}.nii.gz')
+sub_tract_sphere2_temp = os.path.join(base_output_dir, '{tract}_sphere2_sub-{sub}.nii.gz')
+sub_tract_sphere3_temp = os.path.join(base_output_dir, '{tract}_sphere3_sub-{sub}.nii.gz')
+sub_mask_list=[sub_tract_mask_temp, sub_tract_sphere1_temp, sub_tract_sphere2_temp, sub_tract_sphere3_temp]
 
 #Previously generated FA; used as reference image for Ants transforms
 fa_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
@@ -131,28 +140,31 @@ for sub in sub_list:
      for tract in tract_list:
           try:
                #Set up mask and sphere file names
-               tract_mask = os.path.join(tract_mask_dir, tract_mask_temp.format(tract=tract))
-               tract_spheres = os.path.join(tract_mask_dir, tract_sphere_temp.format(tract=tract))
+               # tract_mask = os.path.join(tract_mask_dir, tract_mask_temp.format(tract=tract))
+               # tract_spheres = os.path.join(tract_mask_dir, tract_sphere_temp.format(tract=tract))
+               mask_list=[tract_mask_temp.format(tract=tract), tract_sphere1_temp.format(tract=tract), tract_sphere2_temp.format(tract=tract), tract_sphere3_temp.format(tract=tract)]
 
                #Set up subject-space mask and sphere file names
-               sub_tract_mask = os.path.join(sub_output_dir, sub_tract_mask_temp.format(tract=tract, sub=sub))
-               sub_sphere_mask = os.path.join(sub_output_dir, sub_tract_spheres_temp.format(tract=tract, sub=sub))
+               # sub_tract_mask = os.path.join(sub_output_dir, sub_tract_mask_temp.format(tract=tract, sub=sub))
+               # sub_sphere_mask = os.path.join(sub_output_dir, sub_tract_spheres_temp.format(tract=tract, sub=sub))
+               sub_mask_list=[sub_tract_mask_temp.format(tract=tract,sub=sub), sub_tract_sphere1_temp.format(tract=tract,sub=sub), sub_tract_sphere2_temp.format(tract=tract,sub=sub), sub_tract_sphere3_temp.format(tract=tract,sub=sub)]
 
                tckgen_out = os.path.join(sub_output_dir, tckgen_out_temp.format(sub=sub, ses=ses, tract=tract))
 
                #Transform mask and spheres into subject space
-               okay = eda.transform_roi(in_image=tract_mask, out_image=sub_tract_mask, ref=ref_image, transform=transform_file)
-               if okay is None:
-                    logging.error('Transforming tract mask to subject space failed!')
-                    raise RuntimeError('Transforming tract mask to subject space failed!')
+               for in_mask,out_mask in zip(mask_list,sub_mask_list):
+                   okay = eda.transform_roi(in_image=in_mask, out_image=out_mask, ref=ref_image, transform=transform_file)
+                   if okay is None:
+                        logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
+                        raise RuntimeError('Transforming mask to subject space failed!')
 
-               okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
-               if okay is None:
-                    logging.error('Transforming sphere mask to subject space failed!')
-                    raise RuntimeError('Transforming sphere mask to subject space failed!')
+               # okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
+               # if okay is None:
+               #      logging.error('Transforming sphere mask to subject space failed!')
+               #      raise RuntimeError('Transforming sphere mask to subject space failed!')
 
                #Run tckgen to generate tracks
-               okay = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=sub_tract_mask, include=sub_sphere_mask, bval=bval, bvec=bvec, track_num=track_num)
+               okay = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=sub_mask_list[0], include_list=sub_mask_list[1:], bval=bval, bvec=bvec, track_num=track_num)
                if okay is None:
                     logging.error('Tract generation failed!')
                     raise RuntimeError('Tract generation failed!')
