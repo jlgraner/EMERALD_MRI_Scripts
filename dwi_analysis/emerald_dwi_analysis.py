@@ -44,8 +44,8 @@ def generate_tracks(in_dwi, in_fod, out_tck, mask, include_list, bval, bvec, tra
                    '-select', track_num,
                    '-maxlength', '250',
                    '-fslgrad', bvec, bval,
-                   '-seeds', '0'
-                  # '-force'
+                   '-seeds', '0',
+                  '-force'
                   ]
 
     call_parts = call_beginning + call_ending
@@ -75,8 +75,8 @@ def generate_wholebrain_tracks(in_dwi, in_fod, out_tck, bval, bvec, track_num):
                   '-seed_image', in_dwi, in_fod, out_tck,
                   '-select', track_num,
                   '-maxlength', '250',
-                  '-fslgrad', bvec, bval
-                  # '-force'
+                  '-fslgrad', bvec, bval,
+                  '-force'
                   ]
 
     logging.info('Generating whole-brain tracks...')
@@ -102,8 +102,8 @@ def sift_tracks(in_tck, in_fod, out_sift, sift_num):
                   in_tck,
                   in_fod,
                   out_sift,
-                  '-term_number', sift_num
-                  # '-force'
+                  '-term_number', sift_num,
+                  '-force'
                   ]
 
     logging.info('Sifting tracks...')
@@ -122,8 +122,8 @@ def sample_FA(in_tck, in_fa, out_fa):
                   in_tck,
                   in_fa,
                   out_fa,
-                  '-stat_tck', 'mean'
-                  # '-force'
+                  '-stat_tck', 'mean',
+                  '-force'
                   ]
 
     logging.info('Sampling FA...')

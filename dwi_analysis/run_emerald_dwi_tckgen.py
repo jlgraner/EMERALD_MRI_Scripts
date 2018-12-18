@@ -9,7 +9,7 @@ this_env = os.environ
 ses = 'day3'
 
 sub_list = [
-            'EM0001'
+            'EM0038'
             ]
 
 # sub_list = [
@@ -158,10 +158,10 @@ for sub in sub_list:
                         logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
                         raise RuntimeError('Transforming mask to subject space failed!')
 
-               # okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
-               # if okay is None:
-               #      logging.error('Transforming sphere mask to subject space failed!')
-               #      raise RuntimeError('Transforming sphere mask to subject space failed!')
+               okay = eda.transform_roi(in_image=tract_spheres, out_image=sub_sphere_mask, ref=ref_image, transform=transform_file)
+               if okay is None:
+                    logging.error('Transforming sphere mask to subject space failed!')
+                    raise RuntimeError('Transforming sphere mask to subject space failed!')
 
                #Run tckgen to generate tracks
                okay = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=sub_mask_list[0], include_list=sub_mask_list[1:], bval=bval, bvec=bvec, track_num=track_num)
@@ -177,11 +177,13 @@ for sub in sub_list:
                     raise RuntimeError('Tract sift failed!')
 
                #Produce output metrics
-               out_sample = '{}_meanFA.txt'.format(out_sift.split('.tck')[0])
-               okay = eda.sample_FA(in_tck=out_sift, in_fa=ref_image, out_fa=out_sample)
-               if okay is None:
-                    logging.error('FA sampling failed!')
-                    raise RuntimeError('FA sampling failed!')
+               # out_sample = '{}_meanFA.txt'.format(out_sift.split('.tck')[0])
+               out_sample = '{}_meanFA.txt'.format(tckgen_out.split('.tck')[0])
+               # okay = eda.sample_FA(in_tck=out_sift, in_fa=ref_image, out_fa=out_sample)
+               # okay = eda.sample_FA(in_tck=tckgen_out, in_fa=ref_image, out_fa=out_sample)
+               # if okay is None:
+               #      logging.error('FA sampling failed!')
+               #      raise RuntimeError('FA sampling failed!')
 
                good_runs.append([sub, tract])
 

@@ -12,7 +12,7 @@ fs_license = '/usr/local/freesurfer/license.txt'
 subs_to_run = [
                # 'UT0003',
                # 'UT0004',
-               'UT0052'
+               'UT0025'
                ]
 
 
@@ -30,7 +30,7 @@ for sub in subs_to_run:
                   '{}:/out'.format(output_dir),
                   '-v',
                   '{}:/opt/freesurfer/license.txt'.format(fs_license),
-                  'poldracklab/fmriprep:1.0.15',
+                  'poldracklab/fmriprep:latest',
                   '/data',
                   '/out',
                   'participant',
@@ -40,6 +40,7 @@ for sub in subs_to_run:
                   'template',
                   '--template-resampling-grid',
                   'native',
+                  '--task', 'emoreg',
                   '--nthreads',
                   '2',
                   '--low-mem',
