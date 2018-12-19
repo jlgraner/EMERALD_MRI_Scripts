@@ -45,8 +45,8 @@ sub_list = [
 tract_list = [
               'R_SLFII',
               'L_SLFII',
-              'R_UNC',
-              'L_UNC'
+              'R_Unc',
+              'L_Unc'
               ]
 
 # track_num = '20K'
@@ -66,7 +66,8 @@ base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMas
 # base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
 base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
-tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
+# tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
+tract_mask_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/10mm_spheres_test_rois/')
 
 #Templates for input file names
 dti_in_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_mask.nii.gz'
@@ -75,18 +76,18 @@ bvec_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bvec'
 bval_temp = 'sub-{sub}_ses-{ses}_dwi_prep.bval'
 
 #Standard space tract mask and inclusion spheres (input to transform function)
-tract_mask_temp = os.path.join(tract_mask_dir, '{tract}_mask.nii.gz')
-tract_sphere1_temp = os.path.join(tract_mask_dir, '{tract}_sphere1.nii.gz')
-tract_sphere2_temp = os.path.join(tract_mask_dir, '{tract}_sphere2.nii.gz')
-tract_sphere3_temp = os.path.join(tract_mask_dir, '{tract}_sphere3.nii.gz')
-mask_list=[tract_mask_temp, tract_sphere1_temp, tract_sphere2_temp, tract_sphere3_temp]
+# tract_mask_temp = os.path.join(tract_mask_dir, '{tract}_mask.nii.gz')
+# tract_sphere1_temp = os.path.join(tract_mask_dir, '{tract}_sphere1.nii.gz')
+# tract_sphere2_temp = os.path.join(tract_mask_dir, '{tract}_sphere2.nii.gz')
+# tract_sphere3_temp = os.path.join(tract_mask_dir, '{tract}_sphere3.nii.gz')
+# mask_list=[tract_mask_temp, tract_sphere1_temp, tract_sphere2_temp, tract_sphere3_temp]
 
 #Subject-space tract mask and inclusion spheres (output of transform function)
-sub_tract_mask_temp = os.path.join(base_output_dir, '{tract}_mask_sub-{sub}.nii.gz')
-sub_tract_sphere1_temp = os.path.join(base_output_dir, '{tract}_sphere1_sub-{sub}.nii.gz')
-sub_tract_sphere2_temp = os.path.join(base_output_dir, '{tract}_sphere2_sub-{sub}.nii.gz')
-sub_tract_sphere3_temp = os.path.join(base_output_dir, '{tract}_sphere3_sub-{sub}.nii.gz')
-sub_mask_list=[sub_tract_mask_temp, sub_tract_sphere1_temp, sub_tract_sphere2_temp, sub_tract_sphere3_temp]
+# sub_tract_mask_temp = os.path.join(base_output_dir, '{tract}_mask_sub-{sub}.nii.gz')
+# sub_tract_sphere1_temp = os.path.join(base_output_dir, '{tract}_sphere1_sub-{sub}.nii.gz')
+# sub_tract_sphere2_temp = os.path.join(base_output_dir, '{tract}_sphere2_sub-{sub}.nii.gz')
+# sub_tract_sphere3_temp = os.path.join(base_output_dir, '{tract}_sphere3_sub-{sub}.nii.gz')
+# sub_mask_list=[sub_tract_mask_temp, sub_tract_sphere1_temp, sub_tract_sphere2_temp, sub_tract_sphere3_temp]
 
 #Previously generated FA; used as reference image for Ants transforms
 fa_temp = 'sub-{sub}_ses-{ses}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'
@@ -142,7 +143,16 @@ for sub in sub_list:
                #Set up mask and sphere file names
                # tract_mask = os.path.join(tract_mask_dir, tract_mask_temp.format(tract=tract))
                # tract_spheres = os.path.join(tract_mask_dir, tract_sphere_temp.format(tract=tract))
-               mask_list=[tract_mask_temp.format(tract=tract), tract_sphere1_temp.format(tract=tract), tract_sphere2_temp.format(tract=tract), tract_sphere3_temp.format(tract=tract)]
+               # mask_list=[tract_mask_temp.format(tract=tract), tract_sphere1_temp.format(tract=tract), tract_sphere2_temp.format(tract=tract), tract_sphere3_temp.format(tract=tract)]
+
+               tract_mask = eda.find_masks(tract_mask_dir, [tract, '_mask.nii.gz'])
+               if len(tract_mask) > 1:
+                  logging.error('More than one mask file found for tract: {}'.format(tract))
+                  logging.error('Files found: {}'.format(tract_mask))
+                  raise RuntimeError('Found more than one mask file!')
+
+               tract_mask = tract_mask[0]
+               include_mask_list = eda.find_masks(tract_mask_dir, [tract, '_include.nii.gz'])
 
                #Set up subject-space mask and sphere file names
                # sub_tract_mask = os.path.join(sub_output_dir, sub_tract_mask_temp.format(tract=tract, sub=sub))

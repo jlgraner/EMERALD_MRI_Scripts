@@ -3,6 +3,34 @@ import os
 import logging
 import subprocess
 
+this_code = 'emerald_dwi_analysis.py'
+
+def find_masks(dir_to_search, search_string_list):
+    #Return file paths/names in dir_to_search that contain all
+    #the strings in search_string_list
+
+    this_function = 'find_masks()'
+    files_to_return = []
+
+    #Make sure directory is there
+    if not os.path.exists(dir_to_search):
+      logging.error('Proposed mask directory not found: {}'.format(dir_to_search))
+      logging.error('Error from: {} -- {}'.format(this_code, this_function))
+      return 0
+
+    #List files in the directory
+    contents = os.listdir(dir_to_search)
+
+    for file_name in contents:
+      count = 0
+      for element in search_string_list:
+        if element in file_name:
+          count = count + 1
+      if count == len(search_string_list):
+        files_to_return.append(os.path.join(dir_to_search, file_name))
+
+    return files_to_return
+    
 
 def transform_roi(in_image, out_image, ref, transform):
     #Put an input image through antsApplyTransforms
