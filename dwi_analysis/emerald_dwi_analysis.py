@@ -30,10 +30,29 @@ def find_masks(dir_to_search, search_string_list):
         files_to_return.append(os.path.join(dir_to_search, file_name))
 
     return files_to_return
-    
 
-def transform_roi(in_image, out_image, ref, transform):
+
+def transform_roi(in_image, add_suffix, ref, transform):
     #Put an input image through antsApplyTransforms
+    this_function = 'transform_roi()'
+    #Create output file name
+    input_path, input_name = os.path.split(in_image)
+    if '.nii' not in input_name:
+      logging.error('Input image expected to be a .nii file!')
+      logging.error('input file name: {}'.format(input_name))
+      raise RuntimeError('Input image not a NIFTI file! -- {}, {}'.format(this_code,this_function))
+    if input_name[-7:] == '.nii.gz':
+      input_end = '.nii.gz'
+    elif input_name[-4:] == '.nii':
+      input_end = '.nii'
+    else:
+      logging.error('Input image name does not end in .nii or .nii.gz???')
+      raise RuntimeError('Input image file name should end in .nii or .nii.gz! -- {}, {}'.format(this_code,this_function))
+
+    input_prefix = input_name.split(input_end)[0]
+    output_name = '{}_{}{}'.format(input_prefix, add_suffix, input_end)
+    out_image = os.path.join(input_path, output_name)
+
     call_parts = [
                   'antsApplyTransforms',
                   '--float',
