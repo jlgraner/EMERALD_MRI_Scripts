@@ -1,6 +1,6 @@
 
 
-import os
+import os, shutil
 import logging, time
 import emerald_dwi_analysis as eda
 
@@ -43,16 +43,16 @@ sub_list = [
             # ]
 
 tract_list = [
-              'R_SLFII',
-              'L_SLFII',
+              # 'R_SLFII',
+              # 'L_SLFII',
               'R_Unc',
               'L_Unc'
               ]
 
 # track_num = '20K'
-track_num = '2'
+track_num = '50'
 # sift_num = '5K'
-sift_num = '1'
+sift_num = '40'
 
 
 log_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/tckgen_logs/')
@@ -112,6 +112,10 @@ for sub in sub_list:
           logging.info('Creating it: {}'.format(sub_output_dir))
           os.makedirs(sub_output_dir)
  
+     #Copy the reference FA image to the output directory,
+     #for easier visual QA
+     shutil.copy2(ref_image, sub_output_dir)
+
      for tract in tract_list:
           try:
                #Set up mask and sphere file names
@@ -144,7 +148,7 @@ for sub in sub_list:
                       subspace_include_roi_list.append(out_name)
 
                #Run tckgen to generate tracks
-               working_tract_file = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=subspace_mask, include_list=sub_mask_list[1:], bval=bval, bvec=bvec, track_num=track_num)
+               working_tract_file = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=subspace_mask, include_list=subspace_include_roi_list, bval=bval, bvec=bvec, track_num=track_num)
                if working_tract_file is None:
                     logging.error('Tract generation failed!')
                     raise RuntimeError('Tract generation failed!')
