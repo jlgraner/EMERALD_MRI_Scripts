@@ -73,7 +73,7 @@ def transform_roi(in_image, add_suffix, ref, transform):
         logging.error('Process failed: {}'.format(call_parts))
         return None
     else:
-        return 1
+        return out_image
 
 def generate_tracks(in_dwi, in_fod, out_tck, mask, include_list, bval, bvec, track_num):
     #Generate tracktography
@@ -89,10 +89,10 @@ def generate_tracks(in_dwi, in_fod, out_tck, mask, include_list, bval, bvec, tra
 
     call_ending = [
                    '-select', track_num,
-                   '-maxlength', '250',
+                   '-maxlength', '300',
                    '-fslgrad', bvec, bval,
                    '-seeds', '0',
-                  '-force'
+                   '-force'
                   ]
 
     call_parts = call_beginning + call_ending
@@ -112,7 +112,7 @@ def generate_tracks(in_dwi, in_fod, out_tck, mask, include_list, bval, bvec, tra
         logging.error('Process failed: {}'.format(call_parts))
         return None
     else:
-        return 1
+        return out_tck
 
 
 def generate_wholebrain_tracks(in_dwi, in_fod, out_tck, bval, bvec, track_num):
@@ -160,7 +160,7 @@ def sift_tracks(in_tck, in_fod, out_sift, sift_num):
         logging.error('Process failed: {}'.format(call_parts))
         return None
     else:
-        return 1
+        return out_sift
 
 def sample_FA(in_tck, in_fa, out_fa):
     #Sample FA
