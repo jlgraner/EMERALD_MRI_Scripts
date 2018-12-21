@@ -130,7 +130,7 @@ for sub in sub_list:
 
                #Transform mask and spheres into subject space
                subspace_mask = eda.transform_roi(in_image=tract_mask, add_suffix=sub, ref=ref_image, transform=transform_file)
-               if okay is None:
+               if subspace_mask is None:
                   logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
                   raise RuntimeError('Transforming mask to subject space failed!')
 
@@ -158,8 +158,8 @@ for sub in sub_list:
 
                #Produce output metrics
                out_sample = '{}_meanFA.txt'.format(working_tract_file.split('.tck')[0])
-               # okay = eda.sample_FA(in_tck=out_sift, in_fa=ref_image, out_fa=out_sample)
-               # if okay is None:
+               # sample_fa_out = eda.sample_FA(in_tck=out_sift, in_fa=ref_image, out_fa=out_sample)
+               # if sample_fa_out is None:
                #      logging.error('FA sampling failed!')
                #      raise RuntimeError('FA sampling failed!')
 

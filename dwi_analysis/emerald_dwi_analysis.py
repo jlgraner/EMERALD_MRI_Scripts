@@ -180,4 +180,4 @@ def sample_FA(in_tck, in_fa, out_fa):
         logging.error('Process failed: {}'.format(call_parts))
         return None
     else:
-        return 1
+        return out_fa
