@@ -154,11 +154,11 @@ for sub in sub_list:
                     raise RuntimeError('Tract generation failed!')
 
                #Sift tracks
-               out_sift = '{}_sift{}.tck'.format(tckgen_out.split('.tck')[0], sift_num)
-               working_tract_file = eda.sift_tracks(in_tck=tckgen_out, in_fod=input_fod, out_sift=out_sift, sift_num=sift_num)
-               if working_tract_file is None:
-                    logging.error('Tract sift failed!')
-                    raise RuntimeError('Tract sift failed!')
+               # out_sift = '{}_sift{}.tck'.format(tckgen_out.split('.tck')[0], sift_num)
+               # working_tract_file = eda.sift_tracks(in_tck=tckgen_out, in_fod=input_fod, out_sift=out_sift, sift_num=sift_num)
+               # if working_tract_file is None:
+               #      logging.error('Tract sift failed!')
+               #      raise RuntimeError('Tract sift failed!')
 
                #Produce output metrics
                out_sample = '{}_meanFA.txt'.format(working_tract_file.split('.tck')[0])
