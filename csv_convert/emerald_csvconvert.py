@@ -453,3 +453,13 @@ def csv2fsl(input_file=None, output_dir=None):
     start_times, durations = __create_fsl_condition(['negStrategyOnset'], ['negStrategyOffset'], all_line_parts, time_to_ignore, stimdescrip_select='FLOW')
     __write_fsl('negflowstrategycues', start_times, durations, output_dir, subid, runid)
     
+
+def search_for_files(input_dir, search_string):
+    #Look for files in input_dir that contain search_string in their names
+    contents = os.listdir(input_dir)
+    file_list = []
+    for element in contents:
+        if (search_string in element) and (element[-4:] == '.csv'):
+            file_list.append(os.path.join(input_dir, element))
+    #Return the list of files
+    return file_list
