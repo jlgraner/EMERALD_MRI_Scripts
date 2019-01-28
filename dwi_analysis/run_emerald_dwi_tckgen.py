@@ -9,7 +9,10 @@ this_env = os.environ
 ses = 'day3'
 
 sub_list = [
-            'EM0001'
+            'EM0001',
+            'EM0038',
+            'EM0184',
+            'EM0291'
             ]
 
 # sub_list = [
@@ -43,14 +46,14 @@ sub_list = [
             # ]
 
 tract_list = [
-              # 'R_SLFII',
-              # 'L_SLFII',
+              'R_SLFII',
+              'L_SLFII',
               'R_Unc',
               'L_Unc'
               ]
 
 # track_num = '20K'
-track_num = '50'
+track_num = '10'
 # sift_num = '5K'
 sift_num = '40'
 
@@ -62,12 +65,13 @@ if not os.path.exists(log_dir):
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
 # base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
-base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/sub-{sub}/DWI/10mm_sphere_test/')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/sub-{sub}/DWI/dsi_studio_test/')
 # base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
 base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
 # tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
-tract_mask_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/10mm_spheres_test_rois/')
+tract_mask_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/dsi_studio_test_rois/')
+# tract_mask_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/small_r_slfII_rois/')
 
 
 good_runs = []
@@ -148,10 +152,10 @@ for sub in sub_list:
                       subspace_include_roi_list.append(out_name)
 
                #Run tckgen to generate tracks
-               working_tract_file = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=subspace_mask, include_list=subspace_include_roi_list, bval=bval, bvec=bvec, track_num=track_num)
-               if working_tract_file is None:
-                    logging.error('Tract generation failed!')
-                    raise RuntimeError('Tract generation failed!')
+               # working_tract_file = eda.generate_tracks(in_dwi=input_dti, in_fod=input_fod, out_tck=tckgen_out, mask=subspace_mask, include_list=subspace_include_roi_list, bval=bval, bvec=bvec, track_num=track_num)
+               # if working_tract_file is None:
+               #      logging.error('Tract generation failed!')
+               #      raise RuntimeError('Tract generation failed!')
 
                #Sift tracks
                # out_sift = '{}_sift{}.tck'.format(tckgen_out.split('.tck')[0], sift_num)
@@ -161,7 +165,7 @@ for sub in sub_list:
                #      raise RuntimeError('Tract sift failed!')
 
                #Produce output metrics
-               out_sample = '{}_meanFA.txt'.format(working_tract_file.split('.tck')[0])
+               # out_sample = '{}_meanFA.txt'.format(working_tract_file.split('.tck')[0])
                # sample_fa_out = eda.sample_FA(in_tck=out_sift, in_fa=ref_image, out_fa=out_sample)
                # if sample_fa_out is None:
                #      logging.error('FA sampling failed!')
