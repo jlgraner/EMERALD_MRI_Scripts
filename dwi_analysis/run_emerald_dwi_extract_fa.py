@@ -29,3 +29,8 @@ if not os.path.exists(base_output_dir):
 
 output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_02082019.csv')
 
+##Calculate average FA for each subject for each tract
+
+#Save these into dictionaries
+#Concatenate the dictionaries into a pandas data frame
+#Save the pandas data frame as a csv

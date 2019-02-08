@@ -54,20 +54,19 @@ base_input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
 
 for sub in sub_list:
     sub_dir = base_input_dir.format(sub=sub)
-    #Align the FA file with a mask file from the tract list
+    preproc_dti = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc.nii.gz'.format(sub,ses))
+    #Align the FA file with the preprocessed DTI from the tract list
     fa_file = os.path.join(sub_dir, 'sub-{}_ses-day3_dwi_d_ss_prep_ss_bc_fa.nii.gz'.format(sub))
     centered_fa = fa_file.split('.nii.gz')[0]+'_shft.nii.gz'
     resampled_fa = fa_file.split('.nii.gz')[0]+'_final.nii.gz'
 
-    first_tract_mask_file = os.path.join(sub_dir, '{}_mask_{}.nii.gz'.format(tract_list[0], sub))
-
     call_parts = [
                   '@Align_Centers',
-                  '-base', first_tract_mask_file,
+                  '-base', preproc_dti,
                   '-dset', fa_file
                   ]
     print('Running @Align_centers for {}, FA map'.format(sub))
-    print('first_tract_mask_file: {}'.format(first_tract_mask_file))
+    print('preproc_dti: {}'.format(preproc_dti))
     print('fa_file: {}'.format(fa_file))
     print(call_parts)
     error_flag = subprocess.call(call_parts)
@@ -79,7 +78,7 @@ for sub in sub_list:
     #Resample FA image to first tract mask
     call_parts = [
                   '3dresample',
-                  '-master', first_tract_mask_file,
+                  '-master', preproc_dti,
                   '-inset', centered_fa,
                   '-prefix', resampled_fa
                   ]
@@ -105,14 +104,14 @@ for sub in sub_list:
                     print('Output file already there; deleting it:{}'.format(element))
                     os.remove(element)
 
-            #Align the tract ROI with the mask for that ROI
+            #Align the tract ROI with the preprocessed DTI
             call_parts = [
                           '@Align_Centers',
-                          '-base', tract_mask_file,
+                          '-base', preproc_dti,
                           '-dset', tract_roi_file
                           ]
             print('Running @Align_centers for {}, tract {}'.format(sub, tract))
-            print('tract_mask_file: {}'.format(tract_mask_file))
+            print('preproc_dti: {}'.format(preproc_dti))
             print('tract_roi_file: {}'.format(tract_roi_file))
             print(call_parts)
             error_flag = subprocess.call(call_parts)
@@ -124,7 +123,7 @@ for sub in sub_list:
             #Resample the aligned tract ROI to the tract mask
             call_parts = [
                           '3dresample',
-                          '-master', tract_mask_file,
+                          '-master', preproc_dti,
                           '-inset', centered_roi_file,
                           '-prefix', resampled_roi_file
                           ]
