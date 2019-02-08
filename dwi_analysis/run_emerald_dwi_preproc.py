@@ -152,43 +152,43 @@ for subject in sub_list:
             raise RuntimeError
 
         #Calculate tensors
-        tensor_file = edp.make_tensor(working_file, bias_cor_mask, output_dir, working_bvec, working_bval)
-        if tensor_file is None:
-            logging.error('Tensor creation failed for subject {}, session {}!'.format(subject, session))
-            failed_runs.append([subject, session, 'tensor_creation'])
-            raise RuntimeError
+        # tensor_file = edp.make_tensor(working_file, bias_cor_mask, output_dir, working_bvec, working_bval)
+        # if tensor_file is None:
+        #     logging.error('Tensor creation failed for subject {}, session {}!'.format(subject, session))
+        #     failed_runs.append([subject, session, 'tensor_creation'])
+        #     raise RuntimeError
 
         #Calculate FA, RD, AD
-        fa_file, rd_file, ad_file = edp.make_metrics(tensor_file, output_dir)
-        for element in [fa_file, rd_file, ad_file]:
-            if element is None:
-                logging.error('FA, RD, AD creation failed for subject {}, session {}!'.format(subject, session))
-                failed_runs.append([subject, session, 'FA_RD_AD'])
-                raise RuntimeError
+        # fa_file, rd_file, ad_file = edp.make_metrics(tensor_file, output_dir)
+        # for element in [fa_file, rd_file, ad_file]:
+        #     if element is None:
+        #         logging.error('FA, RD, AD creation failed for subject {}, session {}!'.format(subject, session))
+        #         failed_runs.append([subject, session, 'FA_RD_AD'])
+        #         raise RuntimeError
 
         ########
         #Create response function
-        response_txt_file = edp.make_response_txt(working_file, output_dir, working_bvec, working_bval)
-        if response_txt_file is None:
-            logging.error('Response function creation failed for subject {}, session {}!'.format(subject, session))
-            failed_runs.append([subject, session, 'response_creation'])
-            raise RuntimeError
+        # response_txt_file = edp.make_response_txt(working_file, output_dir, working_bvec, working_bval)
+        # if response_txt_file is None:
+        #     logging.error('Response function creation failed for subject {}, session {}!'.format(subject, session))
+        #     failed_runs.append([subject, session, 'response_creation'])
+        #     raise RuntimeError
 
         #Create regional (GM/WM/CSF) response functions
-        response_txt_file_wm, response_txt_gm, response_txt_csf = edp.make_segment_response_txt(working_file, output_dir, working_bvec, working_bval)
-        for element in [response_txt_file_wm, response_txt_gm, response_txt_csf]:
-            if element is None:
-                logging.error('Segmentation region response function creation failed for subject {}, session {}!'.format(subject, session))
-                failed_runs.append([subject, session, 'seg_response_creation'])
-                raise RuntimeError
+        # response_txt_file_wm, response_txt_gm, response_txt_csf = edp.make_segment_response_txt(working_file, output_dir, working_bvec, working_bval)
+        # for element in [response_txt_file_wm, response_txt_gm, response_txt_csf]:
+        #     if element is None:
+        #         logging.error('Segmentation region response function creation failed for subject {}, session {}!'.format(subject, session))
+        #         failed_runs.append([subject, session, 'seg_response_creation'])
+        #         raise RuntimeError
 
         #Create FOD image
-        response_image_file = edp.make_response_image(working_file, response_txt_file, bias_cor_mask, output_dir, working_bvec, working_bval)
-        for element in [response_image_file]:
-            if element is None:
-                logging.error('Response function image create failed for subject {}, session {}!'.format(subject, session))
-                failed_runs.append([subject, session, 'response_image_creation'])
-                raise RuntimeError
+        # response_image_file = edp.make_response_image(working_file, response_txt_file, bias_cor_mask, output_dir, working_bvec, working_bval)
+        # for element in [response_image_file]:
+        #     if element is None:
+        #         logging.error('Response function image create failed for subject {}, session {}!'.format(subject, session))
+        #         failed_runs.append([subject, session, 'response_image_creation'])
+        #         raise RuntimeError
         ########
 
         logging.info('Finished without errors for subject {}, session {}.'.format(subject, session))
