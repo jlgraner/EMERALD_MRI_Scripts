@@ -101,7 +101,7 @@ for sub in sub_list:
      bvec = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_prep.bvec'.format(sub,ses))
      bval = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_prep.bval'.format(sub,ses))
      transform_file = os.path.join(sub_anat_dir, 'sub-{}_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5'.format(sub,ses))
-     ref_image = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'.format(sub,ses))
+     # ref_image = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'.format(sub,ses))
 
      #Create output directory if it is not there
      if not os.path.exists(sub_output_dir):
@@ -110,7 +110,7 @@ for sub in sub_list:
           os.makedirs(sub_output_dir)
  
      #Copy the reference FA image to the output directory, for easier visual QA
-     shutil.copy2(ref_image, sub_output_dir)
+     # shutil.copy2(ref_image, sub_output_dir)
      #Copy the bvec and bval files to the output directory, for use in dsi_studio
      shutil.copy2(bvec, sub_output_dir)
      shutil.copy2(bval, sub_output_dir)
@@ -131,7 +131,7 @@ for sub in sub_list:
                include_roi_list = eda.find_masks(tract_mask_dir, [tract, '_include.nii.gz'])
 
                #Transform mask and spheres into subject space
-               subspace_mask = eda.transform_roi(in_image=tract_mask, add_suffix=sub, ref=ref_image, transform=transform_file)
+               subspace_mask = eda.transform_roi(in_image=tract_mask, add_suffix=sub, ref=input_dti, transform=transform_file)
                if subspace_mask is None:
                   logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
                   raise RuntimeError('Transforming mask to subject space failed!')
@@ -140,7 +140,7 @@ for sub in sub_list:
 
                subspace_include_roi_list = []
                for element in include_roi_list:
-                 out_name = eda.transform_roi(in_image=element, add_suffix=sub, ref=ref_image, transform=transform_file)
+                 out_name = eda.transform_roi(in_image=element, add_suffix=sub, ref=input_dti, transform=transform_file)
                  if out_name is None:
                       logging.error('Transforming sphere mask to subject space failed!')
                       raise RuntimeError('Transforming sphere mask to subject space failed!')
