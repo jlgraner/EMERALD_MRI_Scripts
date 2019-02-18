@@ -8,10 +8,35 @@ this_env = os.environ
 #Apply temporal filtering to fMRI data that have been through fmriprep
 
 sub_list = [
-            'EM0001'
-            ]
+              'EM0001',
+              'EM0033',
+              'EM0036',
+              'EM0038',
+              'EM0066',
+              'EM0071',
+              'EM0088',
+              'EM0126',
+              'EM0153',
+              'EM0155',
+              'EM0162',
+              'EM0164',
+              'EM0174',
+              'EM0179',
+              'EM0184',
+              'EM0187',
+              'EM0192',
+              'EM0202',
+              'EM0206',
+              'EM0217',
+              'EM0219',
+              'EM0220',
+              'EM0223',
+              'EM0229',
+              'EM0240',
+              'EM0291'
+               ]
 
-run_list = ['3']
+run_list = ['1', '2', '3', '4']
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'fmriprep')
 
@@ -20,7 +45,9 @@ bad_runs = []
 
 for sub in sub_list:
     sub_dir = os.path.join(base_input_dir, 'sub-{}'.format(sub), 'ses-day3', 'func')
+    print('\nSubject {}'.format(sub))
     for run in run_list:
+        print('Run {}'.format(run))
         #Set the input image filename
         input_image = os.path.join(sub_dir, 'sub-{}_emoreg_run{}_AROMApreproc_short.nii.gz'.format(sub, run))
         #Create the temporal mean filename
@@ -39,6 +66,7 @@ for sub in sub_list:
                       temp_tmean_output
                       ]
         #Carry out temporal mean creation
+        print('...creating temporal mean...')
         process = subprocess.Popen(call_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = process.communicate()
         if err != '':
@@ -64,6 +92,7 @@ for sub in sub_list:
                       temp_filt_output
                       ]
         #Carry out temporal filtering
+        print('...applying temporal filter...')
         process = subprocess.Popen(call_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = process.communicate()
         if err != '':
@@ -72,6 +101,7 @@ for sub in sub_list:
             bad_runs.append([sub, run, 'temporal_filtering'])
             raise RuntimeError()
         #Delete the mean image
+        print('...deleting temporal mean...')
         os.remove(temp_tmean_output)
         #Add the run to the list of good runs
         good_runs.append([sub, run])
