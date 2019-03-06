@@ -75,7 +75,7 @@ for sub in sub_list:
         bad_runs.append([sub, 'FA', 'center align'])
         raise RuntimeError
 
-    #Resample FA image to first tract mask
+    #Resample FA image to preprocessed DTI
     call_parts = [
                   '3dresample',
                   '-master', preproc_dti,
