@@ -6,7 +6,7 @@ import string
 this_env = os.environ
 
 input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
-output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_dummy_fdpointtwo')
 fs_license = '/usr/local/freesurfer/license.txt'
 
 subs_to_run = [
@@ -36,7 +36,10 @@ subs_to_run = [
               # 'EM0229',
               # 'EM0240',
               # 'EM0291',
-              'EM0304'
+              # 'EM0304',
+              # 'EM0381',
+              'EM0360'
+              # 'EM0400'
                ]
 
 
@@ -63,11 +66,9 @@ for sub in subs_to_run:
                      'participant',
                      '--task', 'emoreg',
                      '--use-aroma',
-                     '--ignore-aroma-denoising-errors',
-                     '--output-space',
-                     'template',
-                     '--template-resampling-grid',
-                     'native',
+                     '--output-spaces', 'MNI152NLin6Asym:res-2',
+                     '--dummy-scans', '4',
+                     '--fd-spike-threshold', '0.3',
                      '--nthreads',
                      '4',
                      '--fs-no-reconall',

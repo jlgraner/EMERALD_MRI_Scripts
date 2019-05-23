@@ -8,7 +8,7 @@ this_env = os.environ
 
 overwrite = 0
 
-subs_to_run = ['EM0229']
+subs_to_run = ['EM0400']
 
 # subs_to_run = [
 #               'EM0001',
@@ -36,13 +36,14 @@ subs_to_run = ['EM0229']
 #               'EM0223',
 #               'EM0229',
 #               'EM0240',
-#               'EM0291'
+#               'EM0291',
+#               'EM0304'
 #                ]
 
 runs_to_run = ['1','2','3','4']
 
 
-base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{s}/ses-day3/func/')
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
 
 for sub in subs_to_run:
     for run in runs_to_run:

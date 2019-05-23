@@ -8,33 +8,37 @@ this_env = os.environ
 input_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'EMERALD')
 output_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'mriqc')
 
-subs_to_run = [
-               'EM0001',
-               'EM0033',
-               'EM0036',
-               'EM0038',
-               'EM0066',
-               'EM0071',
-               'EM0088',
-               'EM0126',
-               'EM0153',
-               'EM0155',
-               'EM0162',
-               'EM0164',
-               'EM0174',
-               'EM0179',
-               'EM0184',
-               'EM0192',
-               'EM0202',
-               'EM0206',
-               'EM0217',
-               'EM0219',
-               'EM0220',
-               'EM0223',
-               'EM0229',
-               'EM0240',
-               'EM0304'
-               ]
+
+subs_to_run = ['EM0400']
+
+# subs_to_run = [
+#                'EM0001',
+#                'EM0033',
+#                'EM0036',
+#                'EM0038',
+#                'EM0066',
+#                'EM0071',
+#                'EM0088',
+#                'EM0126',
+#                'EM0153',
+#                'EM0155',
+#                'EM0162',
+#                'EM0164',
+#                'EM0174',
+#                'EM0179',
+#                'EM0184',
+#                'EM0192',
+#                'EM0202',
+#                'EM0206',
+#                'EM0217',
+#                'EM0219',
+#                'EM0220',
+#                'EM0223',
+#                'EM0229',
+#                'EM0240',
+#                'EM0304',
+#                'EM0381'
+#                ]
 
 
 for sub in subs_to_run:
