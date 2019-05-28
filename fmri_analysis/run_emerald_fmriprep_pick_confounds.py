@@ -41,7 +41,7 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-subs_to_run = ['EM0400']
+subs_to_run = ['EM0001']
 # subs_to_run = [
 #               'EM0001',
 #               'EM0033',
@@ -84,8 +84,8 @@ output_suffix = '_forFSL'
 confound_file_base_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/func/')
 confound_file_base_name = 'sub-{sub}_ses-{ses}_task-{task}_run-{run}_desc-confounds_regressors.tsv'
 
-include_tr_motcen_regs = 1
-mot_cen_limit = 0.2
+# include_tr_motcen_regs = 1
+# mot_cen_limit = 0.2
 
 confounds_to_include = [
                         'csf',
@@ -93,7 +93,8 @@ confounds_to_include = [
                         # 'global_signal', <- I wouldn't recommend including this.
                         # 'std_dvars',
                         'dvars',
-                        'framewise_displacement'
+                        'framewise_displacement',
+                        'motion_outlier'
                         # 't_comp_cor',
                         # 'a_comp_cor',
                         # 'cosine',
@@ -141,7 +142,7 @@ for sub in subs_to_run:
                         print('Dealing with confound label: {}'.format(element))
                         #Deal with labels with more than one confound column
                         # if element in ['tCompCor', 'aCompCor', 'Cosine', 'NonSteadyStateOutlier', 'AROMA']:
-                        if element in ['t_comp_cor', 'a_comp_cor', 'cosine', 'non_steady_state_outlier', 'aroma_motion']:
+                        if element in ['t_comp_cor', 'a_comp_cor', 'cosine', 'non_steady_state_outlier', 'aroma_motion', 'motion_outlier']:
                             #Find column header names that contain the label category
                             match_list = fpc.match_columns(data, element)
                             print('Confound label matched with list: {}'.format(match_list))
@@ -155,13 +156,19 @@ for sub in subs_to_run:
                     print('Creating new data frame from name list: {}'.format(include_list))
                     new_data = fpc.add_columns(data, new_data, include_list)
                     #If desired, create single-TR regressors and add them to the new data frame
-                    if include_tr_motcen_regs:
-                        mot_censor_dataframe = fpc.create_motion_censor_regs(data, mot_cen_limit, rows_to_remove)
-                        new_data = fpc.add_columns(mot_censor_dataframe, new_data, mot_censor_dataframe.keys())
+                    # if include_tr_motcen_regs:
+                    #     mot_censor_dataframe = fpc.create_motion_censor_regs(data, mot_cen_limit, rows_to_remove)
+                    #     new_data = fpc.add_columns(mot_censor_dataframe, new_data, mot_censor_dataframe.keys())
                     #If desired, remove initial entries corresponding to pre-steady-state TRs
                     if rows_to_remove > 0:
                         print('Removing first {} rows from new data frame.'.format(rows_to_remove))
                         new_data = new_data.drop(range(rows_to_remove))
+                    #Remove any regressors that are all 0
+                    print('Looking for regressors that are all 0...')
+                    for key in new_data.keys():
+                        if pandas.to_numeric(new_data[key]).abs().sum() == 0:
+                            print('Removing all-0 regressor: {}'.format(key))
+                            new_data = new_data.drop(key, axis='columns')
                     #Write the new data frame out as a new confound file
                     print('Writing output file: {}'.format(output_file))
                     new_data.to_csv(path_or_buf=output_file, sep='\t', index=False, na_rep='n/a')
