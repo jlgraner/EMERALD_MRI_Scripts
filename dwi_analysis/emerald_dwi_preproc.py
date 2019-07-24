@@ -116,9 +116,9 @@ def preproc(input_file, output_dir, bvec_file, bval_file, b0_image_file):
 
     #Put together the preprocessing call
     if b0_image_file is None:
-        call_parts = ['dwipreproc', input_file, output_file, '-rpe_none', '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
+        call_parts = ['dwipreproc', input_file, output_file, '-tmp_dir', output_dir, '-rpe_none', '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
     else:
-        call_parts = ['dwipreproc', input_file, output_file, '-rpe_pair', '-se_epi', b0_image_file, '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
+        call_parts = ['dwipreproc', input_file, output_file, '-tmp_dir', output_dir, '-rpe_pair', '-se_epi', b0_image_file, '-pe_dir', 'AP', '-fslgrad', bvec_file, bval_file, '-export_grad_fsl', output_bvec, output_bval, '-force']
     logging.info('Running: {}'.format(string.join(call_parts)))
 
     error_flag = subprocess.call(call_parts)

@@ -8,7 +8,7 @@ this_env = os.environ
 
 overwrite = 0
 
-subs_to_run = ['EM0400']
+subs_to_run = ['EM0500', 'EM0519']
 
 # subs_to_run = [
 #               'EM0001',
@@ -49,7 +49,7 @@ for sub in subs_to_run:
     for run in runs_to_run:
         #Put together the input file
         print('---------------------------------------')
-        input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin2009cAsym_desc-smoothAROMAnonaggr_bold.nii.gz'
+        input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-smoothAROMAnonaggr_bold.nii.gz'
         full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
 
         #Put together the output file

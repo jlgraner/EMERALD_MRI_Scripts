@@ -10,7 +10,7 @@ base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{su
 
 
 sub_list = [
-            'EM0291'
+            'EM0304', 'EM0381', 'EM0360', 'EM0400', 'EM0500', 'EM0519', 'EM0525'
             ]
 
 
@@ -101,7 +101,7 @@ for subject in sub_list:
             b0_image_file = edp.create_b0(input_file, rpe_file, output_dir, subject, session)
             b0_image_file = b0_image_file.format(sub=subject, ses=session)
             if b0_image_file is None:
-                logging.error('b0 image file creationg failed for subject {}, session {}!'.format(subject,session))
+                logging.error('b0 image file creation failed for subject {}, session {}!'.format(subject,session))
                 failed_runs.append([subject, session, 'b0 creation'])
                 raise RuntimeError
         else:

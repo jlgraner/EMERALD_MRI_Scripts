@@ -7,7 +7,7 @@ this_env = os.environ
 
 #Apply temporal filtering to fMRI data that have been through fmriprep
 
-sub_list = ['EM0400']
+sub_list = ['EM0500', 'EM0519']
 # sub_list = [
 #               'EM0001',
 #               'EM0033',
