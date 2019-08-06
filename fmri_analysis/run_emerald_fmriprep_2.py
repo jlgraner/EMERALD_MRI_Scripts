@@ -6,10 +6,11 @@ import string
 this_env = os.environ
 
 input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
-output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_temp')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/')
 fs_license = '/usr/local/freesurfer/license.txt'
 
-subs_to_run = ['EM0219']
+subs_to_run = ['EM0220', 'EM0223', 'EM0229', 'EM0240', 'EM0291',
+               'EM0304', 'EM0381', 'EM0360', 'EM0400']
 
 # subs_to_run = [
 #               'EM0001'
@@ -41,9 +42,7 @@ subs_to_run = ['EM0219']
               # 'EM0304',
               # 'EM0381',
               # 'EM0360',
-              # 'EM0400',
-              # 'EM0500',
-              # 'EM0519'
+              # 'EM0400'
                # ]
 
 

@@ -58,4 +58,4 @@ for sub in subs_to_run:
                         sub
                         ]
     print('Calling: {}'.format(string.join(other_call_parts)))
-    subprocess.call(call_parts)
+    subprocess.call(other_call_parts)

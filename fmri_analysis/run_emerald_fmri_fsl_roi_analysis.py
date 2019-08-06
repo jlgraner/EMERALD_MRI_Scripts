@@ -1,16 +1,17 @@
 
 import os, subprocess
+import shutil
 import logging
 
 this_env = os.environ
 
 input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/Second_level_allruns.gfeat')
-output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
+feat_output_dir = 'featquery_{roi}_output'
 
-output_file_template = 'Group_ROI_means_{cope}.txt'
+final_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
+output_file_template = 'Group_ROI_means_fsl_{cope}.txt'
 
 roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
-# roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'Test_area', 'ROI_testing')
 
 #for each subject:
 #	1) Locate the dist>flow map
@@ -22,6 +23,7 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 #	5) Save the average activations into an output file
 
 ses = 'day3'
+actually_run = 1
 
 subs_to_run = [
               'EM0001',
@@ -59,7 +61,7 @@ subs_to_run = [
               'EM0519'
                   ]
 
-# subs_to_run = ['sub-EM0179']
+# subs_to_run = ['EM0001']
 
 #Create a dictionary of all ROI files.
 #Keys will be region names, values will be full file path/names.
@@ -96,7 +98,7 @@ for sub in subs_to_run:
 
     #Look for the output for cope4 (reap>flow) and cope5 (dist>flow)
     for key in cope_labels:
-        cope_file = os.path.join(input_dir.format(sub=sub,ses=ses), 'cope{}.feat'.format(cope_labels[key]), 'stats', 'zstat1.nii.gz')
+        cope_file = os.path.join(input_dir.format(sub=sub,ses=ses), 'cope{}.feat'.format(cope_labels[key]), 'stats', 'cope1.nii.gz')
         if not os.path.exists(cope_file):
             print('Input cope image cannot be found! Sub: {sub}; File: {file}'.format(sub=sub,file=cope_file))
             raise RuntimeError
@@ -108,33 +110,51 @@ for sub in subs_to_run:
     for cope in cope_labels:
         print('Contrast: {}'.format(cope))
         output_dict[sub][cope] = {}
-        cope_file = os.path.join(input_dir.format(sub=sub,ses=ses), 'cope{}.feat'.format(cope_labels[cope]), 'stats', 'zstat1.nii.gz')
-        output_dict[sub][cope]['file'] = cope_file
+        cope_dir = os.path.join(input_dir.format(sub=sub,ses=ses), 'cope{}.feat'.format(cope_labels[cope]))
+        output_dict[sub][cope]['dir'] = cope_dir
         for roi in roi_dict:
+            dir_to_delete = os.path.join(cope_dir, feat_output_dir.format(roi=roi))
+            if os.path.exists(dir_to_delete):
+              print('Output directory already there; DELETING it!')
+              shutil.rmtree(dir_to_delete)
             call_parts = [
-                          '3dROIstats',
-                          '-nzmean',
-                          '-nomeanout',
-                          '-quiet',
-                          '-mask',
-                          roi_dict[roi],
-                          cope_file
+                          'featquery',
+                          '1',
+                          cope_dir,
+                          '1',
+                          'stats/cope1',
+                          feat_output_dir.format(roi=roi),
+                          '-p',
+                          '-b',
+                          roi_dict[roi]
                           ]
-            #Save the ROI mean, as a string, into the dictionary
-            output_dict[sub][cope][roi] = subprocess.check_output(call_parts).strip()
+            #Call featquery
+            print('Calling: {}'.format(' '.join(call_parts)))
+            if actually_run:
+              error_flag = subprocess.call(call_parts)
+              #Save the ROI mean, as a string, into the dictionary
+              report_file = os.path.join(cope_dir, feat_output_dir.format(roi=roi), 'report.txt')
+              with open(report_file) as fid:
+                contents = fid.read()
+              output_dict[sub][cope][roi] = contents.split()[5]
 
 #Write the ROI means into .txt files
-for cope in cope_labels:
-    lines_to_write = ['sub\troi\tmean']
-    output_file = os.path.join(output_dir, output_file_template.format(cope=cope))
-    for roi in roi_dict:
-        for sub in subs_to_run:
-            lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]))
-    print('Writing file: {}'.format(output_file))
-    with open(output_file, 'w') as fd:
-        for line in lines_to_write:
-            fd.write(line+'\n')
+if actually_run:
+  for cope in cope_labels:
+      lines_to_write = ['sub\troi\tmean']
+      output_file = os.path.join(final_output_dir, output_file_template.format(cope=cope))
+      for roi in roi_dict:
+          for sub in subs_to_run:
+              lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]))
+      print('Writing file: {}'.format(output_file))
+      with open(output_file, 'w') as fd:
+          for line in lines_to_write:
+              fd.write(line+'\n')
 
 
 print('Done')
 print('---------------------------------------------------')
+
+# /usr/share/fsl/5.0/bin/featquery 1
+# /mnt/keoki/experiments4/EMERALD/Analysis/MRI/sub-EM0001/Func/Second_level_allruns.gfeat/cope4.feat 1
+# stats/cope1 featquery_test_single -p -b /mnt/keoki/experiments4/EMERALD/Analysis/MRI/ROIs/ROI_dlPFC_final.nii.gz

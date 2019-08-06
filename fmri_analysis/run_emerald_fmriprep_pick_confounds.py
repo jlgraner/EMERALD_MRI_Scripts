@@ -41,7 +41,7 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-subs_to_run = ['EM0500', 'EM0519']
+subs_to_run = ['EM0381']
 # subs_to_run = [
 #               'EM0001',
 #               'EM0033',
@@ -116,63 +116,67 @@ for sub in subs_to_run:
     for ses in ses_to_run:
         for task in tasks_to_run:
             for run in runs_to_run:
-                confound_dir = confound_file_base_dir.format(sub=sub, ses=ses)
-                confound_name = confound_file_base_name.format(sub=sub, ses=ses, run=run, task=task)
-                confound_file = os.path.join(confound_dir, confound_name)
+                try:
+                    confound_dir = confound_file_base_dir.format(sub=sub, ses=ses)
+                    confound_name = confound_file_base_name.format(sub=sub, ses=ses, run=run, task=task)
+                    confound_file = os.path.join(confound_dir, confound_name)
 
-                print('Creating confound file from: {}'.format(confound_file))
+                    print('Creating confound file from: {}'.format(confound_file))
 
-                output_name = os.path.split(confound_file)[-1][:-4]+str(output_suffix)
-                output_file = os.path.join(confound_dir, output_name+'.tsv')
+                    output_name = os.path.split(confound_file)[-1][:-4]+str(output_suffix)
+                    output_file = os.path.join(confound_dir, output_name+'.tsv')
 
-                print('Output file name set: {}'.format(output_file))
+                    print('Output file name set: {}'.format(output_file))
 
-                if not os.path.exists(confound_file):
-                    print('Confound file cannot be found: {}'.format(confound_file))
-                    failed_runs.append([sub, ses, task, run, 'input_file_missing'])
-                    raise RuntimeError('input_file_missing')
-                else:
-                    #Create a list of confound column names to include in the new file
-                    include_list = [] #This list will contain the specific names of columns to be included in the output
-                    print('Reading input file as data frame...')
-                    data = pandas.read_csv(confound_file, sep='\t', engine='python', dtype=float)
-                    #Create an empty data frame to fill in
-                    new_data = pandas.DataFrame()
-                    for element in confounds_to_include:
-                        print('Dealing with confound label: {}'.format(element))
-                        #Deal with labels with more than one confound column
-                        # if element in ['tCompCor', 'aCompCor', 'Cosine', 'NonSteadyStateOutlier', 'AROMA']:
-                        if element in ['t_comp_cor', 'a_comp_cor', 'cosine', 'non_steady_state_outlier', 'aroma_motion', 'motion_outlier']:
-                            #Find column header names that contain the label category
-                            match_list = fpc.match_columns(data, element)
-                            print('Confound label matched with list: {}'.format(match_list))
-                            #Add them all to the full list
-                            include_list = include_list + match_list
-                        #Deal with labels that don't have multiple confound columns
-                        else:
-                            include_list.append(element)
-                            print('Confound label added to inclusion list: {}'.format(element))
-                    #Put the columns with the included column labels into the new data frame
-                    print('Creating new data frame from name list: {}'.format(include_list))
-                    new_data = fpc.add_columns(data, new_data, include_list)
-                    #If desired, create single-TR regressors and add them to the new data frame
-                    # if include_tr_motcen_regs:
-                    #     mot_censor_dataframe = fpc.create_motion_censor_regs(data, mot_cen_limit, rows_to_remove)
-                    #     new_data = fpc.add_columns(mot_censor_dataframe, new_data, mot_censor_dataframe.keys())
-                    #If desired, remove initial entries corresponding to pre-steady-state TRs
-                    if rows_to_remove > 0:
-                        print('Removing first {} rows from new data frame.'.format(rows_to_remove))
-                        new_data = new_data.drop(range(rows_to_remove))
-                    #Remove any regressors that are all 0
-                    print('Looking for regressors that are all 0...')
-                    for key in new_data.keys():
-                        if pandas.to_numeric(new_data[key]).abs().sum() == 0:
-                            print('Removing all-0 regressor: {}'.format(key))
-                            new_data = new_data.drop(key, axis='columns')
-                    #Write the new data frame out as a new confound file
-                    print('Writing output file: {}'.format(output_file))
-                    new_data.to_csv(path_or_buf=output_file, sep='\t', index=False, na_rep='n/a')
-                    good_runs.append([sub, ses, task, run])
+                    if not os.path.exists(confound_file):
+                        print('Confound file cannot be found: {}'.format(confound_file))
+                        failed_runs.append([sub, ses, task, run, 'input_file_missing'])
+                        raise RuntimeError('input_file_missing')
+                    else:
+                        #Create a list of confound column names to include in the new file
+                        include_list = [] #This list will contain the specific names of columns to be included in the output
+                        print('Reading input file as data frame...')
+                        data = pandas.read_csv(confound_file, sep='\t', engine='python', dtype=float)
+                        #Create an empty data frame to fill in
+                        new_data = pandas.DataFrame()
+                        for element in confounds_to_include:
+                            print('Dealing with confound label: {}'.format(element))
+                            #Deal with labels with more than one confound column
+                            # if element in ['tCompCor', 'aCompCor', 'Cosine', 'NonSteadyStateOutlier', 'AROMA']:
+                            if element in ['t_comp_cor', 'a_comp_cor', 'cosine', 'non_steady_state_outlier', 'aroma_motion', 'motion_outlier']:
+                                #Find column header names that contain the label category
+                                match_list = fpc.match_columns(data, element)
+                                print('Confound label matched with list: {}'.format(match_list))
+                                #Add them all to the full list
+                                include_list = include_list + match_list
+                            #Deal with labels that don't have multiple confound columns
+                            else:
+                                include_list.append(element)
+                                print('Confound label added to inclusion list: {}'.format(element))
+                        #Put the columns with the included column labels into the new data frame
+                        print('Creating new data frame from name list: {}'.format(include_list))
+                        new_data = fpc.add_columns(data, new_data, include_list)
+                        #If desired, create single-TR regressors and add them to the new data frame
+                        # if include_tr_motcen_regs:
+                        #     mot_censor_dataframe = fpc.create_motion_censor_regs(data, mot_cen_limit, rows_to_remove)
+                        #     new_data = fpc.add_columns(mot_censor_dataframe, new_data, mot_censor_dataframe.keys())
+                        #If desired, remove initial entries corresponding to pre-steady-state TRs
+                        if rows_to_remove > 0:
+                            print('Removing first {} rows from new data frame.'.format(rows_to_remove))
+                            new_data = new_data.drop(range(rows_to_remove))
+                        #Remove any regressors that are all 0
+                        print('Looking for regressors that are all 0...')
+                        for key in new_data.keys():
+                            if pandas.to_numeric(new_data[key]).abs().sum() == 0:
+                                print('Removing all-0 regressor: {}'.format(key))
+                                new_data = new_data.drop(key, axis='columns')
+                        #Write the new data frame out as a new confound file
+                        print('Writing output file: {}'.format(output_file))
+                        new_data.to_csv(path_or_buf=output_file, sep='\t', index=False, na_rep='n/a')
+                        good_runs.append([sub, ses, task, run])
+                except Exception as ex:
+                    print(ex)
+                    failed_runs.append([sub,ses,task,run,ex])
 
 print('-------------------------------------')
 print('Runs that ran: {}'.format(good_runs))
