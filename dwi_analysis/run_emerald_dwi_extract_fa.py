@@ -40,7 +40,13 @@ sub_list = [
             'EM0223',
             'EM0229',
             'EM0240',
-            'EM0291'
+            'EM0291',
+            'EM0304',
+            'EM0381',
+            'EM0360',
+            'EM0400',
+            'EM0500',
+            'EM0519'
             ]
 
 tract_list = [
@@ -53,13 +59,13 @@ tract_list = [
 bad_runs = []
 good_runs = []
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_02122019')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_08082019')
 #If the output directory does not exist, create it
 if not os.path.exists(base_output_dir):
     print('Output directory not found; creating it: {}'.format(base_output_dir))
     os.mkdir(base_output_dir)
 
-output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_02122019.csv')
+output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_08082019.csv')
 
 ##Calculate average FA for each subject for each tract
 all_fa_dictionary = {}
@@ -86,13 +92,17 @@ for tract in tract_list:
             if err != '':
                 if 'If you are performing spatial transformations on an oblique dset' not in err:
                     bad_runs.append([sub, tract, 'ave_FA'])
-                    raise RuntimeError('Error extracting average FA for {}, {}'.format(sub, tract))
+                    print('Error extracting average FA for {}, {}'.format(sub, tract))
+                    # raise RuntimeError('Error extracting average FA for {}, {}'.format(sub, tract))
+                    tract_fa_list.append('NaN')
                 else:
                     print('Got a deoblique warning from 3dROIstats for {}, {}'.format(sub, tract))
-            tract_fa_list.append(out.strip())
+                    tract_fa_list.append(out.strip())
+            else:
+                tract_fa_list.append(out.strip())
             good_runs.append([sub, tract])
         except Exception as err_gen:
-            print('Error extracting average FA for {}, {}\n{}'.format(sub, tract, err_gen))
+            print('Ran into odd problems extracting average FA for {}, {}\n{}'.format(sub, tract, err_gen))
     #Save the FAs into a dictionary
     all_fa_dictionary[tract] = tract_fa_list
 

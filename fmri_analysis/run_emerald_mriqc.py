@@ -9,7 +9,7 @@ input_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'EMERALD')
 output_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'mriqc')
 
 
-subs_to_run = ['EM0565']
+subs_to_run = ['EM0291']
 
 # subs_to_run = [
 #                'EM0001',
@@ -36,6 +36,7 @@ subs_to_run = ['EM0565']
 #                'EM0223',
 #                'EM0229',
 #                'EM0240',
+#                'EM0291',
 #                'EM0304',
 #                'EM0381'
 #                ]
@@ -85,4 +86,4 @@ for sub in subs_to_run:
                         sub
                         ]
     print('Calling: {}'.format(string.join(other_call_parts)))
-    subprocess.call(call_parts)
+    subprocess.call(other_call_parts)

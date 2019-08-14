@@ -12,7 +12,13 @@ sub_list = [
             # 'EM0001'
             # 'EM0038',
             # 'EM0184',
-            'EM0291'
+            # 'EM0304'
+            # 'EM0381',
+            # 'EM0360',
+            # 'EM0400',
+            # 'EM0500',
+            # 'EM0519',
+            'EM0525'
             ]
 
 # sub_list = [
@@ -61,7 +67,7 @@ if not os.path.exists(log_dir):
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub}/ses-{ses}/')
 
 base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
-base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/anat/')
+base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/anat/')
 # base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
 tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
@@ -100,7 +106,7 @@ for sub in sub_list:
      input_dti = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc.nii.gz'.format(sub,ses))
      bvec = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_prep.bvec'.format(sub,ses))
      bval = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_prep.bval'.format(sub,ses))
-     transform_file = os.path.join(sub_anat_dir, 'sub-{}_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5'.format(sub,ses))
+     transform_file = os.path.join(sub_anat_dir, 'sub-{}_from-MNI152NLin6Asym_to-T1w_mode-image_xfm.h5'.format(sub,ses))
      # ref_image = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc_tensor_FA.nii.gz'.format(sub,ses))
 
      #Create output directory if it is not there

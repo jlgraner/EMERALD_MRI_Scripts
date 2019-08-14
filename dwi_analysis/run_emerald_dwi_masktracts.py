@@ -6,7 +6,10 @@ import subprocess
 this_env = os.environ
 
 sub_list = [
-            'EM0240'
+            'EM0360',
+            'EM0400',
+            'EM0500',
+            'EM0519'
             ]
 
 # sub_list = [
@@ -42,9 +45,9 @@ sub_list = [
 
 tract_list = [
               'L_SLFII',
-              # 'R_SLFII',
-              # 'L_Unc',
-              # 'R_Unc'
+              'R_SLFII',
+              'L_Unc',
+              'R_Unc'
               ]
 
 bad_runs = []
@@ -54,7 +57,7 @@ base_input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
 
 for sub in sub_list:
     sub_dir = base_input_dir.format(sub=sub)
-    preproc_dti = os.path.join(sub_input_dir, 'sub-{}_ses-{}_dwi_d_ss_prep_ss_bc.nii.gz'.format(sub,ses))
+    preproc_dti = os.path.join(sub_dir, 'sub-{}_ses-day3_dwi_d_ss_prep_ss_bc.nii.gz'.format(sub))
     #Align the FA file with the preprocessed DTI from the tract list
     fa_file = os.path.join(sub_dir, 'sub-{}_ses-day3_dwi_d_ss_prep_ss_bc_fa.nii.gz'.format(sub))
     centered_fa = fa_file.split('.nii.gz')[0]+'_shft.nii.gz'
