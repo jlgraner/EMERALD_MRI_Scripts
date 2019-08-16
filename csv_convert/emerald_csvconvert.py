@@ -272,7 +272,8 @@ def csv2bids(input_file=None):
     print('Finding subject ID and run ID from file name...')
     input_file_name = os.path.split(input_file)[1]
     subid = input_file_name.split('_')[2] #e.g. EM0019
-    runid = input_file_name.split('_')[3] #e.g. run1
+    runstring = input_file_name.split('_')[3] #e.g. run1
+    runid = '0{}'.format(runstring[-1])
     
     #Create lists of:
     #Start times of condition times relative to start of scan
