@@ -13,7 +13,9 @@ with open(em_to_biac_file) as fd:
     em_to_biac = json.loads(fd.read())
 
 em_to_run = [
-            'EM0565'
+            'EM0588',
+            'EM0560',
+            'EM0673'
             ]
 
 for em_id in em_to_run:
