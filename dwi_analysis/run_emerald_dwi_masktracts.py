@@ -6,42 +6,12 @@ import subprocess
 this_env = os.environ
 
 sub_list = [
-            'EM0360',
+            # 'EM0360',
             'EM0400',
-            'EM0500',
-            'EM0519'
+            # 'EM0500',
+            # 'EM0519'
             ]
 
-# sub_list = [
-#             # 'EM0001',
-#             'EM0033',
-#             'EM0036',
-#             'EM0038',
-#             'EM0066',
-#             'EM0071',
-#             'EM0088',
-#             'EM0126',
-#             'EM0153',
-#             'EM0155',
-#             'EM0162',
-#             'EM0164',
-#             'EM0174',
-#             'EM0179',
-#             # 'EM0182',
-#             'EM0184',
-#             'EM0187',
-#             # 'EM0188',
-#             'EM0192',
-#             'EM0202',
-#             'EM0206',
-#             'EM0217',
-#             'EM0219',
-#             'EM0220',
-#             'EM0223',
-#             'EM0229',
-#             'EM0240',
-#             'EM0291'
-#             ]
 
 tract_list = [
               'L_SLFII',
@@ -94,7 +64,7 @@ for sub in sub_list:
 
     for tract in tract_list:
         try:
-            tract_mask_file = os.path.join(sub_dir, '{}_mask_{}.nii.gz'.format(tract, sub))
+            tract_mask_file = os.path.join(sub_dir, '{}_mask_{}_shft.nii.gz'.format(tract, sub))
             tract_roi_file = os.path.join(sub_dir, '{}_tractROI_{}.nii.gz'.format(tract, sub))
             centered_roi_file = tract_roi_file.split('.nii.gz')[0]+'_shft.nii.gz'
             resampled_roi_file = tract_roi_file.split('.nii.gz')[0]+'_resamp.nii.gz'
@@ -123,7 +93,7 @@ for sub in sub_list:
                 bad_runs.append([sub, tract, 'center align'])
                 raise RuntimeError
 
-            #Resample the aligned tract ROI to the tract mask
+            #Resample the aligned tract ROI to the preprocessed dti
             call_parts = [
                           '3dresample',
                           '-master', preproc_dti,

@@ -181,3 +181,41 @@ def sample_FA(in_tck, in_fa, out_fa):
         return None
     else:
         return out_fa
+
+def align_centers(base_image, moving_image):
+
+    current_dir = os.getcwd()
+
+    #Create output image file name
+    if moving_image[-7:] == '.nii.gz':
+      input_prefix = moving_image[:-7]
+      input_extension = '.nii.gz'
+    elif moving_image[-4:] == '.nii':
+      input_prefix = moving_image[:-4]
+      input_extension = '.nii'
+    else:
+      logging.error('Input moving image should be .nii or .nii.gz!')
+      logging.error('moving_image: {}'.format(moving_image))
+      logging.error('emerald_dwi_analysis.py -- align_centers()')
+      return None
+
+    out_image = '{}_shft{}'.format(input_prefix, input_extension)
+
+    target_dir = os.path.split(base_image)[0]
+    os.chdir(target_dir)
+
+    #Align the centers of two images
+    call_parts = [
+                    '@Align_Centers',
+                    '-base', base_image,
+                    '-dset', moving_image
+                    ]
+    logging.info('Aligning centers...')
+
+    error_flag = subprocess.call(call_parts)
+    os.chdir(current_dir)
+    if error_flag:
+        logging.error('Process failed: {}'.format(call_parts))
+        return None
+    else:
+        return out_image

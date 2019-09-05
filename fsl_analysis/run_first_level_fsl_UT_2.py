@@ -12,19 +12,17 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 
 full_template = os.path.join(template_directory, template_file)
 
-subs_to_run = ['UT0005']
+# subs_to_run = ['UT0003']
 
-# subs_to_run = [
-#               'UT0003',
-#               'UT0004',
-#               'UT0005',
-#               'UT0024',
-#               'UT0025'
-#               ]
+subs_to_run = [
+              'UT0004',
+              'UT0005',
+              'UT0024',
+              'UT0025'
+              ]
 
 
-# runs_to_run = ['1','2','3','4']
-runs_to_run = ['3']
+runs_to_run = ['1','2','3','4']
 
 
 good_runs = []

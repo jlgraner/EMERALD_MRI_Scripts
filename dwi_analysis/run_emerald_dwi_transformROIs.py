@@ -18,38 +18,9 @@ sub_list = [
             # 'EM0400',
             # 'EM0500',
             # 'EM0519',
-            'EM0525'
+            'EM0400'
             ]
 
-# sub_list = [
-#             # 'EM0001',
-#             'EM0033',
-#             'EM0036',
-#             'EM0038',
-#             'EM0066',
-#             'EM0071',
-#             'EM0088',
-#             'EM0126',
-#             'EM0153',
-#             'EM0155',
-#             'EM0162',
-#             'EM0164',
-#             'EM0174',
-#             'EM0179',
-#             'EM0182',
-#             'EM0184',
-#             'EM0187',
-#             # 'EM0188',
-#             'EM0192',
-#             'EM0202',
-#             'EM0206',
-#             'EM0217',
-#             'EM0219',
-#             'EM0220',
-#             'EM0223',
-#             'EM0229',
-#             'EM0240'
-#             ]
 
 tract_list = [
               'R_SLFII',
@@ -68,10 +39,8 @@ base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep/sub-{sub
 
 base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/DWI/')
 base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/anat/')
-# base_anat_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/new_fmriprep/fmriprep/sub-{sub}/anat/')
 
 tract_mask_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/DTI_TractCreationMasks/')
-# tract_mask_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/dwi/NewMaskTest/dsi_studio_test_rois/')
 
 
 good_runs = []
@@ -141,8 +110,17 @@ for sub in sub_list:
                if subspace_mask is None:
                   logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
                   raise RuntimeError('Transforming mask to subject space failed!')
+
+               #Align the center of the transformed mask to the preprocessed DTI
+               # aligned_mask = eda.align_centers(input_dti, subspace_mask)
+               # if aligned_mask is None:
+               #    logging.error('Aligning mask to input DTI failed: {}'.format(subspace_mask))
+               #    raise RuntimeError('Aligning mask to input DTI failed!')
+
                #Move the transformed mask to the subject's directory
                shutil.move(subspace_mask, sub_output_dir)
+               #Move the aligned mask to the subject's directory
+               # shutil.move(aligned_mask, sub_output_dir)
 
                subspace_include_roi_list = []
                for element in include_roi_list:
@@ -151,9 +129,17 @@ for sub in sub_list:
                       logging.error('Transforming sphere mask to subject space failed!')
                       raise RuntimeError('Transforming sphere mask to subject space failed!')
                  else:
-                      subspace_include_roi_list.append(out_name)
+                      # #Align the center of the transformed sphere mask to the preprocessed DTI
+                      # aligned_sphere = eda.align_centers(input_dti, out_name)
+                      # if aligned_sphere is None:
+                      #   logging.error('Alignind sphere mask to input DTI failed: {}'.format(out_name))
+                      #   raise RuntimeError('Aligning sphere mask to input DTI failed!')
+                      # subspace_include_roi_list.append(aligned_sphere)
+                      subspace_include_roi_list.append(name_out)
                       #Move the transformed roi to the subject's directory
                       shutil.move(out_name, sub_output_dir)
+                      #Move the aligned roi to the subject's directory
+                      # shutil.move(aligned_sphere, sub_output_dir)
 
                good_runs.append([sub, tract])
 
