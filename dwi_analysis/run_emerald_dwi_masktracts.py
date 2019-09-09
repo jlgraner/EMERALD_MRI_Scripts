@@ -33,11 +33,15 @@ for sub in sub_list:
     centered_fa = fa_file.split('.nii.gz')[0]+'_shft.nii.gz'
     resampled_fa = fa_file.split('.nii.gz')[0]+'_final.nii.gz'
 
+    #Save current directory so we can get back
+    current_dir = os.getcwd()
+    #Change to output directory
+    os.chdir(sub_dir)
+
     call_parts = [
                   '@Align_Centers',
                   '-base', preproc_dti,
-                  '-dset', fa_file,
-                  '-prefix', os.path.split(centered_fa)[-1]
+                  '-dset', fa_file
                   ]
     print('Running @Align_centers for {}, FA map'.format(sub))
     print('preproc_dti: {}'.format(preproc_dti))
@@ -47,7 +51,11 @@ for sub in sub_list:
     if error_flag:
         print('@Align_centers failed for subject {}, FA!'.format(sub))
         bad_runs.append([sub, 'FA', 'center align'])
+        os.chdir(current_dir)
         raise RuntimeError
+
+    #Change back to the original directory
+    os.chdir(current_dir)
 
     #Resample FA image to preprocessed DTI
     call_parts = [
@@ -78,6 +86,12 @@ for sub in sub_list:
                     print('Output file already there; deleting it:{}'.format(element))
                     os.remove(element)
 
+
+            #Save current directory so we can get back
+            current_dir = os.getcwd()
+            #Change to output directory
+            os.chdir(sub_dir)
+
             #Align the tract ROI with the preprocessed DTI
             call_parts = [
                           '@Align_Centers',
@@ -92,7 +106,11 @@ for sub in sub_list:
             if error_flag:
                 print('@Align_centers failed for subject {}, tract {}!'.format(sub, tract))
                 bad_runs.append([sub, tract, 'center align'])
+                os.chdir(current_dir)
                 raise RuntimeError
+
+            #Change back to the original directory
+            os.chdir(current_dir)
 
             #Resample the aligned tract ROI to the preprocessed dti
             call_parts = [
