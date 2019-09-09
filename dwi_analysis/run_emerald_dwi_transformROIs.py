@@ -18,7 +18,7 @@ sub_list = [
             # 'EM0400',
             # 'EM0500',
             # 'EM0519',
-            'EM0400'
+            'EM0519'
             ]
 
 
@@ -111,16 +111,9 @@ for sub in sub_list:
                   logging.error('Transforming mask to subject space failed: {}'.format(in_mask))
                   raise RuntimeError('Transforming mask to subject space failed!')
 
-               #Align the center of the transformed mask to the preprocessed DTI
-               # aligned_mask = eda.align_centers(input_dti, subspace_mask)
-               # if aligned_mask is None:
-               #    logging.error('Aligning mask to input DTI failed: {}'.format(subspace_mask))
-               #    raise RuntimeError('Aligning mask to input DTI failed!')
-
                #Move the transformed mask to the subject's directory
                shutil.move(subspace_mask, sub_output_dir)
                #Move the aligned mask to the subject's directory
-               # shutil.move(aligned_mask, sub_output_dir)
 
                subspace_include_roi_list = []
                for element in include_roi_list:
@@ -129,17 +122,10 @@ for sub in sub_list:
                       logging.error('Transforming sphere mask to subject space failed!')
                       raise RuntimeError('Transforming sphere mask to subject space failed!')
                  else:
-                      # #Align the center of the transformed sphere mask to the preprocessed DTI
-                      # aligned_sphere = eda.align_centers(input_dti, out_name)
-                      # if aligned_sphere is None:
-                      #   logging.error('Alignind sphere mask to input DTI failed: {}'.format(out_name))
-                      #   raise RuntimeError('Aligning sphere mask to input DTI failed!')
-                      # subspace_include_roi_list.append(aligned_sphere)
-                      subspace_include_roi_list.append(name_out)
+                      subspace_include_roi_list.append(out_name)
                       #Move the transformed roi to the subject's directory
                       shutil.move(out_name, sub_output_dir)
                       #Move the aligned roi to the subject's directory
-                      # shutil.move(aligned_sphere, sub_output_dir)
 
                good_runs.append([sub, tract])
 

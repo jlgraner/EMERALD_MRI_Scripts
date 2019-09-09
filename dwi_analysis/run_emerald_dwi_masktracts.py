@@ -7,7 +7,7 @@ this_env = os.environ
 
 sub_list = [
             # 'EM0360',
-            'EM0400',
+            'EM0519'
             # 'EM0500',
             # 'EM0519'
             ]
@@ -36,7 +36,8 @@ for sub in sub_list:
     call_parts = [
                   '@Align_Centers',
                   '-base', preproc_dti,
-                  '-dset', fa_file
+                  '-dset', fa_file,
+                  '-prefix', os.path.split(centered_fa)[-1]
                   ]
     print('Running @Align_centers for {}, FA map'.format(sub))
     print('preproc_dti: {}'.format(preproc_dti))
@@ -59,12 +60,12 @@ for sub in sub_list:
     error_flag = subprocess.call(call_parts)
     if error_flag:
         print('3dresample failed for subject {}, FA!'.format(sub))
-        bad_runs.append([sub, tract, 'resample'])
+        bad_runs.append([sub, 'FA', 'resample'])
         raise RuntimeError
 
     for tract in tract_list:
         try:
-            tract_mask_file = os.path.join(sub_dir, '{}_mask_{}_shft.nii.gz'.format(tract, sub))
+            tract_mask_file = os.path.join(sub_dir, '{}_mask_{}.nii.gz'.format(tract, sub))
             tract_roi_file = os.path.join(sub_dir, '{}_tractROI_{}.nii.gz'.format(tract, sub))
             centered_roi_file = tract_roi_file.split('.nii.gz')[0]+'_shft.nii.gz'
             resampled_roi_file = tract_roi_file.split('.nii.gz')[0]+'_resamp.nii.gz'
@@ -125,6 +126,9 @@ for sub in sub_list:
             print('\nSomething went wrong with subject {}, tract {}.\n'.format(sub, tract))
             print('{}'.format(err))
             bad_runs.append([sub, tract, 'somewhere...'])
+
+#Clean up any .1D files left in the code directory
+
 
 print('-------------------------------------------')
 print('Good Runs: {}'.format(good_runs))
