@@ -6,7 +6,7 @@ import string
 this_env = os.environ
 
 input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
-output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep')
+output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS')
 fs_license = '/usr/local/freesurfer/license.txt'
 
 
