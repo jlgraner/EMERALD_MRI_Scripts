@@ -19,10 +19,52 @@ def __add_prefix(input_file, prefix):
     return output_file
 
 
-def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0):
+def remove_file(file_to_delete):
+    #This function checks for a file and then deletes it
+    if os.path.exists(file_to_delete):
+        print('DELETING file: {}'.format(file_to_delete))
+        os.remove(file_to_delete)
+
+
+def rename_file(input_file, output_file):
+    #This function copies an image file with a new name
+    print('-------Starting: rename_file-------')
+    try:
+        if not os.path.exists(input_file):
+            print('Passed input_file not found: {}'.format(input_file))
+            raise RuntimeError()
+
+        if os.path.exists(output_file):
+            print('Output file already exists...')
+            if overwrite:
+                print('Overwrite set to 1, DELETING: {}'.format(output_file))
+                os.remove(output_file)
+            else:
+                print('Overwrite not set! EXITTING!')
+                raise RuntimeError()
+        copy_call = [
+                     '3dcopy',
+                     input_file,
+                     output_file
+                    ]
+
+        os.system(' '.join(copy_call))
+        if not os.path.exists(output_file):
+            print('Output file should be there but is not! {}'.format(output_file))
+            raise RuntimeError()
+
+        print('-------Done: apply_mask-------')
+        return output_file
+    except:
+        print('ERROR renaming file!')
+        return None
+
+
+
+def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0, skip=0):
     #This function uses AFNI's 3dTcat to remove a number of initial TRs from
     #a 4D image.
-    print('----Starting: emerald_preproc_lib.remove_trs()----')
+    print('-------Starting: remove_trs-------')
     try:
         #Check the input file for a path
         input_path, input_file = os.path.split(input_image)
@@ -44,6 +86,9 @@ def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0):
         #Check to see if passed output image is already there
         if os.path.exists(output_image):
             print('output_image already exists!')
+            if skip:
+                print('Skip set, returning...')
+                return output_image
             if overwrite:
                 print('Overwrite set to 1, deleting...')
                 os.remove(output_image)
@@ -56,16 +101,12 @@ def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0):
                    '3dTcat',
                    '-prefix',
                    output_image,
-                   input_image+"'[{}..$]'".format(cut_trs)
+                   input_image+'"[{}..$]"'.format(cut_trs)
                   ]
 
         print('Removing TRs...')
-        process = subprocess.Popen(ct_call, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        if err != '':
-            print('Something went wrong with 3dTcat call!')
-            print(err)
-            raise RuntimeError()
+
+        os.system(' '.join(ct_call))
 
         if not os.path.exists(output_image):
             print('output_image should be there, but is not: {}'.format(output_image))
@@ -75,13 +116,14 @@ def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0):
         return None
 
     print('TR removal successful.')
+    print('-------Done: apply_mask-------')
     return output_image
 
 
-def tempfilt(input_image, overwrite=0):
+def tempfilt(input_image, overwrite=0, skip=0):
     #This function applies temporal filtering to a passed image.
     #It uses settings that mimic the defaults used by the FEAT GUI
-
+    print('-------Starting: tempfilt-------')
     try:
         #Check the input file for a path
         input_path, input_file = os.path.split(input_image)
@@ -112,12 +154,7 @@ def tempfilt(input_image, overwrite=0):
                       ]
         #Carry out temporal mean creation
         print('...creating temporal mean...')
-        process = subprocess.Popen(call_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        if err != '':
-            print('Something went wrong creating mean functional image!')
-            print(err)
-            raise RuntimeError()
+        os.system(' '.join(call_parts))
 
         #Create the temporal-filtered image filename
         temp_filt_filename = __add_prefix(input_file, '_tempfilt')
@@ -125,6 +162,11 @@ def tempfilt(input_image, overwrite=0):
         #If the filtered data already exists, delete it
         if os.path.exists(temp_filt_output):
             print('Filtered file exists: {}'.format(temp_filt_output))
+            if skip:
+                print('Skip set, returning...')
+                print('...deleting temporal mean first...')
+                os.remove(temp_tmean_output)
+                return temp_filt_output
             if overwrite:
                 print('Overwrite set, deleting existing file...')
                 os.remove(temp_filt_output)
@@ -142,12 +184,7 @@ def tempfilt(input_image, overwrite=0):
                       ]
         #Carry out temporal filtering
         print('...applying temporal filter...')
-        process = subprocess.Popen(call_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        if err != '':
-            print('Something went wrong creating mean functional image!')
-            print(err)
-            raise RuntimeError()
+        os.system(' '.join(call_parts))
         #Delete the mean image
         print('...deleting temporal mean...')
         os.remove(temp_tmean_output)
@@ -156,12 +193,14 @@ def tempfilt(input_image, overwrite=0):
         return None
 
     print('Temporal filtering successful!')
+    print('-------End: apply_mask-------')
     return temp_filt_output
 
 
-def apply_mask(input_image, mask_image, overwrite=0):
+def apply_mask(input_image, mask_image, overwrite=0, skip=0):
     #This function takes a binary mask image and applies it to another image
     #using AFNI's 3dCalc.
+    print('-------Starting: apply_mask-------')
 
     try:
         #Check the input file for a path
@@ -187,19 +226,24 @@ def apply_mask(input_image, mask_image, overwrite=0):
             raise RuntimeError()
 
         #Create the masked file name
-        mask_out_file = __append_prefix(input_file, '_brain')
+        print('Creating masked file output name...')
+        mask_out_file = __add_prefix(input_file, '_brain')
         mask_out_image = os.path.join(input_path, mask_out_file)
         #Check to see if output masked image is already there
         if os.path.exists(mask_out_image):
             print('mask_out_image already exists!')
+            if skip:
+                print('Skip set, returning...')
+                return mask_out_image
             if overwrite:
                 print('Overwrite set to 1, deleting...')
-                os.remove(mask_out_image_image)
+                os.remove(mask_out_image)
             else:
                 print('Overwrite not set, exitting...')
                 return None
 
         #Create call to mask the image
+        print('Creating call parts list...')
         call_parts = [
                       '3dcalc',
                       '-a', input_image,
@@ -210,15 +254,11 @@ def apply_mask(input_image, mask_image, overwrite=0):
                      ]
         #Carry out masking
         print('...applying mask...')
-        process = subprocess.Popen(call_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        if err != '':
-            print('Something went wrong masking image!')
-            print(err)
-            raise RuntimeError()
+        os.system(' '.join(call_parts))
     except:
         print('ERROR applying mask!')
         return None
 
     print('Masking successful.')
+    print('-------Done: apply_mask-------')
     return mask_out_image

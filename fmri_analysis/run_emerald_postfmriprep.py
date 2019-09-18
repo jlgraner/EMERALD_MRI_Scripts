@@ -11,9 +11,36 @@ this_env = os.environ
 
 overwrite = 0
 
-subs_to_run = ['EM0381']
+subs_to_run = ['EM0187']
+
+# subs_to_run = [
+#                'EM0126',
+#                'EM0153',
+#                'EM0155',
+#                'EM0162',
+#                'EM0164',
+#                'EM0174',
+#                'EM0179',
+#                'EM0184',
+#                'EM0192',
+#                'EM0202',
+#                'EM0206',
+#                'EM0217',
+#                'EM0219',
+#                'EM0220',
+#                'EM0223',
+#                'EM0229',
+#                'EM0240',
+#                'EM0291',
+#                'EM0304',
+#                'EM0360',
+#                'EM0400',
+#                'EM0500',
+#                'EM0519'
+#               ]
 
 runs_to_run = ['1','2','3','4']
+# runs_to_run = ['2','3','4']
 
 good_runs = []
 failed_runs = []
@@ -28,37 +55,40 @@ for sub in subs_to_run:
             input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-smoothAROMAnonaggr_bold.nii.gz'
             full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
 
-            #Put together the output file
-            output_file = 'sub-{s}_emoreg_run{r}_AROMApreproc_short.nii.gz'
-            full_output = os.path.join(base_input_dir, output_file).format(s=sub,r=run)
+            #Put together the mask file
+            mask_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-brain_mask.nii.gz'
+            full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
 
-            #Put together call to 3dTcat
-            ct_call = "3dTcat -prefix {output} {input}'[4..$]'".format(output=full_output,input=full_input)
+            #Put together base output image name
+            new_file = 'sub-{s}_emoreg_run{r}_AROMApreproc.nii.gz'
+            new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
 
-            #Check to see if output is already there
-            ##TODO: the following flow should be set so there's only one copy of the call
-            if os.path.exists(full_output):
-                if overwrite:
-                    print('Deleting existing output: {}'.format(full_output))
-                    os.remove(full_output)
+            #Rename the image
+            new_output = epl.rename_file(full_input, new_image)
+            if new_output is None:
+              raise RuntimeError('Renaming')
 
-                    #Pass call to terminal
-                    print('Removing first 4 TRs from preprocessed data. Subject {}, run {}.'.format(sub,run))
-                    print('Input: {}'.format(full_input))
-                    print('Output: {}'.format(full_output))
-                    os.system(ct_call)
-                else:
-                    print('Output file already exists and overwrite is not set!')
-                    print('Subject {}, run {}'.format(sub,run))
-                    print('EXITTING!')
-                    sys.exit()
-            else:
-                #Pass call to terminal
-                print('Removing first 4 TRs from preprocessed data. Subject {}, run {}.'.format(sub,run))
-                print('Input: {}'.format(full_input))
-                print('Output: {}'.format(full_output))
-                os.system(ct_call)
-                good_runs.append([sub,run])
+            #Remove the first 4 TRs from the data
+            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=1)
+            if short_image is None:
+              raise RuntimeError('TR removal')
+
+            #Apply temporal filter to the data
+            temp_image = epl.tempfilt(short_image, skip=1)
+            if temp_image is None:
+              raise RuntimeError('Temporal filter')
+
+            #Mask the image
+            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=1)
+            if masked_image is None:
+              raise RuntimeError('Masking')
+
+            #Remove intermediate images
+            epl.remove_file(new_image)
+            epl.remove_file(short_image)
+            epl.remove_file(temp_image)
+
+            good_runs.append([sub,run])
         except Exception as ex:
             failed_runs.append([sub,run,ex])
 
