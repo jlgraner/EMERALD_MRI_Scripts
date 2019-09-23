@@ -10,8 +10,13 @@ import emerald_preproc_lib as epl
 this_env = os.environ
 
 overwrite = 0
+skip = 1
 
-subs_to_run = ['EM0187']
+subs_to_run = [
+               'UT0005',
+               'UT0024',
+               'UT0025'
+              ]
 
 # subs_to_run = [
 #                'EM0126',
@@ -40,12 +45,13 @@ subs_to_run = ['EM0187']
 #               ]
 
 runs_to_run = ['1','2','3','4']
-# runs_to_run = ['2','3','4']
+# runs_to_run = ['2', '3', '4']
 
 good_runs = []
 failed_runs = []
 
-base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
+# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
 
 for sub in subs_to_run:
     for run in runs_to_run:
@@ -69,17 +75,17 @@ for sub in subs_to_run:
               raise RuntimeError('Renaming')
 
             #Remove the first 4 TRs from the data
-            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=1)
+            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=skip)
             if short_image is None:
               raise RuntimeError('TR removal')
 
             #Apply temporal filter to the data
-            temp_image = epl.tempfilt(short_image, skip=1)
+            temp_image = epl.tempfilt(short_image, skip=skip)
             if temp_image is None:
               raise RuntimeError('Temporal filter')
 
             #Mask the image
-            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=1)
+            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=skip)
             if masked_image is None:
               raise RuntimeError('Masking')
 
