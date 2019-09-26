@@ -24,6 +24,44 @@ def __write_fsl(condition_name, start_times, durations, output_dir, subid, runid
     fid.close()
     
     
+def __create_fsl_event_condition(event_type, lines, time_to_ignore, stimtype_select=None, stimdescrip_select=None):
+
+    #lines is a list of lists. Each element of lines has the following:
+    #[type, timefromstart, stimtype, stimdescrip]
+    
+    #This function returns start times for a given condition and sets all durations to 0.1
+    #to mimic a single, short event.
+    events_to_keep = []
+
+    for element in lines:
+        keep_it = 0
+        if element[0] in event_type:
+            keep_it = 1
+            excluded_start = 0
+            if (stimtype_select is not None) and (element[2] != stimtype_select):
+                keep_it = 0
+                excluded_start = 1
+            if (stimdescrip_select is not None) and (element[3] != stimdescrip_select):
+                keep_it = 0
+                excluded_start = 1
+        if keep_it:
+            events_to_keep.append(element)
+
+    #In this case we expect the event types to all be the same, as there are no end timee.
+
+    #Create list of durations
+    durations = []
+    for i in events_to_keep:
+        durations.append(0.1)
+
+    #Create list of start times, shifted for pre-steady-state time
+    start_times = []
+    for element in events_to_keep:
+        start_times.append(float(element[1]) - time_to_ignore)
+
+    return start_times, durations
+
+
 def __create_fsl_condition(start_type, end_type, lines, time_to_ignore, stimtype_select=None, stimdescrip_select=None):
     
     #lines is a list of lists. Each element of lines has the following:
@@ -422,6 +460,11 @@ def csv2fsl(input_file=None, output_dir=None):
     #event type to the first subsequent occurrence of the end event
     #type.
     
+
+    #Write a conditoin file for motor events
+    start_times, durations = __create_fsl_event_condition(['negArrowResponse', 'neuArrowResponse', 'neuValenceResponse', 'negValenceResponse', 'neuArousalResponse', 'negArousalResponse'], all_line_parts, time_to_ignore)
+    __write_fsl('motorresponses', start_times, durations, output_dir, subid, runid)
+
     #Write a condition file for negative memory cue words
     start_times, durations = __create_fsl_condition(['negMemoryOnset'], ['negMemoryOffset'], all_line_parts, time_to_ignore)
     __write_fsl('negmemorywords', start_times, durations, output_dir, subid, runid)
