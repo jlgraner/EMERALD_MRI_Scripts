@@ -10,7 +10,7 @@ base_output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/dwiprep_UT/sub-
 
 
 sub_list = [
-            'UT0004'
+            'UT0024'
             ]
 
 
