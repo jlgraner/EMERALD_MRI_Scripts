@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy import optimize
 import subprocess
 import logging
+import os
 
 
 def gauss_model(x, height, mean, std):
@@ -31,7 +32,7 @@ def create_histo(input_file, bins=122, minimum=0, maximum=None):
         maximum = str(maximum)
     else:
         #Find maximum intensity from image
-        max_call = [
+        call_parts = [
                     'fslstats',
                     input_file,
                     '-R'
@@ -41,7 +42,7 @@ def create_histo(input_file, bins=122, minimum=0, maximum=None):
         maximum = call_output.decode("utf-8").split()[-1]
 
     #Create histogram bin values
-    histo_call = [
+    call_parts = [
                   'fslstats',
                   input_file,
                   '-H', bins, minimum, maximum
@@ -112,6 +113,10 @@ def mask_roi(image_file, roi_file, output_file, int_thresh):
 def mean_image(image_file, output_image):
     #Create a mean of the passed image
 
+    #If the output image is already there, delete it
+    if os.path.exists(output_image):
+        os.remove(output_image)
+
     call_parts = [
                   '3dTstat',
                   '-mean',
@@ -123,3 +128,14 @@ def mean_image(image_file, output_image):
     call_output, stderr = proc.communicate()
 
     return output_image
+
+def save_plot(x_arr_list, y_arr_list, output_file, sub, run):
+    #Create a plot of some data and save it to a file
+    plt.figure(num='save_plot_temp')
+    for element in zip(x_arr_list, y_arr_list):
+        plt.plot(element[0], element[1])
+    plt.xlabel('Intensity')
+    plt.ylabel('# of Voxels in Bin')
+    plt.title('Sub {}, Run {}'.format(sub, run))
+    plt.savefig(output_file)
+    plt.close(fig='save_plot_temp')
