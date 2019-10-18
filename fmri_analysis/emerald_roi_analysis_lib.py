@@ -83,8 +83,8 @@ def fit_gauss(x_array, y_array):
     #Fit a gaussian to the passed data, using optimize.curve_fit
     #Set initial parameters based on the passed data
     height_guess = y_array.max()
-    mean_guess = x_array[np.where(y_array==y_array.max())]
-    std_guess = '200'
+    mean_guess = x_array[np.where(y_array==y_array.max())][-1]
+    std_guess = 200
 
     opt_params, _ = optimize.curve_fit(gauss_model, x_array, y_array, p0=(height_guess, mean_guess, std_guess))
 
@@ -102,7 +102,7 @@ def mask_roi(image_file, roi_file, output_file, int_thresh):
                   '-b', roi_file,
                   '-float',
                   '-prefix', output_file,
-                  '-exp', '"equals(ispositive(a-int_thresh), b)"'
+                  '-exp', 'ispositive(a-{})*b'.format(int_thresh)
                   ]
     proc = subprocess.Popen(call_parts, stdout=subprocess.PIPE)
     call_output, stderr = proc.communicate()
@@ -139,3 +139,48 @@ def save_plot(x_arr_list, y_arr_list, output_file, sub, run):
     plt.title('Sub {}, Run {}'.format(sub, run))
     plt.savefig(output_file)
     plt.close(fig='save_plot_temp')
+
+
+def _create_html_part(sub, run, histo_png, fit_png):
+    line_list = [
+    '<H2>{sub}, Run {run}'.format(sub, run),
+    '<br>',
+    '<IMAGE SRC="{histo}" HEIGHT=200 ALT="histo_png">'.format(histo=histo_png),
+    '<IMAGE SRC="{fit}" HEIGHT=200 ALT="fit_png">'.format(fit=fit_png),
+    '<br>'
+                ]
+    return line_list
+
+
+def write_html(info_dict, output_dir):
+    #Write an html file linking all the created png files
+    #for visual qa ofthe fitting process.
+    html_lines = []
+    first_lines = [
+    '<HTML>',
+    '<HEAD>',
+    '<TITLE>ROI Intensity Masking Fit Plots</TITLE>',
+    '</HEAD>',
+    '<BODY>'
+                 ]
+
+    last_lines = [
+    '</BODY>',
+    '</HTML>'
+                 ]
+
+    html_lines = html_lines + first_lines
+    for sub in info_dict.keys():
+        for run in info_dict[sub].keys():
+            histo_png = info_dict[sub][run]['histo_png']
+            fit_png = info_dict[sub][run]['fit_png']
+            new_lines = _create_html_part(sub, run, histo_png, fit_png)
+            html_lines = html_lines + new_lines
+    html_lines = html_lines + last_lines
+
+    output_file = os.path.join(output_dir, 'PPI_Prep_Fit_Plots.html')
+    with open(output_file, 'w') as fo:
+        for line in html_lines:
+            fo.write('{}\n'.format(line))
+
+    return output_file
