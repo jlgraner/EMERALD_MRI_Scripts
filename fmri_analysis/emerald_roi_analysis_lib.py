@@ -6,6 +6,7 @@ from scipy import optimize
 import subprocess
 import logging
 import os
+import nibabel as nb
 
 
 def gauss_model(x, height, mean, std):
@@ -141,6 +142,14 @@ def save_plot(x_arr_list, y_arr_list, output_file, sub, run):
     plt.close(fig='save_plot_temp')
 
 
+def count_mask(input_mask):
+    #Count the number of voxels included in the passed mask
+    mask_vol = nb.load(input_mask)
+    mask_data = mask_vol.get_data()
+
+    return mask_data.sum()
+
+
 def _create_html_part(sub, run, histo_png, fit_png, int_thresh):
 
     histo_png_short = '.\{}\{}'.format(histo_png.split('/')[-2], histo_png.split('/')[-1])
@@ -177,16 +186,39 @@ def write_html(info_dict, output_dir):
     html_lines = html_lines + first_lines
     for sub in info_dict.keys():
         for run in info_dict[sub].keys():
-            histo_png = info_dict[sub][run]['histo_png']
-            fit_png = info_dict[sub][run]['fit_png']
-            int_thresh = info_dict[sub][run]['int_thresh']
-            new_lines = _create_html_part(sub, run, histo_png, fit_png, int_thresh)
-            html_lines = html_lines + new_lines
+            if 'histo_png' in info_dict[sub][run]:
+                histo_png = info_dict[sub][run]['histo_png']
+                fit_png = info_dict[sub][run]['fit_png']
+                int_thresh = info_dict[sub][run]['int_thresh']
+                new_lines = _create_html_part(sub, run, histo_png, fit_png, int_thresh)
+                html_lines = html_lines + new_lines
     html_lines = html_lines + last_lines
 
     output_file = os.path.join(output_dir, 'PPI_Prep_Fit_Plots.html')
     with open(output_file, 'w') as fo:
         for line in html_lines:
+            fo.write('{}\n'.format(line))
+
+    return output_file
+
+
+def write_csv(info_dict, roi_list, output_dir):
+    #Write a csv file containing information on how many voxels were
+    #excluded from each participant's mask.
+    lines_to_write = []
+    header_line = 'SubID,ROI,MaskVox,DiffFromOrig'
+    lines_to_write.append(header_line)
+    for sub in info_dict.keys():
+        for roi in roi_list:
+            mask_count = info_dict[sub][roi]['final_mask_count']
+            diff_count = info_dict[sub][roi]['final_mask_diff']
+            this_line = '{},{},{},{}'.format(sub,roi,mask_count,diff_count)
+            lines_to_write.append(this_line)
+
+    output_file = os.path.join(output_dir, 'PPI_Prep_Mask_Counts.csv')
+
+    with open(output_file, 'w') as fo:
+        for line in lines_to_write:
             fo.write('{}\n'.format(line))
 
     return output_file
