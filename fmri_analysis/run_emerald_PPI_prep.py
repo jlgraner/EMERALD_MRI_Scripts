@@ -26,8 +26,12 @@ base_input_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'fmripre
 
 # base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'Test_area', 'ROI_testing')
 base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI')
+png_output_dir = os.path.join(base_output_dir, 'PPI_Prep_Fit_Plots_source')
 
 masking_info = {}
+
+if not os.path.exists(png_output_dir):
+    os.makedirs(png_output_dir)
 
 for sub in sub_list:
     things_to_delete = []
@@ -52,7 +56,7 @@ for sub in sub_list:
         x_first, y_first, x_last, y_last = emlab.split_histo(x_array, y_array)
 
         #Save some plots for debugging
-        full_plot = os.path.join(sub_output_dir, 'sub-{}_run{}_histo_plot.png'.format(sub, run))
+        full_plot = os.path.join(png_output_dir, 'sub-{}_run{}_histo_plot.png'.format(sub, run))
         emlab.save_plot([x_first, x_last], [y_first, y_last], full_plot, sub, run)
 
         #Fit a gaussian to the latter portion of the histogram
@@ -61,14 +65,11 @@ for sub in sub_list:
         #Plot the fit
         x_gauss = x_last
         y_gauss = emlab.gauss_model(x_gauss, opt_params[0], opt_params[1], opt_params[2])
-        fit_plot = os.path.join(sub_output_dir, 'sub-{}_run{}_fit_plot.png'.format(sub, run))
+        fit_plot = os.path.join(png_output_dir, 'sub-{}_run{}_fit_plot.png'.format(sub, run))
         emlab.save_plot([x_gauss, x_last], [y_gauss, y_last], fit_plot, sub, run)
 
         #Divide the center of the gaussian by two (NOTE: THIS IS A ROUGH APPROXIMATION OF THE DOUBLE-GAUSS METHOD!!!)
         int_thresh = opt_params[1]/2.0
-        print('------------------------------')
-        print('Intensity threshold: {}'.format(int_thresh))
-        print('------------------------------')
 
         #Save a bunch of stuff
         masking_info[sub][run]['int_thresh'] = int_thresh
@@ -116,7 +117,6 @@ for sub in sub_list:
 
         if os.path.exists(final_output_roi):
             os.remove(final_output_roi)
-        print(' '.join(call_parts))
         proc = subprocess.Popen(call_parts, stdout=subprocess.PIPE)
         call_output, stderr = proc.communicate()
 

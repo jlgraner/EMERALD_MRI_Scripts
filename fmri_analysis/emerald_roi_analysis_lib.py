@@ -141,12 +141,17 @@ def save_plot(x_arr_list, y_arr_list, output_file, sub, run):
     plt.close(fig='save_plot_temp')
 
 
-def _create_html_part(sub, run, histo_png, fit_png):
+def _create_html_part(sub, run, histo_png, fit_png, int_thresh):
+
+    histo_png_short = '.\{}\{}'.format(histo_png.split('/')[-2], histo_png.split('/')[-1])
+    fit_png_short = '.\{}\{}'.format(fit_png.split('/')[-2], fit_png.split('/')[-1])
+
     line_list = [
-    '<H2>{sub}, Run {run}'.format(sub, run),
+    '<H2>{sub}, Run {run}'.format(sub=sub, run=run),
+    '<H3>Intensity Threshold: {:.2f}'.format(int_thresh),
     '<br>',
-    '<IMAGE SRC="{histo}" HEIGHT=200 ALT="histo_png">'.format(histo=histo_png),
-    '<IMAGE SRC="{fit}" HEIGHT=200 ALT="fit_png">'.format(fit=fit_png),
+    '<IMAGE SRC="{histo}" HEIGHT=300 ALT="histo_png">'.format(histo=histo_png_short),
+    '<IMAGE SRC="{fit}" HEIGHT=300 ALT="fit_png">'.format(fit=fit_png_short),
     '<br>'
                 ]
     return line_list
@@ -174,7 +179,8 @@ def write_html(info_dict, output_dir):
         for run in info_dict[sub].keys():
             histo_png = info_dict[sub][run]['histo_png']
             fit_png = info_dict[sub][run]['fit_png']
-            new_lines = _create_html_part(sub, run, histo_png, fit_png)
+            int_thresh = info_dict[sub][run]['int_thresh']
+            new_lines = _create_html_part(sub, run, histo_png, fit_png, int_thresh)
             html_lines = html_lines + new_lines
     html_lines = html_lines + last_lines
 
