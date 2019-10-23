@@ -51,7 +51,8 @@ run_list = ['1', '2', '3', '4']
 # run_list = ['1']
 
 
-roi_list = ['amy']
+# roi_list = ['amy']
+roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 
 delete_things = 1
 

@@ -65,11 +65,11 @@ condition_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 
 image_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'fmriprep', 'sub-{sub}', 'ses-day3', 'func')
 
 #Directory containing masks to apply
-mask_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
+# mask_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
+mask_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
 
 #Directory in which to write the new EV files
 output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Condition_files')
-# output_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'Test_area', 'fmri')
 
 good_runs = []
 bad_runs = []
@@ -84,7 +84,8 @@ for sub in subs_to_run:
             for mask in masks_to_apply:
                 print('Extracting ROI time-course for mask: {}'.format(mask))
                 fmri_image = os.path.join(image_dir.format(sub=sub), 'sub-{}_emoreg_run{}_AROMApreproc_short_tempfilt.nii.gz'.format(sub,run))
-                mask_image = os.path.join(mask_dir, 'ROI_{}_final.nii.gz'.format(mask))
+                # mask_image = os.path.join(mask_dir, 'ROI_{}_final.nii.gz'.format(mask))
+                mask_image = os.path.join(mask_dir.format(sub=sub), 'sub_{sub}_ROI_{mask}_final.nii.gz'.format(sub=sub,mask=mask))
                 output_file = os.path.join(output_dir.format(sub=sub), 'sub-{sub}_emoreg_run{run}_AROMApreproc_short_{mask}_timecourse.txt'.format(sub=sub, run=run, mask=mask))
 
                 call_parts = ['3dROIstats',

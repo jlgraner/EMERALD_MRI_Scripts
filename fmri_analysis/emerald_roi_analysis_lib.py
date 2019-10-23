@@ -95,7 +95,6 @@ def fit_gauss(x_array, y_array):
 def mask_roi(image_file, roi_file, output_file, int_thresh):
     #Create a binary mask of the image_file only where it is above int_thresh.
     #Create another mask that is the union of the new mask and the roi_file.
-    #3dcalc -a image_file -b roi_file -float -prefix output_file -exp "equals(ispositive(a-int_thresh), roi_file)"
 
     call_parts = [
                   '3dcalc',
