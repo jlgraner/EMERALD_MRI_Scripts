@@ -11,7 +11,8 @@ feat_output_dir = 'featquery_{roi}_output'
 final_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
 output_file_template = 'Group_ROI_means_fsl_{cope}.txt'
 
-roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
+# roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
+roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
 
 #for each subject:
 #	1) Locate the dist>flow map
@@ -25,43 +26,43 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 ses = 'day3'
 actually_run = 1
 
-subs_to_run = [
-              'EM0001',
-              'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              # 'EM0188',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500',
-              'EM0519'
-                  ]
+# subs_to_run = [
+#               'EM0001',
+#               'EM0033',
+#               'EM0036',
+#               'EM0038',
+#               'EM0066',
+#               'EM0071',
+#               'EM0088',
+#               'EM0126',
+#               'EM0153',
+#               'EM0155',
+#               'EM0162',
+#               'EM0164',
+#               'EM0174',
+#               'EM0179',
+#               'EM0184',
+#               'EM0187',
+#               # 'EM0188',
+#               'EM0192',
+#               'EM0202',
+#               'EM0206',
+#               'EM0217',
+#               'EM0219',
+#               'EM0220',
+#               'EM0223',
+#               'EM0229',
+#               'EM0240',
+#               'EM0291',
+#               'EM0304',
+#               'EM0381',
+#               'EM0360',
+#               'EM0400',
+#               'EM0500',
+#               'EM0519'
+#                   ]
 
-# subs_to_run = ['EM0001']
+subs_to_run = ['EM0001', 'EM0033']
 
 #Create a dictionary of all ROI files.
 #Keys will be region names, values will be full file path/names.
