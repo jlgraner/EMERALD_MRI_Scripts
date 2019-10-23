@@ -26,47 +26,45 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func'
 ses = 'day3'
 actually_run = 1
 
-# subs_to_run = [
-#               'EM0001',
-#               'EM0033',
-#               'EM0036',
-#               'EM0038',
-#               'EM0066',
-#               'EM0071',
-#               'EM0088',
-#               'EM0126',
-#               'EM0153',
-#               'EM0155',
-#               'EM0162',
-#               'EM0164',
-#               'EM0174',
-#               'EM0179',
-#               'EM0184',
-#               'EM0187',
-#               # 'EM0188',
-#               'EM0192',
-#               'EM0202',
-#               'EM0206',
-#               'EM0217',
-#               'EM0219',
-#               'EM0220',
-#               'EM0223',
-#               'EM0229',
-#               'EM0240',
-#               'EM0291',
-#               'EM0304',
-#               'EM0381',
-#               'EM0360',
-#               'EM0400',
-#               'EM0500',
-#               'EM0519'
-#                   ]
+subs_to_run = [
+              'EM0001',
+              'EM0033',
+              'EM0036',
+              'EM0038',
+              'EM0066',
+              'EM0071',
+              'EM0088',
+              'EM0126',
+              'EM0153',
+              'EM0155',
+              'EM0162',
+              'EM0164',
+              'EM0174',
+              'EM0179',
+              'EM0184',
+              'EM0187',
+              # 'EM0188',
+              'EM0192',
+              'EM0202',
+              'EM0206',
+              'EM0217',
+              'EM0219',
+              'EM0220',
+              'EM0223',
+              'EM0229',
+              'EM0240',
+              'EM0291',
+              'EM0304',
+              'EM0381',
+              'EM0360',
+              'EM0400',
+              'EM0500',
+              'EM0519'
+                  ]
 
-subs_to_run = ['EM0001', 'EM0033']
+# subs_to_run = ['EM0001', 'EM0033']
 
-#Create a dictionary of all ROI files.
-#Keys will be region names, values will be full file path/names.
-roi_dict = {}
+roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 #This dictionary will house all the ROI means and input files
 output_dict = {}
 
@@ -79,16 +77,16 @@ print('---------------------------------------------------')
 print('Participants to run: {}'.format(subs_to_run))
 print('Cope labels to run: {}'.format(cope_labels.keys()))
 
-if not os.path.exists(roi_dir):
-    print('ROI input directory cannot be found! {}'.format(roi_dir))
-    raise RuntimeError
-else:
-    for element in os.listdir(roi_dir):
-        file_parts = element.split('_')
-        if (len(file_parts)==3) and (file_parts[0]=='ROI') and (file_parts[-1]=='final.nii.gz'):
-            #We've found an ROI image file
-            print('Found ROI file: {}'.format(element))
-            roi_dict[file_parts[1]] = os.path.join(roi_dir, element)
+# if not os.path.exists(roi_dir):
+#     print('ROI input directory cannot be found! {}'.format(roi_dir))
+#     raise RuntimeError
+# else:
+#     for element in os.listdir(roi_dir):
+#         file_parts = element.split('_')
+#         if (len(file_parts)==3) and (file_parts[0]=='ROI') and (file_parts[-1]=='final.nii.gz'):
+#             #We've found an ROI image file
+#             print('Found ROI file: {}'.format(element))
+#             roi_dict[file_parts[1]] = os.path.join(roi_dir, element)
 
 print('Checking for input images...')
 for sub in subs_to_run:
@@ -104,17 +102,26 @@ for sub in subs_to_run:
             print('Input cope image cannot be found! Sub: {sub}; File: {file}'.format(sub=sub,file=cope_file))
             raise RuntimeError
 
+    #Look for masked ROIs
+    for roi in roi_list:
+      roi_file = os.path.join(roi_dir.format(sub=sub), 'sub_{sub}_ROI_{roi}_final.nii.gz'.format(sub=sub,roi=roi))
+      if not os.path.exists(roi_file):
+        print('Input ROI mask image cannot be found! Sub: {sub}; File: {file}'.format(sub=sub,file=roi_file))
+        raise RuntimeError
+
 #If we get here, everything is ready to go
 for sub in subs_to_run:
     output_dict[sub] = {}
     print('Running Sub: {}'.format(sub))
+
     for cope in cope_labels:
         print('Contrast: {}'.format(cope))
         output_dict[sub][cope] = {}
         cope_dir = os.path.join(input_dir.format(sub=sub,ses=ses), 'cope{}.feat'.format(cope_labels[cope]))
         output_dict[sub][cope]['dir'] = cope_dir
-        for roi in roi_dict:
+        for roi in roi_list:
             dir_to_delete = os.path.join(cope_dir, feat_output_dir.format(roi=roi))
+            roi_file = os.path.join(roi_dir.format(sub=sub), 'sub_{sub}_ROI_{roi}_final.nii.gz'.format(sub=sub,roi=roi))
             if os.path.exists(dir_to_delete):
               print('Output directory already there; DELETING it!')
               shutil.rmtree(dir_to_delete)
@@ -127,7 +134,7 @@ for sub in subs_to_run:
                           feat_output_dir.format(roi=roi),
                           '-p',
                           '-b',
-                          roi_dict[roi]
+                          roi_file
                           ]
             #Call featquery
             print('Calling: {}'.format(' '.join(call_parts)))
@@ -144,7 +151,7 @@ if actually_run:
   for cope in cope_labels:
       lines_to_write = ['sub\troi\tmean']
       output_file = os.path.join(final_output_dir, output_file_template.format(cope=cope))
-      for roi in roi_dict:
+      for roi in roi_list:
           for sub in subs_to_run:
               lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]))
       print('Writing file: {}'.format(output_file))
