@@ -4,6 +4,8 @@ import emerald_roi_analysis_lib as emlab
 import os
 import subprocess
 
+#This code applies participant-wise intensity-based masking to the common ROI masks.
+
 ##NOTE: this code is currently in "just-finish-it" mode and doesn't have decent error handling or logging
 
 this_env = os.environ
@@ -59,9 +61,8 @@ delete_things = 1
 roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'fmriprep', 'sub-{sub}', 'ses-day3', 'func')
 
-# base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'Test_area', 'ROI_testing')
 base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI')
-png_output_dir = os.path.join(base_output_dir, 'PPI_Prep_Fit_Plots_source')
+png_output_dir = os.path.join(base_output_dir, 'IntensityMasking_Plots_source')
 
 masking_info = {}
 

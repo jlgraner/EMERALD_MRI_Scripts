@@ -193,7 +193,7 @@ def write_html(info_dict, output_dir):
                 html_lines = html_lines + new_lines
     html_lines = html_lines + last_lines
 
-    output_file = os.path.join(output_dir, 'PPI_Prep_Fit_Plots.html')
+    output_file = os.path.join(output_dir, 'IntensityMasking_Plots.html')
     with open(output_file, 'w') as fo:
         for line in html_lines:
             fo.write('{}\n'.format(line))
@@ -214,7 +214,7 @@ def write_csv(info_dict, roi_list, output_dir):
             this_line = '{},{},{},{}'.format(sub,roi,mask_count,diff_count)
             lines_to_write.append(this_line)
 
-    output_file = os.path.join(output_dir, 'PPI_Prep_Mask_Counts.csv')
+    output_file = os.path.join(output_dir, 'IntensityMasked_ROI_Counts.csv')
 
     with open(output_file, 'w') as fo:
         for line in lines_to_write:
