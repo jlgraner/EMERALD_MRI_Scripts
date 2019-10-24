@@ -77,17 +77,6 @@ print('---------------------------------------------------')
 print('Participants to run: {}'.format(subs_to_run))
 print('Cope labels to run: {}'.format(cope_labels.keys()))
 
-# if not os.path.exists(roi_dir):
-#     print('ROI input directory cannot be found! {}'.format(roi_dir))
-#     raise RuntimeError
-# else:
-#     for element in os.listdir(roi_dir):
-#         file_parts = element.split('_')
-#         if (len(file_parts)==3) and (file_parts[0]=='ROI') and (file_parts[-1]=='final.nii.gz'):
-#             #We've found an ROI image file
-#             print('Found ROI file: {}'.format(element))
-#             roi_dict[file_parts[1]] = os.path.join(roi_dir, element)
-
 print('Checking for input images...')
 for sub in subs_to_run:
     #Make sure the input directory is there
