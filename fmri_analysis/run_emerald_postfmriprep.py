@@ -9,13 +9,11 @@ import emerald_preproc_lib as epl
 
 this_env = os.environ
 
-overwrite = 0
-skip = 1
+overwrite = 1
+skip = 0
 
 subs_to_run = [
-               'UT0005',
-               'UT0024',
-               'UT0025'
+               'EM0560'
               ]
 
 # subs_to_run = [
@@ -44,14 +42,14 @@ subs_to_run = [
 #                'EM0519'
 #               ]
 
-runs_to_run = ['1','2','3','4']
-# runs_to_run = ['2', '3', '4']
+# runs_to_run = ['1','2','3','4']
+runs_to_run = ['1', '2', '3']
 
 good_runs = []
 failed_runs = []
 
-# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
-base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
+base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
+# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
 
 for sub in subs_to_run:
     for run in runs_to_run:

@@ -41,42 +41,43 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-# subs_to_run = ['EM0381']
-subs_to_run = [
+subs_to_run = ['EM0560', 'EM0673']
+# subs_to_run = [
 #               'EM0001',
-              'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304'
+              # 'EM0033',
+              # 'EM0036',
+              # 'EM0038',
+              # 'EM0066',
+              # 'EM0071',
+              # 'EM0088',
+              # 'EM0126',
+              # 'EM0153',
+              # 'EM0155',
+              # 'EM0162',
+              # 'EM0164',
+              # 'EM0174',
+              # 'EM0179',
+              # 'EM0184',
+              # 'EM0187',
+              # 'EM0192',
+              # 'EM0202',
+              # 'EM0206',
+              # 'EM0217',
+              # 'EM0219',
+              # 'EM0220',
+              # 'EM0223',
+              # 'EM0229',
+              # 'EM0240',
+              # 'EM0291',
+              # 'EM0304'
 #               'EM0381',
 #               'EM0360',
 #               'EM0400'
-               ]
+               # ]
 
 ses_to_run = ['day3']
 runs_to_run = ['01', '02', '03', '04']
+# runs_to_run = ['01', '02', '03']
 tasks_to_run = ['emoreg']
 
 rows_to_remove = 4
@@ -157,10 +158,6 @@ for sub in subs_to_run:
                         #Put the columns with the included column labels into the new data frame
                         print('Creating new data frame from name list: {}'.format(include_list))
                         new_data = fpc.add_columns(data, new_data, include_list)
-                        #If desired, create single-TR regressors and add them to the new data frame
-                        # if include_tr_motcen_regs:
-                        #     mot_censor_dataframe = fpc.create_motion_censor_regs(data, mot_cen_limit, rows_to_remove)
-                        #     new_data = fpc.add_columns(mot_censor_dataframe, new_data, mot_censor_dataframe.keys())
                         #If desired, remove initial entries corresponding to pre-steady-state TRs
                         if rows_to_remove > 0:
                             print('Removing first {} rows from new data frame.'.format(rows_to_remove))

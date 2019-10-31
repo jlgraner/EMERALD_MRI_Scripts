@@ -5,7 +5,7 @@ import emerald_fsl_tools as eft
 
 this_env = os.environ
 
-template_directory = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/fsl_templates/first_level_template_files_03112019/')
+template_directory = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/fsl_templates/first_level_template_files_10312019/')
 template_file = 'first_level_design_template.fsf'
 
 template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
@@ -13,7 +13,9 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0229'
+               'EM0565',
+               'EM0588',
+               'EM0569'
                ]
 
 # subs_to_run = [
