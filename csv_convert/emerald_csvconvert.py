@@ -496,7 +496,10 @@ def csv2fsl(input_file=None, output_dir=None):
     #Write a condition file for the negative flow strategy cue words
     start_times, durations = __create_fsl_condition(['negStrategyOnset'], ['negStrategyOffset'], all_line_parts, time_to_ignore, stimdescrip_select='FLOW')
     __write_fsl('negflowstrategycues', start_times, durations, output_dir, subid, runid)
-    
+
+    #Write a condition file for rating scales
+    start_times, durations = __create_fsl_condition(['negValenceOnset', 'neuValenceOnset'], ['negArousalOffset', 'neuArousalOffset'], all_line_parts, time_to_ignore)
+    __write_fsl('ratings', start_times, durations, output_dir, subid, runid)
 
 def search_for_files(input_dir, search_string):
     #Look for files in input_dir that contain search_string in their names
