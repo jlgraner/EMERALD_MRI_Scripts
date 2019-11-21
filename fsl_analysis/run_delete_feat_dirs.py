@@ -12,7 +12,7 @@ base_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{s}/Func/old_feats'
 # subs_to_run = ['EM0001']
 
 subs_to_run = [
-               'EM0001',
+               # 'EM0001',
               'EM0033',
               'EM0036',
               'EM0038',
@@ -35,7 +35,17 @@ subs_to_run = [
               'EM0217',
               'EM0220',
               'EM0223',
-              'EM0240'
+              'EM0240',
+              'EM0291',
+              'EM0304',
+              'EM0381',
+              'EM0360',
+              'EM0400',
+              'EM0500',
+              'EM0565',
+              'EM0588',
+              'EM0560',
+              'EM0569'
                ]
 
 for sub in subs_to_run:
@@ -43,7 +53,7 @@ for sub in subs_to_run:
     for contents in os.listdir(base_dir.format(s=sub)):
         print('{}'.format(contents))
         # if ('.feat' in contents) and os.path.isdir(os.path.join(base_dir, contents)):
-        if '.feat' in contents:
+        if '.gfeat' in contents:
             to_delete = os.path.join(base_dir.format(s=sub), contents)
             print('Deleting directory: {}'.format(to_delete))
             shutil.rmtree(to_delete)

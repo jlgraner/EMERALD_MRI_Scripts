@@ -27,39 +27,43 @@ ses = 'day3'
 actually_run = 1
 
 subs_to_run = [
-              'EM0001',
-              'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              # 'EM0188',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500',
-              'EM0519'
+              # 'EM0001',
+              # 'EM0033',
+              # 'EM0036',
+              # 'EM0038',
+              # 'EM0066',
+              # 'EM0071',
+              # 'EM0088',
+              # 'EM0126',
+              # 'EM0153',
+              # 'EM0155',
+              # 'EM0162',
+              # 'EM0164',
+              # 'EM0174',
+              # 'EM0179',
+              # 'EM0184',
+              # 'EM0187',
+              # # 'EM0188',
+              # 'EM0192',
+              # 'EM0202',
+              # 'EM0206',
+              # 'EM0217',
+              # 'EM0219',
+              # 'EM0220',
+              # 'EM0223',
+              # 'EM0229',
+              # 'EM0240',
+              # 'EM0291',
+              # 'EM0304',
+              # 'EM0381',
+              # 'EM0360',
+              # 'EM0400',
+              # 'EM0500',
+              # 'EM0519',
+              'EM0565',
+              'EM0588',
+              'EM0560',
+              'EM0569'
                   ]
 
 # subs_to_run = ['EM0001', 'EM0033']
@@ -151,7 +155,3 @@ if actually_run:
 
 print('Done')
 print('---------------------------------------------------')
-
-# /usr/share/fsl/5.0/bin/featquery 1
-# /mnt/keoki/experiments4/EMERALD/Analysis/MRI/sub-EM0001/Func/Second_level_allruns.gfeat/cope4.feat 1
-# stats/cope1 featquery_test_single -p -b /mnt/keoki/experiments4/EMERALD/Analysis/MRI/ROIs/ROI_dlPFC_final.nii.gz

@@ -7,48 +7,54 @@ import pandas
 
 this_env = os.environ
 
-sub_list = [
-            'EM0400',
-            'EM0500',
-            'EM0519'
-            ]
-
 # sub_list = [
-#             'EM0001',
-#             'EM0033',
-#             'EM0036',
-#             'EM0038',
-#             'EM0066',
-#             'EM0071',
-#             'EM0088',
-#             'EM0126',
-#             'EM0153',
-#             'EM0155',
-#             'EM0162',
-#             'EM0164',
-#             'EM0174',
-#             'EM0179',
-#             # 'EM0182',
-#             'EM0184',
-#             'EM0187',
-#             # 'EM0188',
-#             'EM0192',
-#             'EM0202',
-#             'EM0206',
-#             'EM0217',
-#             'EM0219',
-#             'EM0220',
-#             'EM0223',
-#             'EM0229',
-#             'EM0240',
-#             'EM0291',
-#             'EM0304',
-#             'EM0381',
-#             'EM0360',
 #             'EM0400',
 #             'EM0500',
 #             'EM0519'
 #             ]
+
+sub_list = [
+            'EM0001',
+            'EM0033',
+            'EM0036',
+            'EM0038',
+            'EM0066',
+            'EM0071',
+            'EM0088',
+            'EM0126',
+            'EM0153',
+            'EM0155',
+            'EM0162',
+            'EM0164',
+            'EM0174',
+            'EM0179',
+            # 'EM0182',
+            'EM0184',
+            'EM0187',
+            # 'EM0188',
+            'EM0192',
+            'EM0202',
+            'EM0206',
+            'EM0217',
+            'EM0219',
+            'EM0220',
+            'EM0223',
+            'EM0229',
+            'EM0240',
+            'EM0291',
+            'EM0304',
+            'EM0381',
+            'EM0360',
+            'EM0400',
+            'EM0500',
+            'EM0519',
+            'EM0565',
+            'EM0588',
+            'EM0560',
+            'EM0673',
+            'EM0573',
+            'EM0643'
+            ]
 
 tract_list = [
               'L_SLFII',
@@ -60,13 +66,13 @@ tract_list = [
 bad_runs = []
 good_runs = []
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_09092019')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_11072019')
 #If the output directory does not exist, create it
 if not os.path.exists(base_output_dir):
     print('Output directory not found; creating it: {}'.format(base_output_dir))
     os.mkdir(base_output_dir)
 
-output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_08082019.csv')
+output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_11072019.csv')
 
 ##Calculate average FA for each subject for each tract
 all_fa_dictionary = {}

@@ -12,11 +12,11 @@ em_to_biac_file = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/EM_to_BI
 with open(em_to_biac_file) as fd:
     em_to_biac = json.loads(fd.read())
 
-# em_to_run = [
-#             'EM0519'
-#             ]
-
 em_to_run = [
+            'EM0812'
+            ]
+
+# em_to_run = [
               # 'EM0001',
               # 'EM0033',
               # 'EM0036',
@@ -48,13 +48,13 @@ em_to_run = [
               # 'EM0381',
               # 'EM0360',
               # 'EM0400',
-              'EM0500',
-              'EM0519',
-              'EM0565',
-              'EM0588',
-              'EM0560',
-              'EM0569'
-                  ]
+              # 'EM0500',
+              # 'EM0519',
+              # 'EM0565',
+              # 'EM0588',
+              # 'EM0560',
+              # 'EM0569'
+              #     ]
 
 for em_id in em_to_run:
     biac_ses = em_to_biac['em_to_biac'][em_id]
