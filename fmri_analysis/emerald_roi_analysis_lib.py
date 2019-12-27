@@ -9,6 +9,35 @@ import os
 import nibabel as nb
 
 
+def run_undump(output_dir, master, peak_file, rad, mask):
+    #Run AFNI's 3dUndump
+
+    #Create output file name
+    mask_file = os.path.split(mask)[-1]
+    if mask_file[-7:] == '.nii.gz':
+        mask_prefix = mask_file.split('.nii.gz')[0]
+    else:
+        mask_prefix = os.path.splitext(mask_file)[0]
+    prefix = os.path.join(output_dir, '{}_peak_sphere.nii.gz'.format(mask_prefix))
+
+    call_parts = [
+                  '3dUndump',
+                  '-master', master,
+                  '-prefix', prefix,
+                  '-datum', 'float',
+                  '-ijk',
+                  '-srad', rad,
+                  '-mask', mask,
+                  peak_file
+                 ]
+
+    print('Calling: {}'.format(' '.join(call_parts)))
+    error_flag = subprocess.call(call_parts)
+    if error_flag:
+        print('Something went wrong with 3dUndump call!')
+        return None
+    return prefix
+
 def run_featquery(cope_dir, output_dir, roi_file):
     #Run FSL's featquery
 

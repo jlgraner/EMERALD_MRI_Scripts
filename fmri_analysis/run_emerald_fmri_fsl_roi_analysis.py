@@ -119,11 +119,11 @@ for sub in subs_to_run:
         output_dict[sub][cope]['dir'] = cope_dir
         for roi in roi_list:
             output_dict[sub][cope][roi] = {}
-            dir_to_delete = os.path.join(cope_dir, feat_output_dir.format(roi=roi))
+            output_dir = os.path.join(cope_dir, feat_output_dir.format(roi=roi))
             roi_file = os.path.join(roi_dir.format(sub=sub), 'sub_{sub}_ROI_{roi}_final.nii.gz'.format(sub=sub,roi=roi))
-            if os.path.exists(dir_to_delete):
+            if os.path.exists(output_dir):
               print('Output directory already there; DELETING it!')
-              shutil.rmtree(dir_to_delete)
+              shutil.rmtree(output_dir)
             report_file = eral.run_featquery(cope_dir=cope_dir, output_dir=feat_output_dir.format(roi=roi), roi_file=roi_file)
             peak_file = os.path.join(cope_dir, feat_output_dir.format(roi=roi), 'peak_coords.txt')
             if report_file is not None:
@@ -148,6 +148,9 @@ for sub in subs_to_run:
             with open(peak_file, 'w') as fid:
               fid.write(peak_line)
 
+            #Create a spherical ROI, masked by the ROI, around the ROI peak
+            zstat_image = os.path.join(cope_dir, 'stats', 'zstat1.nii.gz')
+            sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='7', mask=roi_file)
 
 #Write the ROI means into .txt files
 if actually_run:
