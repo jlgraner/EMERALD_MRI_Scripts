@@ -38,21 +38,24 @@ def main():
               'EM0360',
               'EM0400',
               'EM0500',
-              'EM0519'
+              'EM0519',
+              'EM0565',
+              'EM0588',
+              'EM0560',
+              'EM0569'
                   ]
-    # sub_list = [
-    #             'EM0291',
-    #             'EM0304',
-    #             'EM0381',
-    #             'EM0360',
-    #             'EM0400',
-    #             'EM0500',
-    #             'EM0519'
-    #             ]
 
     run_list = ['1','2','3','4']
 
-    output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/Higher_feat_all_08132019')
+    bad_pairs = [
+                  ['EM0381', '3'],
+                  ['EM0400', '4'],
+                  ['EM0525', '4'],
+                  ['EM0560', '4'],
+                  ['EM0812', '4']
+                ]
+
+    output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/Higher_feat_all_12102019')
     dir_output_name = 'SecondLevelFeatDirs_to_copy.txt'
     ev_output_name = 'SecondLevelEVMatrix_to_copy.txt'
     contrast_output_name = 'SecondLevelSubjectContrastMatrix_to_copy.txt'
@@ -62,10 +65,10 @@ def main():
     contrast_output_file = os.path.join(output_dir, contrast_output_name)
 
     print('Writing first-level directory list file...')
-    write_firstleveldirs(sub_list, run_list, dir_output_file)
+    write_firstleveldirs(sub_list, run_list, bad_pairs, dir_output_file)
 
     print('Writing EV matrix for 2nd-Level analysis...')
-    write_evmatrix(sub_list, run_list, ev_output_file)
+    write_evmatrix(sub_list, run_list, bad_pairs, ev_output_file)
 
     print('Writing Contrast matrix for 2nd-Level analysis...')
     write_subjectcontrastmatrix(sub_list, contrast_output_file)
@@ -89,22 +92,27 @@ def write_subjectcontrastmatrix(sub_list, output_file):
 
 
 
-def write_evmatrix(sub_list, run_list, output_file):
+def write_evmatrix(sub_list, run_list, bad_pairs, output_file):
 
     sub_num = len(sub_list)
     run_num = len(run_list)
-    total_rows = sub_num*run_num
+    bad_num = len(bad_pairs)
+    total_rows = (sub_num*run_num) - bad_num
 
     #This creates an initial row of 0s that will need to be removed
     ev_matrix = numpy.zeros(sub_num)
 
     for sub_count in range(sub_num):
+        sub = sub_list[sub_count]
         for run_count in range(run_num):
+            run = run_list[run_count]
             #For each subject, for each run, add a row that has a 1
-            #in the subject column.
-            this_row = numpy.zeros(sub_num)
-            this_row[sub_count] = 1
-            ev_matrix = numpy.row_stack((ev_matrix, this_row))
+            #in the subject column unless the sub/run combo is in
+            #bad_pairs.
+            if [sub,run] not in bad_pairs:
+              this_row = numpy.zeros(sub_num)
+              this_row[sub_count] = 1
+              ev_matrix = numpy.row_stack((ev_matrix, this_row))
 
     #Remove the leading row of 0s
     ev_matrix = numpy.delete(ev_matrix, 0, 0)
@@ -121,15 +129,16 @@ def write_evmatrix(sub_list, run_list, output_file):
 
 
 
-def write_firstleveldirs(sub_list, run_list, output_file):
+def write_firstleveldirs(sub_list, run_list, bad_pairs, output_file):
 
     firstlevel_dir_template = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}.feat')
     output_lines = []
 
     for sub in sub_list:
         for run in run_list:
-            this_line = firstlevel_dir_template.format(sub=sub, run=run)
-            output_lines.append(this_line)
+            if [sub,run] not in bad_pairs:
+              this_line = firstlevel_dir_template.format(sub=sub, run=run)
+              output_lines.append(this_line)
 
     #Check to see if the output file already exists
     if os.path.exists(output_file):

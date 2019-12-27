@@ -12,32 +12,32 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 
 full_template = os.path.join(template_directory, template_file)
 
-# subs_to_run = [
-#                'EM0519'
-#                ]
-
 subs_to_run = [
-              'EM0184',
-              'EM0187',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500'
-              ]
+               'EM0812'
+               ]
 
-# runs_to_run = ['1']
-runs_to_run = ['1','2','3','4']
+# subs_to_run = [
+#               'EM0184',
+#               'EM0187',
+#               'EM0192',
+#               'EM0202',
+#               'EM0206',
+#               'EM0217',
+#               'EM0219',
+#               'EM0220',
+#               'EM0223',
+#               'EM0229',
+#               'EM0240',
+#               'EM0291',
+#               'EM0304',
+#               'EM0381',
+#               'EM0360',
+#               'EM0400',
+#               'EM0500'
+#               ]
+
+runs_to_run = ['1', '2', '3']
+# runs_to_run = ['1','2','3','4']
 
 
 good_runs = []

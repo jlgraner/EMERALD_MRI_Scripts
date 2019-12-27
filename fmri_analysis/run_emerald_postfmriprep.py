@@ -13,7 +13,7 @@ overwrite = 1
 skip = 0
 
 subs_to_run = [
-               'EM0560'
+               'EM0787', 'EM0880'
               ]
 
 # subs_to_run = [
@@ -43,7 +43,7 @@ subs_to_run = [
 #               ]
 
 # runs_to_run = ['1','2','3','4']
-runs_to_run = ['1', '2', '3']
+runs_to_run = ['4']
 
 good_runs = []
 failed_runs = []

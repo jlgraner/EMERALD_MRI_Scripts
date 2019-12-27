@@ -10,19 +10,11 @@ output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS')
 fs_license = '/usr/local/freesurfer/license.txt'
 
 
-# subs_to_run = [
-#                'EM0565',
-#                'EM0588',
-#                'EM0560',
-#                'EM0673',
-#                'EM0573',
-#                'EM0569',
-#                'EM0643'
-#               ]
-
 
 subs_to_run = [
-               "EM0643"
+               'EM0812',
+               'EM0787',
+               'EM0880'
                ]
 
 good_runs = []
