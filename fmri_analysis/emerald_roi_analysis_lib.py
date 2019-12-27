@@ -9,6 +9,30 @@ import os
 import nibabel as nb
 
 
+def run_featquery(cope_dir, output_dir, roi_file):
+    #Run FSL's featquery
+
+    call_parts = [
+                  'featquery',
+                  '1',
+                  cope_dir,
+                  '1',
+                  'stats/cope1',
+                  output_dir,
+                  '-p',
+                  '-b',
+                  roi_file
+                  ]
+    #Call featquery
+    print('Calling: {}'.format(' '.join(call_parts)))
+    error_flag = subprocess.call(call_parts)
+    if error_flag:
+        print('Something went wrong with featquery call!')
+        return None
+    #Save the ROI mean, as a string, into the dictionary
+    report_file = os.path.join(cope_dir, output_dir, 'report.txt')
+    return report_file
+
 def gauss_model(x, height, mean, std):
     return height*np.exp(-((x-mean)/(4.0*std))**2)
 
