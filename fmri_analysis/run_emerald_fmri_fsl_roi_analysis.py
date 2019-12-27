@@ -152,6 +152,13 @@ for sub in subs_to_run:
             zstat_image = os.path.join(cope_dir, 'stats', 'zstat1.nii.gz')
             sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='7', mask=roi_file)
 
+            #Run featquery on the spherical ROI
+            sphere_report_file = eral.run_featquery(cope_dir=cope_dir, output_dir=feat_output_dir.format(roi='{}sphere'.format(roi)), roi_file=sphere_roi_file)
+            with open(sphere_report_file) as fid:
+              contents = fid.read()
+
+            output_dict[sub][cope][roi]['spheremean'] = contents.split()[5]
+
 #Write the ROI means into .txt files
 if actually_run:
   for cope in cope_labels:
@@ -164,7 +171,8 @@ if actually_run:
       with open(output_file, 'w') as fd:
           for line in lines_to_write:
               fd.write(line+'\n')
-
+              
+#Write the sphere ROI means into a .txt file
 
 
 
