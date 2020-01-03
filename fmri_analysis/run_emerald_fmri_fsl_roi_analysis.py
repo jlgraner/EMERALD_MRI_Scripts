@@ -69,19 +69,19 @@ subs_to_run = ['EM0569']
               # 'EM0569'
               #     ]
 
-# roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
-roi_list = ['amy']
+roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
+# roi_list = ['amy']
 #This dictionary will house all the ROI means and input files
 output_dict = {}
 
-cope_labels = {
-                'reapGTflow':'4'
-              }
-
 # cope_labels = {
-#                'reapGTflow':'4',
-#                'distGTflow':'5'
-#                }
+#                 'reapGTflow':'4'
+#               }
+
+cope_labels = {
+               'reapGTflow':'4',
+               'distGTflow':'5'
+               }
 
 print('---------------------------------------------------')
 print('Participants to run: {}'.format(subs_to_run))
@@ -133,6 +133,7 @@ for sub in subs_to_run:
             else:
               raise RuntimeError
             output_dict[sub][cope][roi]['mean'] = contents.split()[5]
+            output_dict[sub][cope][roi]['stdev'] = contents.split()[9]
             output_dict[sub][cope][roi]['max'] = contents.split()[8]
             output_dict[sub][cope][roi]['max_x'] = contents.split()[10]
             output_dict[sub][cope][roi]['max_y'] = contents.split()[11]
@@ -154,20 +155,25 @@ for sub in subs_to_run:
             sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='7', mask=roi_file)
 
             #Run featquery on the spherical ROI
+            sphere_output_dir = os.path.join(cope_dir, feat_output_dir.format(roi='{}sphere'.format(roi)))
+            if os.path.exists(sphere_output_dir):
+              print('Output directory already there; DELETING it!')
+              shutil.rmtree(sphere_output_dir)
             sphere_report_file = eral.run_featquery(cope_dir=cope_dir, output_dir=feat_output_dir.format(roi='{}sphere'.format(roi)), roi_file=sphere_roi_file)
             with open(sphere_report_file) as fid:
               contents = fid.read()
 
             output_dict[sub][cope][roi]['spheremean'] = contents.split()[5]
+            output_dict[sub][cope][roi]['spherestdev'] = contents.split()[9]
 
 #Write the ROI means into .txt files
 if actually_run:
   for cope in cope_labels:
-      lines_to_write = ['sub\troi\tmean']
+      lines_to_write = ['sub\troi\tmean\tstdev']
       output_file = os.path.join(final_output_dir, output_file_template.format(cope=cope))
       for roi in roi_list:
           for sub in subs_to_run:
-              lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean']))
+              lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
       print('Writing file: {}'.format(output_file))
       with open(output_file, 'w') as fd:
           for line in lines_to_write:
@@ -176,11 +182,11 @@ if actually_run:
 #Write the sphere ROI means into a .txt file
 if actually_run:
   for cope in cope_labels:
-    lines_to_write = ['sub\troi\tmean']
+    lines_to_write = ['sub\troi\tmean\tstdev']
     output_file = os.path.join(final_output_dir, sphere_output_file_template.format(cope=cope))
     for roi in roi_list:
       for sub in subs_to_run:
-        lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean']))
+        lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
     print('Writing file: {}'.format(output_file))
     with open(output_file, 'w') as fd:
       for line in lines_to_write:
