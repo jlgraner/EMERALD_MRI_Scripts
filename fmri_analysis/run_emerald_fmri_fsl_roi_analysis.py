@@ -11,6 +11,7 @@ feat_output_dir = 'featquery_{roi}_output'
 
 final_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
 output_file_template = 'Group_ROI_means_fsl_{cope}.txt'
+sphere_output_file_template = 'Group_sphereROI_means_fsl_{cope}.txt'
 
 # roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
@@ -173,7 +174,17 @@ if actually_run:
               fd.write(line+'\n')
               
 #Write the sphere ROI means into a .txt file
-
+if actually_run:
+  for cope in cope_labels:
+    lines_to_write = ['sub\troi\tmean']
+    output_file = os.path.join(final_output_dir, sphere_output_file_template.format(cope=cope))
+    for roi in roi_list:
+      for sub in subs_to_run:
+        lines_to_write.append('{sub}\t{roi}\t{mean}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean']))
+    print('Writing file: {}'.format(output_file))
+    with open(output_file, 'w') as fd:
+      for line in lines_to_write:
+        fd.write(line+'\n')
 
 
 
