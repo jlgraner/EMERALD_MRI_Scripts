@@ -152,7 +152,7 @@ for sub in subs_to_run:
 
             #Create a spherical ROI, masked by the ROI, around the ROI peak
             zstat_image = os.path.join(cope_dir, 'stats', 'zstat1.nii.gz')
-            sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='7', mask=roi_file)
+            sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='5', mask=roi_file)
 
             #Run featquery on the spherical ROI
             sphere_output_dir = os.path.join(cope_dir, feat_output_dir.format(roi='{}sphere'.format(roi)))

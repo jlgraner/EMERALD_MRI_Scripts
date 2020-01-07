@@ -8,6 +8,34 @@ import logging
 import os
 import nibabel as nb
 
+this_code = 'emerald_roi_analysis_lib.py'
+
+def run_mean(output_file, input_list):
+    #Run AFNI's 3dMean
+
+    #Check output file
+    if os.path.exists(output_file):
+        print('Output file already exists: {}'.format(output_file))
+        print('Returning None! -- {}.run_mean()'.format(this_code))
+        return None
+
+    call_parts = [
+                  '3dMean',
+                  '-sum',
+                  '-prefix', output_file
+                  ]
+
+    #Add the elemenents of the input list to the call parts
+    for element in input_list:
+        call_parts.append(str(element))
+
+    print('Calling: {}'.format(' '.join(call_parts)))
+    error_flag = subprocess.call(call_parts)
+    if error_flag:
+        print('Something went wrong with 3dMean call! -- {}.run_mean()'.format(this_code))
+        return None
+    return output_file
+    
 
 def run_undump(output_dir, master, peak_file, rad, mask):
     #Run AFNI's 3dUndump
