@@ -13,7 +13,7 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0812'
+               'EM1050'
                ]
 
 # subs_to_run = [
@@ -36,8 +36,8 @@ subs_to_run = [
 #               'EM0500'
 #               ]
 
-runs_to_run = ['1', '2', '3']
-# runs_to_run = ['1','2','3','4']
+# runs_to_run = ['1', '2', '3']
+runs_to_run = ['1','2','3','4']
 
 
 good_runs = []
