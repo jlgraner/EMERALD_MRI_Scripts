@@ -17,45 +17,47 @@ this_env = os.environ
 run_list = ['1', '2', '3', '4']
 # run_list = ['2', '3', '4']
 
-# masks_to_apply = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
-masks_to_apply = ['amy']
+masks_to_apply = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
+# masks_to_apply = ['amy']
 
 contrasts_to_make = [ ['diststrategycues', 'negflowstrategycues'], ['reapstrategycues', 'negflowstrategycues'] ]
 
-subs_to_run = [
-              # 'EM0001'
-              'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500',
-              'EM0519'
-               ]
+subs_to_run = ['EM0569']
+
+# subs_to_run = [
+#               # 'EM0001'
+#               'EM0033',
+#               'EM0036',
+#               'EM0038',
+#               'EM0066',
+#               'EM0071',
+#               'EM0088',
+#               'EM0126',
+#               'EM0153',
+#               'EM0155',
+#               'EM0162',
+#               'EM0164',
+#               'EM0174',
+#               'EM0179',
+#               'EM0184',
+#               'EM0187',
+#               'EM0192',
+#               'EM0202',
+#               'EM0206',
+#               'EM0217',
+#               'EM0219',
+#               'EM0220',
+#               'EM0223',
+#               'EM0229',
+#               'EM0240',
+#               'EM0291',
+#               'EM0304',
+#               'EM0381',
+#               'EM0360',
+#               'EM0400',
+#               'EM0500',
+#               'EM0519'
+#                ]
 
 
 #Directory containing the event timing files
@@ -83,7 +85,7 @@ for sub in subs_to_run:
         try:
             for mask in masks_to_apply:
                 print('Extracting ROI time-course for mask: {}'.format(mask))
-                fmri_image = os.path.join(image_dir.format(sub=sub), 'sub-{}_emoreg_run{}_AROMApreproc_short_tempfilt.nii.gz'.format(sub,run))
+                fmri_image = os.path.join(image_dir.format(sub=sub), 'sub-{}_emoreg_run{}_AROMApreproc_short_tempfilt_brain.nii.gz'.format(sub,run))
                 # mask_image = os.path.join(mask_dir, 'ROI_{}_final.nii.gz'.format(mask))
                 mask_image = os.path.join(mask_dir.format(sub=sub), 'sub_{sub}_ROI_{mask}_final.nii.gz'.format(sub=sub,mask=mask))
                 output_file = os.path.join(output_dir.format(sub=sub), 'sub-{sub}_emoreg_run{run}_AROMApreproc_short_{mask}_timecourse.txt'.format(sub=sub, run=run, mask=mask))

@@ -10,7 +10,7 @@ output_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'mriqc')
 
 
 subs_to_run = [
-                'EM1050'
+                'EM0946'
                ]
 
 # subs_to_run = [
