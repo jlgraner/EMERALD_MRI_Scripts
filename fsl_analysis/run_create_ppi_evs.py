@@ -14,8 +14,8 @@ import pandas
 
 this_env = os.environ
 
-# run_list = ['1', '2', '3', '4']
-run_list = ['1']
+run_list = ['1', '2', '3', '4']
+# run_list = ['1']
 
 # masks_to_apply = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 masks_to_apply = ['amy', 'dlPFCsphere', 'vlPFCsphere']
