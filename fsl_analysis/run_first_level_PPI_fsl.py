@@ -64,11 +64,11 @@ for sub in subs_to_run:
             feat_call = 'feat {}'.format(run_template_file)
             print('System call: {}'.format(feat_call))
             try:
-                ###os.system(feat_call)
+                os.system(feat_call)
                 #Create a fake reg directory for higher-level analysis
                 #TODO: read in the output directory from the .fsf that was run!!!
-                this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{}/Func/First_level_PPI_{}_run{}.feat'.format(sub,roi,run))
-                ###eft.create_fake_reg(this_feat_dir)
+                this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{}/Func/First_level_{}_run{}.feat'.format(sub,roi,run))
+                eft.create_fake_reg(this_feat_dir)
             except Exception as ex:
                 print('Subject {}, run {}, roi {} did NOT run!'.format(sub,run,roi))
                 print(ex)
