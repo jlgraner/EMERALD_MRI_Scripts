@@ -8,7 +8,9 @@ this_env = os.environ
 
 ses = 'day3'
 
-sub_list = [
+sub_list = ['EM0787']
+
+# sub_list = [
             # 'EM0001'
             # 'EM0038',
             # 'EM0184',
@@ -24,20 +26,22 @@ sub_list = [
             # 'EM0673',
             # 'EM0573',
             # 'EM0643',
-            'EM0812',
-            'EM0787',
-            'EM0880',
-            'EM1050',
-            'EM0946'
-            ]
+            # 'EM0812',
+            # 'EM0787',
+            # 'EM0880',
+            # 'EM1050',
+            # 'EM0946'
+            # ]
 
 
-tract_list = [
-              'R_SLFII',
-              'L_SLFII',
-              'R_Unc',
-              'L_Unc'
-              ]
+# tract_list = [
+#               'R_SLFII',
+#               'L_SLFII',
+#               'R_Unc',
+#               'L_Unc'
+#               ]
+
+tract_list = ['R_SLFII']
 
 
 log_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/tckgen_logs/')
