@@ -4,18 +4,17 @@ import emerald_fsl_tools as eft
 
 this_env = os.environ
 
-template_directory = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/fsl_templates/subjectlevel_template_files_11042019/')
-template_file = 'subjectlevel_design_template.fsf'
+template_directory = os.path.join(this_env['EMDIR'], 'Scripts/MRI_Analysis/fsl_templates/subjectlevel_ppi_template_files_01222020/')
+template_file = 'subjectlevel_{ppi}_ppi_template.fsf'
+
+ppi_list = ['dlPFCdist', 'vlPFCreap']
 
 template_string_list = ['[[SUBID]]']
 
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0812',
-               'EM0787',
-               'EM0880',
-               'EM1050'
+               'EM0001'
                ]
 
 # subs_to_run = [
@@ -62,11 +61,13 @@ good_runs = []
 bad_runs = []
 
 for sub in subs_to_run:
-    run_template_file = os.path.join(template_directory, '{sub}_subjectlevel_design.fsf'.format(sub=sub))
+  for ppi in ppi_list:
+    ppi_template = full_template.format(ppi=ppi)
+    run_template_file = os.path.join(template_directory, '{sub}_subjectlevel_{ppi}_ppi.fsf'.format(sub=sub,ppi=ppi))
     #Replace the template .fsf file place-holder strings with this
     #run's strings and write a new .fsf file for this run.
     new_list = [sub]
-    eft.read_replace_copy_design(full_template, template_string_list, new_list, run_template_file)
+    eft.read_replace_copy_design(ppi_template, template_string_list, new_list, run_template_file)
 
     #Call FEAT with this new run file
     feat_parts = [
@@ -76,10 +77,10 @@ for sub in subs_to_run:
     print('Running call: {}'.format(feat_parts))
     error_flag = subprocess.call(feat_parts)
     if error_flag:
-        print('Subject {} did NOT run!'.format(sub))
-        bad_runs.append('{}'.format(sub))
+        print('Subject {} {} did NOT run!'.format(sub, ppi))
+        bad_runs.append('{}-{}'.format(sub,ppi))
     else:
-        good_runs.append('{}'.format(sub))
+        good_runs.append('{}-{}'.format(sub,ppi))
 
 print('Runs that ran: {}'.format(good_runs))
 print('Runs that did NOT run: {}'.format(bad_runs))

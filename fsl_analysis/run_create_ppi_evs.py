@@ -22,7 +22,7 @@ masks_to_apply = ['amy', 'dlPFCsphere', 'vlPFCsphere']
 
 # contrasts_to_make = [ ['diststrategycues', 'negflowstrategycues'], ['reapstrategycues', 'negflowstrategycues'] ]
 
-subs_to_run = ['EM0569']
+subs_to_run = ['EM0001']
 
 # subs_to_run = [
 #               # 'EM0001'
