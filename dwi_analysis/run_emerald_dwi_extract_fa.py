@@ -8,9 +8,17 @@ import pandas
 this_env = os.environ
 
 # sub_list = [
-#             'EM0400',
-#             'EM0500',
-#             'EM0519'
+#             'EM0565',
+#             'EM0588',
+#             'EM0560',
+#             'EM0673',
+#             'EM0573',
+#             'EM0643',
+#             'EM0812',
+#             'EM0787',
+#             'EM0880',
+#             'EM1050',
+#             'EM0946'
 #             ]
 
 sub_list = [
@@ -53,7 +61,12 @@ sub_list = [
             'EM0560',
             'EM0673',
             'EM0573',
-            'EM0643'
+            'EM0643',
+            'EM0812',
+            'EM0787',
+            'EM0880',
+            'EM1050',
+            'EM0946'
             ]
 
 tract_list = [
@@ -66,13 +79,13 @@ tract_list = [
 bad_runs = []
 good_runs = []
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_11072019')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_01292020')
 #If the output directory does not exist, create it
 if not os.path.exists(base_output_dir):
     print('Output directory not found; creating it: {}'.format(base_output_dir))
     os.mkdir(base_output_dir)
 
-output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_11072019.csv')
+output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_01302020.csv')
 
 ##Calculate average FA for each subject for each tract
 all_fa_dictionary = {}
