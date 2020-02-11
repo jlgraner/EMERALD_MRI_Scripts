@@ -12,57 +12,57 @@ this_env = os.environ
 
 sub_list = [
             # 'EM0001',
-            # 'EM0033',
-            # 'EM0036',
-            # 'EM0038',
-            # 'EM0066',
-            # 'EM0071',
-            # 'EM0088',
-            # 'EM0126',
-            # 'EM0153',
-            # 'EM0155',
-            # 'EM0162',
-            # 'EM0164',
-            # 'EM0174',
-            # 'EM0179',
-            # 'EM0184',
-            # 'EM0187',
-            # 'EM0192',
-            # 'EM0202',
-            # 'EM0206',
-            # 'EM0217',
-            # 'EM0219',
-            # 'EM0220',
-            # 'EM0223',
-            # 'EM0229',
-            # 'EM0240',
-            # 'EM0291',
-            # 'EM0304',
-            # 'EM0381',
-            # 'EM0360',
-            # 'EM0400',
-            # 'EM0500',
-            # 'EM0519',
-            # 'EM0565',
-            # 'EM0588',
-            # 'EM0560',
-            # 'EM0569',
+            'EM0033',
+            'EM0036',
+            'EM0038',
+            'EM0066',
+            'EM0071',
+            'EM0088',
+            'EM0126',
+            'EM0153',
+            'EM0155',
+            'EM0162',
+            'EM0164',
+            'EM0174',
+            'EM0179',
+            'EM0184',
+            'EM0187',
+            'EM0192',
+            'EM0202',
+            'EM0206',
+            'EM0217',
+            'EM0219',
+            'EM0220',
+            'EM0223',
+            'EM0229',
+            'EM0240',
+            'EM0291',
+            'EM0304',
+            'EM0381',
+            'EM0360',
+            'EM0400',
+            'EM0500',
+            'EM0519',
+            'EM0565',
+            'EM0588',
+            'EM0560',
+            'EM0569',
             'EM0812',
             'EM0787',
             'EM0880',
             'EM1050'
             ]
 # sub_list = [
-#             'EM0400',
-#             'EM0360'
+#             'EM0001'
 #             ]
 
 run_list = ['1', '2', '3', '4']
 # run_list = ['1']
 
 
-# roi_list = ['amy']
-roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
+roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
+            'infPar','infParleft','infParright','vlPFC','vlPFCright','vlPFCleft','vmPFC']
+# roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 
 delete_things = 1
 
@@ -133,7 +133,7 @@ for sub in sub_list:
             masking_info[sub][run]['fit_png'] = fit_plot
 
             for roi in roi_list:
-                #Create a new mask for each run, keeping only voxels that are in both the Amygdala ROI
+                #Create a new mask for each run, keeping only voxels that are in both the current ROI
                 #and the intensity-thresholded mask.
                 roi_file = os.path.join(roi_dir, 'ROI_{}_final.nii.gz'.format(roi))
                 output_file = os.path.join(sub_output_dir, 'sub_{}_run{}_ROI_{}_final.nii.gz'.format(sub,run,roi))

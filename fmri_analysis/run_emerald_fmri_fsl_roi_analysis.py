@@ -29,10 +29,7 @@ ses = 'day3'
 actually_run = 1
 
 subs_to_run = [
-               'EM0812',
-               'EM0787',
-               'EM0880',
-               'EM1050'
+               'EM0001'
               ]
 
 # subs_to_run = [
@@ -75,8 +72,9 @@ subs_to_run = [
 #               'EM0569'
 #                   ]
 
-roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
-# roi_list = ['amy']
+# roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
+roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
+            'infPar','infParleft','infParright','vlPFC','vlPFCright','vlPFCleft','vmPFC']
 #This dictionary will house all the ROI means and input files
 output_dict = {}
 
@@ -131,6 +129,7 @@ for sub in subs_to_run:
             if os.path.exists(output_dir):
               print('Output directory already there; DELETING it!')
               shutil.rmtree(output_dir)
+            #Run featquery on the intensity-masked ROI
             report_file = eral.run_featquery(cope_dir=cope_dir, output_dir=feat_output_dir.format(roi=roi), roi_file=roi_file)
             peak_file = os.path.join(cope_dir, feat_output_dir.format(roi=roi), 'peak_coords.txt')
             if report_file is not None:
