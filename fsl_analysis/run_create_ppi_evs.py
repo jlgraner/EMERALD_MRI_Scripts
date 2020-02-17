@@ -18,7 +18,8 @@ run_list = ['1', '2', '3', '4']
 # run_list = ['1']
 
 # masks_to_apply = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
-masks_to_apply = ['amy', 'dlPFCsphere', 'vlPFCsphere']
+# masks_to_apply = ['amy', 'dlPFCsphere', 'vlPFCsphere']
+masks_to_apply = ['amy']
 
 # contrasts_to_make = [ ['diststrategycues', 'negflowstrategycues'], ['reapstrategycues', 'negflowstrategycues'] ]
 
