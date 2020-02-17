@@ -77,7 +77,8 @@ image_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'fmriprep', '
 
 #Directory containing masks to apply
 # mask_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
-mask_file = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Second_level_allruns.gfeat', 'cope{cope}.feat', 'featquery_{roi}_output', 'mask.nii.gz')
+# mask_file = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Second_level_allruns.gfeat', 'cope{cope}.feat', 'featquery_{roi}_output', 'mask.nii.gz')
+mask_file = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Second_level_allruns.gfeat', 'cope4.feat', 'featquery_{roi}_output', 'mask.nii.gz')
 
 #Directory containing activation-based sphere masks
 # sphere_mask = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Second_level_allruns.gfeat', 'cope{cope}.feat', 'featquery_{roi}_output', 'mask.nii.gz')
@@ -96,15 +97,16 @@ for sub in subs_to_run:
         #Extract ROI mask time-courses and save them to files
         try:
             for mask in masks_to_apply:
-                if mask == 'dlPFCsphere':
-                  cope = '5'
-                else:
-                  cope = '4'
+                # if mask == 'dlPFCsphere':
+                #   cope = '5'
+                # else:
+                #   cope = '4'
 
                 print('Extracting ROI time-course for mask: {}'.format(mask))
                 fmri_image = os.path.join(image_dir.format(sub=sub), 'sub-{}_emoreg_run{}_AROMApreproc_short_tempfilt_brain.nii.gz'.format(sub,run))
                 # mask_image = os.path.join(mask_dir.format(sub=sub), 'sub_{sub}_ROI_{mask}_final.nii.gz'.format(sub=sub,mask=mask))
-                mask_image = mask_file.format(sub=sub, cope=cope, roi=mask)
+                # mask_image = mask_file.format(sub=sub, cope=cope, roi=mask)
+                mask_image = mask_file.format(sub=sub, roi=mask)
                 output_file = os.path.join(output_dir.format(sub=sub), 'sub-{sub}_emoreg_run{run}_AROMApreproc_short_{mask}_timecourse.txt'.format(sub=sub, run=run, mask=mask))
 
                 call_parts = ['3dROIstats',
