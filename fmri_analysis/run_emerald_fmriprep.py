@@ -12,7 +12,7 @@ fs_license = '/usr/local/freesurfer/license.txt'
 
 
 subs_to_run = [
-               'EM0946'
+               'EM1201'
                ]
 
 good_runs = []

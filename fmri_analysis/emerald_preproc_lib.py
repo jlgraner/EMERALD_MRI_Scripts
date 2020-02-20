@@ -116,7 +116,65 @@ def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0, skip=0):
         return None
 
     print('TR removal successful.')
-    print('-------Done: apply_mask-------')
+    print('-------Done: remove_trs-------')
+    return output_image
+
+
+def smooth(input_image, input_mask, output_image=None, fwhm='5', overwrite=0):
+    #This function applies spatial smoothing to a passed image.
+
+    print('------Starting: smooth------')
+    try:
+        #Check the input file for a path
+        input_path, input_file = os.path.split(input_image)
+        if input_path is '':
+            print('input_image must contain a full path to the image file!')
+            raise RuntimeError()
+
+        #Check that the input file is either a .nii or .nii.gz file
+        if len(input_file.split('.nii')) == 1:
+            print('input_image file type not recognized. Should be .nii or .nii.gz!')
+            raise RuntimeError()
+
+        #Put together the output file
+        if output_image is None:
+            print('No output_image passed, will append "_smooth_brain" to the input_image name!')
+            output_file = __add_prefix(input_file, '_smooth_brain')
+            output_image = os.path.join(input_path, output_file)
+
+        #Check to see if passed output image is already there
+        if os.path.exists(output_image):
+            print('output_image already exists!')
+            if skip:
+                print('Skip set, returning...')
+                return output_image
+            if overwrite:
+                print('Overwrite set to 1, deleting...')
+                os.remove(output_image)
+            else:
+                print('Overwrite not set, exitting...')
+                return None
+
+        #Put together call to 3dBlurToFWHM
+        blur_call = [
+                    '3dBlurToFWHM',
+                    '-input', input_image,
+                    '-prefix', output_image,
+                    '-FWHM', fwhm,
+                    '-mask', input_mask
+                    ]
+        print('Smoothing Image...')
+        os.system(' '.join(blur_call))
+
+        if not os.path.exists(output_image):
+            print('output_image should be there, but is not: {}'.format(output_image))
+            return None
+    except:
+        print('ERROR in smoothing image!')
+        return None
+
+    print('Image smoothing successful.')
+    print('------Done: smooth------')
     return output_image
 
 

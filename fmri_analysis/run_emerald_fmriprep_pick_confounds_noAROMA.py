@@ -41,7 +41,7 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-subs_to_run = ['EM1201']
+subs_to_run = ['EM0001']
 # subs_to_run = [
 #               'EM0001',
               # 'EM0033',
@@ -81,7 +81,7 @@ runs_to_run = ['01', '02', '03', '04']
 tasks_to_run = ['emoreg']
 
 rows_to_remove = 4
-output_suffix = '_forFSL'
+output_suffix = '_noAROMA_forFSL'
 
 confound_file_base_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{sub}/ses-{ses}/func/')
 confound_file_base_name = 'sub-{sub}_ses-{ses}_task-{task}_run-{run}_desc-confounds_regressors.tsv'
@@ -96,9 +96,9 @@ confounds_to_include = [
                         # 'std_dvars',
                         'dvars',
                         'framewise_displacement',
-                        'motion_outlier'
-                        # 't_comp_cor',
-                        # 'a_comp_cor',
+                        'motion_outlier',
+                        't_comp_cor',
+                        'a_comp_cor'
                         # 'cosine',
                         # 'non_steady_state_outlier',
                         # 'trans_x',

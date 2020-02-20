@@ -13,7 +13,7 @@ overwrite = 1
 skip = 0
 
 subs_to_run = [
-               'EM1201'
+               'EM0001'
               ]
 
 # subs_to_run = [
@@ -42,21 +42,22 @@ subs_to_run = [
 #                'EM0519'
 #               ]
 
-runs_to_run = ['1','2','3','4']
-# runs_to_run = ['1', '2', '3']
+# runs_to_run = ['1','2','3','4']
+runs_to_run = ['2','3','4']
 
 good_runs = []
 failed_runs = []
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
 # base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
+# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/fmri/Smooth_testing')
 
 for sub in subs_to_run:
     for run in runs_to_run:
         try:
             #Put together the input file
             print('---------------------------------------')
-            input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-smoothAROMAnonaggr_bold.nii.gz'
+            input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-preproc_bold.nii.gz'
             full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
 
             #Put together the mask file
@@ -64,7 +65,7 @@ for sub in subs_to_run:
             full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
 
             #Put together base output image name
-            new_file = 'sub-{s}_emoreg_run{r}_AROMApreproc.nii.gz'
+            new_file = 'sub-{s}_emoreg_run{r}_preproc.nii.gz'
             new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
 
             #Rename the image
@@ -82,10 +83,15 @@ for sub in subs_to_run:
             if temp_image is None:
               raise RuntimeError('Temporal filter')
 
-            #Mask the image
-            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=skip)
-            if masked_image is None:
-              raise RuntimeError('Masking')
+            #Smooth and mask the image
+            smoothed_image = epl.smooth(temp_image, full_mask, overwrite=0)
+            if smoothed_image is None:
+                raise RuntimeError('Smoothing')
+
+            # #Mask the image
+            # masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=skip)
+            # if masked_image is None:
+            #   raise RuntimeError('Masking')
 
             #Remove intermediate images
             epl.remove_file(new_image)
