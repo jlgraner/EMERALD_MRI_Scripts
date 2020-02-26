@@ -14,9 +14,11 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]', '[[ROI]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0126',
-               'EM0153'
+              'EM0202',
+              'EM0206'
                ]
+
+# subs_to_run = ['EM0192']
 
 # subs_to_run = [
               # 'EM0001'
@@ -62,7 +64,7 @@ subs_to_run = [
               #  ]
 
 
-# runs_to_run = ['1', '2', '4']
+# runs_to_run = ['4']
 runs_to_run = ['1', '2', '3', '4']
 # rois_to_run = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 # rois_to_run = [ ['dlPFCsphere', 'dist'] , ['vlPFCsphere', 'reap'] ]
@@ -101,11 +103,12 @@ for sub in subs_to_run:
                 #TODO: read in the output directory from the .fsf that was run!!!
                 
                 eft.create_fake_reg(this_feat_dir)
+                good_runs.append('{}-run{}-{}'.format(sub,run,roi))
             except Exception as ex:
                 print('Subject {}, run {}, roi {} did NOT run!'.format(sub,run,roi))
                 print(ex)
                 bad_runs.append('{}-run{}-{}'.format(sub,run,roi))
-            good_runs.append('{}-run{}-{}'.format(sub,run,roi))
+            
 
 print('-------------------------------------')
 print('Runs that ran: {}'.format(good_runs))
