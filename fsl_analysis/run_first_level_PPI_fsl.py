@@ -14,11 +14,12 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]', '[[ROI]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-              'EM0202',
-              'EM0206'
+                'EM0291',
+                'EM0304',
+                'EM0381',
                ]
 
-# subs_to_run = ['EM0192']
+# subs_to_run = ['EM0240']
 
 # subs_to_run = [
               # 'EM0001'
@@ -64,7 +65,7 @@ subs_to_run = [
               #  ]
 
 
-# runs_to_run = ['4']
+# runs_to_run = ['3', '4']
 runs_to_run = ['1', '2', '3', '4']
 # rois_to_run = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 # rois_to_run = [ ['dlPFCsphere', 'dist'] , ['vlPFCsphere', 'reap'] ]
