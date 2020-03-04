@@ -28,12 +28,15 @@ overwrite = 1
 subs_to_run = [
                 'EM0001',
                 'EM0033',
+                'EM0036',
                 'EM0400'
                 ]
+
 
 for sub in subs_to_run:
     sub_dti_dir = dti_dir.format(sub=sub)
     sub_dwiprep_dir = dwiprep_dir.format(sub=sub)
+    sub_output_dir = os.path.join(output_dir, 'sub-{}'.format(sub))
     dti_image = os.path.join(sub_dti_dir, 'sub-{}_ses-day3_dwi.nii.gz'.format(sub))
     mask_image = os.path.join(sub_dwiprep_dir, 'sub-{}_ses-day3_dwi_d_ss_mask.nii.gz'.format(sub))
 
@@ -49,11 +52,13 @@ for sub in subs_to_run:
     logging.info('dti_image: {}'.format(dti_image))
     logging.info('mask_image: {}'.format(mask_image))
     logging.info('shell_index_file: {}'.format(shell_index_file))
-    logging.info('output_dir: {}'.format(output_dir))
+    logging.info('output_dir: {}'.format(sub_output_dir))
     logging.info('overwrite: {}'.format(overwrite))
     logging.info('-----------------------------------')
 
     try:
-        output_written = dqa.qa_the_dti(dti_image, mask_image, shell_index_file, output_dir, overwrite)
+        output_written = dqa.qa_the_dti(dti_image, mask_image, shell_index_file, sub_output_dir, overwrite)
+        output_file_list.append(output_written)
     except Exception as err:
-        logging.error('Something went wrong: {}'.format(err))
+        logging.error('ERROR: Something went wrong: {}'.format(err))
+        raise RuntimeError('Something went wrong: {}'.format(err))
