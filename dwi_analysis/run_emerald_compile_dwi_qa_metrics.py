@@ -18,7 +18,7 @@ output_file = os.path.join(qa_dir, 'Group_dwi_QA_metrics.csv')
 #Find existing subject directories
 sub_dirs = []
 sub_list = []
-big_frame = pandas.DataFrame(columns=['sub','shell','outcount_mean','outcount_max','maxdisp','tsnr_mean'])
+big_frame = pandas.DataFrame(columns=['sub','shell','outcount_mean','outcount_max','outcount_max_volume','maxdisp','maxdisp_volume','tsnr_mean'])
 for element in os.listdir(qa_dir):
     if element[:4] == 'sub-':
         print('subject directory found: {}'.format(element))

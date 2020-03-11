@@ -6,7 +6,7 @@ import logging
 
 this_env = os.environ
 
-dti_qa_dir = os.path.join(this_env['MYDIR'], 'Code', 'DTI_qa')
+dti_qa_dir = os.path.join(this_env['MYDIR'], 'Code', 'GitRepos', 'DTI_qa')
 
 sys.path.append(dti_qa_dir)
 import dti_qa_lib as dqa

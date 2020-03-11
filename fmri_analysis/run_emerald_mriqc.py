@@ -10,7 +10,10 @@ output_dir = os.path.join(this_env['EMDIR'], 'Data', 'MRI', 'BIDS', 'mriqc')
 
 
 subs_to_run = [
-                'EM1201'
+               'EM1657',
+               'EM1611',
+               'EM1569',
+               'EM1708'
                ]
 
 # subs_to_run = [
@@ -44,6 +47,9 @@ subs_to_run = [
 #                ]
 
 
+good_runs = []
+bad_runs = []
+
 for sub in subs_to_run:
     call_parts = [
                   'docker',
@@ -66,7 +72,16 @@ for sub in subs_to_run:
                   ]
 
     print('Calling: {}'.format(string.join(call_parts)))
-    subprocess.call(call_parts)
+    error_flag = subprocess.call(call_parts)
+
+    if error_flag:
+        print('-------------------------------------')
+        print('Subject failed to run: {}'.format([sub,'emoreg']))
+        print('-------------------------------------')
+        bad_runs.append([sub,'emoreg'])
+    else:
+        good_runs.append([sub,'emoreg'])
+
 
     other_call_parts = [
                         'docker',
@@ -89,3 +104,19 @@ for sub in subs_to_run:
                         ]
     print('Calling: {}'.format(string.join(other_call_parts)))
     subprocess.call(other_call_parts)
+    error_flag = subprocess.call(call_parts)
+
+    if error_flag:
+        print('-------------------------------------')
+        print('Subject failed to run: {}'.format([sub,'T1']))
+        print('-------------------------------------')
+        bad_runs.append([sub,'T1'])
+    else:
+        good_runs.append([sub,'T1'])
+
+print('--------------------------------------')
+print('good_runs: {}'.format(good_runs))
+print('\n')
+print('bad_runs: {}'.format(bad_runs))
+print('--------------------------------------')
+print('Done')
