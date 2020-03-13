@@ -41,12 +41,12 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-subs_to_run = ['EM0400']
+subs_to_run = ['EM0500']
 
 
 ses_to_run = ['day3']
-# runs_to_run = ['01', '02', '03', '04']
-runs_to_run = ['01', '02', '03']
+runs_to_run = ['01', '02', '03', '04']
+# runs_to_run = ['01', '02', '03']
 tasks_to_run = ['emoreg']
 
 rows_to_remove = 4
