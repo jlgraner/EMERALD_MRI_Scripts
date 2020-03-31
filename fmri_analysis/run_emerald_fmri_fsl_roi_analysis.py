@@ -9,9 +9,9 @@ this_env = os.environ
 input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/Second_level_allruns.gfeat')
 feat_output_dir = 'featquery_{roi}_output'
 
-final_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
-output_file_template = 'Group_ROI_means_fsl_{cope}.txt'
-sphere_output_file_template = 'Group_sphereROI_means_fsl_{cope}.txt'
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
+output_file_template = '{sub}_ROI_means_fsl_{cope}.txt'
+sphere_output_file_template = '{sub}_sphereROI_means_fsl_{cope}.txt'
 
 # roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
@@ -27,54 +27,55 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func'
 
 ses = 'day3'
 actually_run = 1
+overwrite = 1
 
 # subs_to_run = [
 #                'EM0033'
 #               ]
 
-subs_to_run = [
+# subs_to_run = [
               # 'EM0001',
               # 'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              # 'EM0188',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500',
-              'EM0519',
-              'EM0565',
-              'EM0588',
-              'EM0560',
-              'EM0569',
-              'EM0812',
-              'EM0787',
-              'EM0880',
-              'EM1050'
-                  ]
+              # 'EM0036',
+              # 'EM0038',
+              # 'EM0066',
+              # 'EM0071',
+              # 'EM0088',
+              # 'EM0126',
+              # 'EM0153',
+              # 'EM0155',
+              # 'EM0162',
+              # 'EM0164',
+              # 'EM0174',
+              # 'EM0179',
+              # 'EM0184',
+              # 'EM0187',
+              # # 'EM0188',
+              # 'EM0192',
+              # 'EM0202',
+              # 'EM0206',
+              # 'EM0217',
+              # 'EM0219',
+              # 'EM0220',
+              # 'EM0223',
+              # 'EM0229',
+              # 'EM0240',
+              # 'EM0291',
+              # 'EM0304',
+              # 'EM0381',
+              # 'EM0360',
+              # 'EM0400',
+              # 'EM0500',
+              # 'EM0519',
+              # 'EM0565',
+              # 'EM0588',
+              # 'EM0560',
+              # 'EM0569',
+              # 'EM0812',
+              # 'EM0787',
+              # 'EM0880',
+              # 'EM1050'
+              #     ]
 
 # roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
@@ -82,14 +83,12 @@ roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
 #This dictionary will house all the ROI means and input files
 output_dict = {}
 
-# cope_labels = {
-#                 'reapGTflow':'4'
-#               }
-
 cope_labels = {
                'reapGTflow':'4',
                'distGTflow':'5'
                }
+
+skipped_files = []
 
 print('---------------------------------------------------')
 print('Participants to run: {}'.format(subs_to_run))
@@ -176,30 +175,75 @@ for sub in subs_to_run:
             output_dict[sub][cope][roi]['spherestdev'] = contents.split()[9]
 
 #Write the ROI means into .txt files
+# if actually_run:
+#   for cope in cope_labels:
+#       lines_to_write = ['sub\troi\tmean\tstdev']
+#       output_file = os.path.join(base_output_dir, output_file_template.format(cope=cope))
+#       for roi in roi_list:
+#           for sub in subs_to_run:
+#               lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
+#       print('Writing file: {}'.format(output_file))
+#       with open(output_file, 'w') as fd:
+#           for line in lines_to_write:
+#               fd.write(line+'\n')
+
+#Write the ROI means to output .txt files, one per participant
 if actually_run:
-  for cope in cope_labels:
+  for sub in subs_to_run:
+    for cope in cope_labels:
       lines_to_write = ['sub\troi\tmean\tstdev']
-      output_file = os.path.join(final_output_dir, output_file_template.format(cope=cope))
+      output_file = os.path.join(base_output_dir, 'Participant_Output', output_file_template.format(sub=sub, cope=cope))
+      if os.exists(output_file):
+        if overwrite:
+          print('Output file already exists and overwrite set!')
+          print('DELETING: {}'.format(output_file))
+        else:
+          print('Output file already exists and overwrite NOT set!')
+          print('SKIPPING: {}'.format(output_file))
+          skipped_files.append(output_file)
+          continue
       for roi in roi_list:
-          for sub in subs_to_run:
-              lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
+        lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
       print('Writing file: {}'.format(output_file))
       with open(output_file, 'w') as fd:
-          for line in lines_to_write:
-              fd.write(line+'\n')
+        for line in lines_to_write:
+          fd.write(line+'\n')
               
 #Write the sphere ROI means into a .txt file
 if actually_run:
-  for cope in cope_labels:
-    lines_to_write = ['sub\troi\tmean\tstdev']
-    output_file = os.path.join(final_output_dir, sphere_output_file_template.format(cope=cope))
-    for roi in roi_list:
-      for sub in subs_to_run:
+  for sub in subs_to_run:
+    for cope in cope_labels:
+      lines_to_write = ['sub\troi\tmean\tstdev']
+      output_file = os.path.join(base_output_dir, 'Participant_Output', sphere_output_file_template.format(sub=sub, cope=cope))
+      if os.exists(output_file):
+        if overwrite:
+          print('Output file already exists and overwrite set!')
+          print('DELETING: {}'.format(output_file))
+        else:
+          print('Output file already exists and overwrite NOT set!')
+          print('SKIPPING: {}'.format(output_file))
+          skipped_files.append(output_file)
+          continue
+      for roi in roi_list:
         lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
-    print('Writing file: {}'.format(output_file))
-    with open(output_file, 'w') as fd:
-      for line in lines_to_write:
-        fd.write(line+'\n')
+      print('Writing file: {}'.format(output_file))
+      with open(output_file, 'w') as fd:
+        for line in lines_to_write:
+          fd.write(line+'\n')
+
+
+
+# if actually_run:
+#   for cope in cope_labels:
+#     lines_to_write = ['sub\troi\tmean\tstdev']
+#     output_file = os.path.join(base_output_dir, sphere_output_file_template.format(cope=cope))
+#     for roi in roi_list:
+#       for sub in subs_to_run:
+#         lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
+#     print('Writing file: {}'.format(output_file))
+#     with open(output_file, 'w') as fd:
+#       for line in lines_to_write:
+#         fd.write(line+'\n')
 
 
 
