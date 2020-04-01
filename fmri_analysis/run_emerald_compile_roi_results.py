@@ -41,8 +41,8 @@ for cope in cope_list:
                 contents = fid.read()
             #Ignore the first line, which is a header
             contents_to_keep = contents.split()[1:]
-        for part in contents_to_keep:
-            strings_to_write.append(part)
+            for part in contents_to_keep:
+                strings_to_write.append(part)
     #Write to big ROI output file
     this_output_file = output_file.format(cope=cope)
     print('Writing output file: {}'.format(this_output_file))
@@ -60,8 +60,8 @@ for cope in cope_list:
                 contents = fid.read()
             #Ignore the first line, which is a header
             contents_to_keep = contents.split()[1:]
-        for part in contents_to_keep:
-            strings_to_write.append(part)
+            for part in contents_to_keep:
+                strings_to_write.append(part)
     #Write to sphere ROI output file
     this_output_file = sphere_output_file.format(cope=cope)
     print('Writing output file: {}'.format(this_output_file))

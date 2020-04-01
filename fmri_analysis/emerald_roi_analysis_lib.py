@@ -77,7 +77,7 @@ def run_featquery(cope_dir, output_dir, roi_file):
                   'stats/cope1',
                   output_dir,
                   '-p',
-                  '-b',
+                  # '-b',
                   roi_file
                   ]
     #Call featquery

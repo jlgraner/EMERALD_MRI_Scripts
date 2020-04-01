@@ -194,7 +194,7 @@ if actually_run:
     for cope in cope_labels:
       lines_to_write = ['sub,roi,mean,stdev']
       output_file = os.path.join(base_output_dir, output_file_template.format(sub=sub, cope=cope))
-      if os.exists(output_file):
+      if os.path.exists(output_file):
         if overwrite:
           print('Output file already exists and overwrite set!')
           print('DELETING: {}'.format(output_file))
@@ -216,7 +216,7 @@ if actually_run:
     for cope in cope_labels:
       lines_to_write = ['sub,roi,mean,stdev']
       output_file = os.path.join(base_output_dir, sphere_output_file_template.format(sub=sub, cope=cope))
-      if os.exists(output_file):
+      if os.path.exists(output_file):
         if overwrite:
           print('Output file already exists and overwrite set!')
           print('DELETING: {}'.format(output_file))
