@@ -29,54 +29,54 @@ ses = 'day3'
 actually_run = 1
 overwrite = 1
 
-subs_to_run = [
-               'EM0033',
-               'EM0036'
-              ]
-
 # subs_to_run = [
-              # 'EM0001',
-              # 'EM0033',
-              # 'EM0036',
-              # 'EM0038',
-              # 'EM0066',
-              # 'EM0071',
-              # 'EM0088',
-              # 'EM0126',
-              # 'EM0153',
-              # 'EM0155',
-              # 'EM0162',
-              # 'EM0164',
-              # 'EM0174',
-              # 'EM0179',
-              # 'EM0184',
-              # 'EM0187',
-              # # 'EM0188',
-              # 'EM0192',
-              # 'EM0202',
-              # 'EM0206',
-              # 'EM0217',
-              # 'EM0219',
-              # 'EM0220',
-              # 'EM0223',
-              # 'EM0229',
-              # 'EM0240',
-              # 'EM0291',
-              # 'EM0304',
-              # 'EM0381',
-              # 'EM0360',
-              # 'EM0400',
-              # 'EM0500',
-              # 'EM0519',
-              # 'EM0565',
-              # 'EM0588',
-              # 'EM0560',
-              # 'EM0569',
-              # 'EM0812',
-              # 'EM0787',
-              # 'EM0880',
-              # 'EM1050'
-              #     ]
+#                'EM0033',
+#                'EM0036'
+#               ]
+
+subs_to_run = [
+              'EM0001',
+              'EM0033',
+              'EM0036',
+              'EM0038',
+              'EM0066',
+              'EM0071',
+              'EM0088',
+              'EM0126',
+              'EM0153',
+              'EM0155',
+              'EM0162',
+              'EM0164',
+              'EM0174',
+              'EM0179',
+              'EM0184',
+              'EM0187',
+              # 'EM0188',
+              'EM0192',
+              'EM0202',
+              'EM0206',
+              'EM0217',
+              'EM0219',
+              'EM0220',
+              'EM0223',
+              'EM0229',
+              'EM0240',
+              'EM0291',
+              'EM0304',
+              'EM0381',
+              'EM0360',
+              'EM0400',
+              'EM0500',
+              'EM0519',
+              'EM0565',
+              'EM0588',
+              'EM0560',
+              'EM0569',
+              'EM0812',
+              'EM0787',
+              'EM0880',
+              'EM1050'
+                  ]
 
 # roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
@@ -175,18 +175,6 @@ for sub in subs_to_run:
             output_dict[sub][cope][roi]['spheremean'] = contents.split()[5]
             output_dict[sub][cope][roi]['spherestdev'] = contents.split()[9]
 
-#Write the ROI means into .txt files
-# if actually_run:
-#   for cope in cope_labels:
-#       lines_to_write = ['sub\troi\tmean\tstdev']
-#       output_file = os.path.join(base_output_dir, output_file_template.format(cope=cope))
-#       for roi in roi_list:
-#           for sub in subs_to_run:
-#               lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
-#       print('Writing file: {}'.format(output_file))
-#       with open(output_file, 'w') as fd:
-#           for line in lines_to_write:
-#               fd.write(line+'\n')
 
 #Write the ROI means to output .txt files, one per participant
 if actually_run:
@@ -231,22 +219,6 @@ if actually_run:
       with open(output_file, 'w') as fd:
         for line in lines_to_write:
           fd.write(line+'\n')
-
-
-
-# if actually_run:
-#   for cope in cope_labels:
-#     lines_to_write = ['sub\troi\tmean\tstdev']
-#     output_file = os.path.join(base_output_dir, sphere_output_file_template.format(cope=cope))
-#     for roi in roi_list:
-#       for sub in subs_to_run:
-#         lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
-#     print('Writing file: {}'.format(output_file))
-#     with open(output_file, 'w') as fd:
-#       for line in lines_to_write:
-#         fd.write(line+'\n')
-
-
 
 print('Done')
 print('---------------------------------------------------')
