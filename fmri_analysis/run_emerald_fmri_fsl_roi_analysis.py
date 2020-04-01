@@ -182,50 +182,88 @@ for sub in subs_to_run:
             output_dict[sub][cope][roi]['spheremean'] = contents.split()[5]
             output_dict[sub][cope][roi]['spherestdev'] = contents.split()[9]
 
+        #Big ROI outputs
+        lines_to_write = ['sub,roi,mean,stdev']
+        output_file = os.path.join(base_output_dir, output_file_template.format(sub=sub, cope=cope))
+        if os.path.exists(output_file):
+          if overwrite:
+            print('Output file already exists and overwrite set!')
+            print('DELETING: {}'.format(output_file))
+          else:
+            print('Output file already exists and overwrite NOT set!')
+            print('SKIPPING: {}'.format(output_file))
+            skipped_files.append(output_file)
+            continue
+        for roi in roi_list:
+          lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
+        print('Writing file: {}'.format(output_file))
+        with open(output_file, 'w') as fd:
+          for line in lines_to_write:
+            fd.write(line+'\n')
+
+        #Sphere outputs
+        lines_to_write = ['sub,roi,mean,stdev']
+        output_file = os.path.join(base_output_dir, sphere_output_file_template.format(sub=sub, cope=cope))
+        if os.path.exists(output_file):
+          if overwrite:
+            print('Output file already exists and overwrite set!')
+            print('DELETING: {}'.format(output_file))
+          else:
+            print('Output file already exists and overwrite NOT set!')
+            print('SKIPPING: {}'.format(output_file))
+            skipped_files.append(output_file)
+            continue
+        for roi in roi_list:
+          lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
+        print('Writing file: {}'.format(output_file))
+        with open(output_file, 'w') as fd:
+          for line in lines_to_write:
+            fd.write(line+'\n')
+
 
 #Write the ROI means to output .txt files, one per participant
-if actually_run:
-  for sub in subs_to_run:
-    for cope in cope_labels:
-      lines_to_write = ['sub,roi,mean,stdev']
-      output_file = os.path.join(base_output_dir, output_file_template.format(sub=sub, cope=cope))
-      if os.path.exists(output_file):
-        if overwrite:
-          print('Output file already exists and overwrite set!')
-          print('DELETING: {}'.format(output_file))
-        else:
-          print('Output file already exists and overwrite NOT set!')
-          print('SKIPPING: {}'.format(output_file))
-          skipped_files.append(output_file)
-          continue
-      for roi in roi_list:
-        lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
-      print('Writing file: {}'.format(output_file))
-      with open(output_file, 'w') as fd:
-        for line in lines_to_write:
-          fd.write(line+'\n')
+# if actually_run:
+#   for sub in subs_to_run:
+#     for cope in cope_labels:
+#       lines_to_write = ['sub,roi,mean,stdev']
+#       output_file = os.path.join(base_output_dir, output_file_template.format(sub=sub, cope=cope))
+#       if os.path.exists(output_file):
+#         if overwrite:
+#           print('Output file already exists and overwrite set!')
+#           print('DELETING: {}'.format(output_file))
+#         else:
+#           print('Output file already exists and overwrite NOT set!')
+#           print('SKIPPING: {}'.format(output_file))
+#           skipped_files.append(output_file)
+#           continue
+#       for roi in roi_list:
+#         lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
+#       print('Writing file: {}'.format(output_file))
+#       with open(output_file, 'w') as fd:
+#         for line in lines_to_write:
+#           fd.write(line+'\n')
               
 #Write the sphere ROI means into a .txt file
-if actually_run:
-  for sub in subs_to_run:
-    for cope in cope_labels:
-      lines_to_write = ['sub,roi,mean,stdev']
-      output_file = os.path.join(base_output_dir, sphere_output_file_template.format(sub=sub, cope=cope))
-      if os.path.exists(output_file):
-        if overwrite:
-          print('Output file already exists and overwrite set!')
-          print('DELETING: {}'.format(output_file))
-        else:
-          print('Output file already exists and overwrite NOT set!')
-          print('SKIPPING: {}'.format(output_file))
-          skipped_files.append(output_file)
-          continue
-      for roi in roi_list:
-        lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
-      print('Writing file: {}'.format(output_file))
-      with open(output_file, 'w') as fd:
-        for line in lines_to_write:
-          fd.write(line+'\n')
+# if actually_run:
+#   for sub in subs_to_run:
+#     for cope in cope_labels:
+#       lines_to_write = ['sub,roi,mean,stdev']
+#       output_file = os.path.join(base_output_dir, sphere_output_file_template.format(sub=sub, cope=cope))
+#       if os.path.exists(output_file):
+#         if overwrite:
+#           print('Output file already exists and overwrite set!')
+#           print('DELETING: {}'.format(output_file))
+#         else:
+#           print('Output file already exists and overwrite NOT set!')
+#           print('SKIPPING: {}'.format(output_file))
+#           skipped_files.append(output_file)
+#           continue
+#       for roi in roi_list:
+#         lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
+#       print('Writing file: {}'.format(output_file))
+#       with open(output_file, 'w') as fd:
+#         for line in lines_to_write:
+#           fd.write(line+'\n')
 
 print('Done')
 print('---------------------------------------------------')
