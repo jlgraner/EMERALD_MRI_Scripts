@@ -20,71 +20,33 @@ roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func'
 #	1) Locate the dist>flow map
 #	2) Locate the reap>flow map
 #	3) Locate mask images
-#	4) Extract average activations:
+# 4) For each mask image, for each map, create a peak-centeres sphere
+#	5) Extract average activations:
 #		a) dist>flow for dACC, dlPFC, inf. par.
 #		b) reap>flow for vmPFC, vlPFC, amygdala
-#	5) Save the average activations into an output file
+#	6) Save the average activations into an output file
 
 ses = 'day3'
 actually_run = 1
 
+subs_to_run = ['EM0946']
+
 # subs_to_run = [
-#                'EM0033'
+#                'EM0946',
+#                'EM1201',
+#                'EM1657',
+#                'EM1611',
+#                'EM1569',
+#                'EM1708',
+#                'EM1655'
 #               ]
 
-subs_to_run = [
-              # 'EM0001',
-              # 'EM0033',
-              'EM0036',
-              'EM0038',
-              'EM0066',
-              'EM0071',
-              'EM0088',
-              'EM0126',
-              'EM0153',
-              'EM0155',
-              'EM0162',
-              'EM0164',
-              'EM0174',
-              'EM0179',
-              'EM0184',
-              'EM0187',
-              # 'EM0188',
-              'EM0192',
-              'EM0202',
-              'EM0206',
-              'EM0217',
-              'EM0219',
-              'EM0220',
-              'EM0223',
-              'EM0229',
-              'EM0240',
-              'EM0291',
-              'EM0304',
-              'EM0381',
-              'EM0360',
-              'EM0400',
-              'EM0500',
-              'EM0519',
-              'EM0565',
-              'EM0588',
-              'EM0560',
-              'EM0569',
-              'EM0812',
-              'EM0787',
-              'EM0880',
-              'EM1050'
-                  ]
 
 # roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 roi_list = ['amy','amyright','amyleft','dACC','dlPFC','dlPFCleft','dlPFCright',
             'infPar','infParleft','infParright','vlPFC','vlPFCright','vlPFCleft','vmPFC']
 #This dictionary will house all the ROI means and input files
 output_dict = {}
-
-# cope_labels = {
-#                 'reapGTflow':'4'
-#               }
 
 cope_labels = {
                'reapGTflow':'4',
@@ -161,7 +123,7 @@ for sub in subs_to_run:
 
             #Create a spherical ROI, masked by the ROI, around the ROI peak
             zstat_image = os.path.join(cope_dir, 'stats', 'zstat1.nii.gz')
-            sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='5', mask=roi_file)
+            sphere_roi_file = eral.run_undump(output_dir=output_dir, master=zstat_image, peak_file=peak_file, rad='7', mask=roi_file)
 
             #Run featquery on the spherical ROI
             sphere_output_dir = os.path.join(cope_dir, feat_output_dir.format(roi='{}sphere'.format(roi)))
