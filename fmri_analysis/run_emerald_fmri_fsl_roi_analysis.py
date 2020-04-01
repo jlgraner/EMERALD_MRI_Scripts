@@ -65,7 +65,7 @@ subs_to_run = [
               'EM0304',
               'EM0381',
               'EM0360',
-              'EM0400',
+              # 'EM0400',
               'EM0500',
               'EM0519',
               'EM0565',
@@ -75,7 +75,14 @@ subs_to_run = [
               'EM0812',
               'EM0787',
               'EM0880',
-              'EM1050'
+              'EM1050',
+              'EM0946',
+              'EM1201',
+              'EM1657',
+              'EM1611',
+              'EM1569',
+              'EM1708',
+              'EM1655'
                   ]
 
 # roi_list = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
