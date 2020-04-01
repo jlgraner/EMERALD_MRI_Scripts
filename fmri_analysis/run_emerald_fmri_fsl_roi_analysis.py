@@ -29,9 +29,10 @@ ses = 'day3'
 actually_run = 1
 overwrite = 1
 
-# subs_to_run = [
-#                'EM0033'
-#               ]
+subs_to_run = [
+               'EM0033',
+               'EM0036'
+              ]
 
 # subs_to_run = [
               # 'EM0001',
