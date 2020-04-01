@@ -9,9 +9,9 @@ this_env = os.environ
 input_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/Second_level_allruns.gfeat')
 feat_output_dir = 'featquery_{roi}_output'
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output')
-output_file_template = '{sub}_ROI_means_fsl_{cope}.txt'
-sphere_output_file_template = '{sub}_sphereROI_means_fsl_{cope}.txt'
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/ROI_Analysis_Output/Participant_Output')
+output_file_template = '{sub}_ROI_means_fsl_{cope}.csv'
+sphere_output_file_template = '{sub}_sphereROI_means_fsl_{cope}.csv'
 
 # roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'ROIs')
 roi_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'sub-{sub}', 'Func', 'Intensity_Masked_ROIs')
@@ -191,8 +191,8 @@ for sub in subs_to_run:
 if actually_run:
   for sub in subs_to_run:
     for cope in cope_labels:
-      lines_to_write = ['sub\troi\tmean\tstdev']
-      output_file = os.path.join(base_output_dir, 'Participant_Output', output_file_template.format(sub=sub, cope=cope))
+      lines_to_write = ['sub,roi,mean,stdev']
+      output_file = os.path.join(base_output_dir, output_file_template.format(sub=sub, cope=cope))
       if os.exists(output_file):
         if overwrite:
           print('Output file already exists and overwrite set!')
@@ -203,7 +203,7 @@ if actually_run:
           skipped_files.append(output_file)
           continue
       for roi in roi_list:
-        lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
+        lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['mean'],stdev=output_dict[sub][cope][roi]['stdev']))
       print('Writing file: {}'.format(output_file))
       with open(output_file, 'w') as fd:
         for line in lines_to_write:
@@ -213,8 +213,8 @@ if actually_run:
 if actually_run:
   for sub in subs_to_run:
     for cope in cope_labels:
-      lines_to_write = ['sub\troi\tmean\tstdev']
-      output_file = os.path.join(base_output_dir, 'Participant_Output', sphere_output_file_template.format(sub=sub, cope=cope))
+      lines_to_write = ['sub,roi,mean,stdev']
+      output_file = os.path.join(base_output_dir, sphere_output_file_template.format(sub=sub, cope=cope))
       if os.exists(output_file):
         if overwrite:
           print('Output file already exists and overwrite set!')
@@ -225,7 +225,7 @@ if actually_run:
           skipped_files.append(output_file)
           continue
       for roi in roi_list:
-        lines_to_write.append('{sub}\t{roi}\t{mean}\t{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
+        lines_to_write.append('{sub},{roi},{mean},{stdev}'.format(sub=sub,roi=roi,mean=output_dict[sub][cope][roi]['spheremean'],stdev=output_dict[sub][cope][roi]['spherestdev']))
       print('Writing file: {}'.format(output_file))
       with open(output_file, 'w') as fd:
         for line in lines_to_write:
