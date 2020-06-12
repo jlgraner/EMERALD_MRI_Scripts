@@ -6,7 +6,11 @@ import subprocess
 this_env = os.environ
 
 sub_list = [
-            'EM0880'
+            'EM1201',
+            'EM1657',
+            'EM1611',
+            'EM1569',
+            'EM1708'
             ]
 
 # sub_list = ['EM0643']
