@@ -5,24 +5,24 @@ import subprocess
 
 this_env = os.environ
 
-sub_list = [
-            'EM1201',
-            'EM1657',
-            'EM1611',
-            'EM1569',
-            'EM1708'
-            ]
+# sub_list = [
+#             'EM1201',
+#             'EM1657',
+#             'EM1611',
+#             'EM1569',
+#             'EM1708'
+#             ]
 
-# sub_list = ['EM0643']
+sub_list = ['EM1657']
 
-# tract_list = ['R_Unc']
+tract_list = ['R_Unc']
 
-tract_list = [
-              'L_SLFII',
-              'R_SLFII',
-              'L_Unc',
-              'R_Unc'
-              ]
+# tract_list = [
+#               'L_SLFII',
+#               'R_SLFII',
+#               'L_Unc',
+#               'R_Unc'
+#               ]
 
 bad_runs = []
 good_runs = []
