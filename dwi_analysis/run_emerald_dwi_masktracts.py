@@ -13,9 +13,9 @@ this_env = os.environ
 #             'EM1708'
 #             ]
 
-sub_list = ['EM1657']
+sub_list = ['EM1569']
 
-tract_list = ['R_Unc']
+tract_list = ['R_SLFII', 'R_Unc']
 
 # tract_list = [
 #               'L_SLFII',
