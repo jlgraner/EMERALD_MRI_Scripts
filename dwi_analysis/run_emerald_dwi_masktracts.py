@@ -13,16 +13,16 @@ this_env = os.environ
 #             'EM1708'
 #             ]
 
-sub_list = ['EM1569']
+sub_list = ['EM1708']
 
-tract_list = ['R_SLFII', 'R_Unc']
+# tract_list = ['R_SLFII', 'R_Unc']
 
-# tract_list = [
-#               'L_SLFII',
-#               'R_SLFII',
-#               'L_Unc',
-#               'R_Unc'
-#               ]
+tract_list = [
+              'L_SLFII',
+              'R_SLFII',
+              'L_Unc',
+              'R_Unc'
+              ]
 
 bad_runs = []
 good_runs = []

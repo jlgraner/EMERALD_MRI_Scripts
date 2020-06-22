@@ -66,7 +66,12 @@ sub_list = [
             'EM0787',
             'EM0880',
             'EM1050',
-            'EM0946'
+            'EM0946',
+            'EM1201',
+            'EM1657',
+            'EM1611',
+            'EM1569',
+            'EM1708'
             ]
 
 tract_list = [
@@ -79,13 +84,13 @@ tract_list = [
 bad_runs = []
 good_runs = []
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_01292020')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_06172020')
 #If the output directory does not exist, create it
 if not os.path.exists(base_output_dir):
     print('Output directory not found; creating it: {}'.format(base_output_dir))
     os.mkdir(base_output_dir)
 
-output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_01302020.csv')
+output_file = os.path.join(base_output_dir, 'DTI_tract_FAs_06172020.csv')
 
 ##Calculate average FA for each subject for each tract
 all_fa_dictionary = {}
