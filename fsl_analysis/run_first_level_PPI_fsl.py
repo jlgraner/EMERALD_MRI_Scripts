@@ -14,59 +14,13 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]', '[[ROI]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-                'EM0360',
-                'EM0500',
-                'EM0519',
+                'EM0291'
                ]
 
-# subs_to_run = ['EM0240']
-
-# subs_to_run = [
-              # 'EM0001'
-              # 'EM0033',
-              # 'EM0036',
-              # 'EM0038',
-              # 'EM0066',
-              # 'EM0071',
-              # 'EM0088',
-              # 'EM0126',
-              # 'EM0153',
-              # 'EM0155',
-              # 'EM0162',
-              # 'EM0164',
-              # 'EM0174',
-              # 'EM0179',
-              # 'EM0184',
-              # 'EM0187',
-              # 'EM0192',
-              # 'EM0202',
-              # 'EM0206',
-              # 'EM0217',
-              # 'EM0219',
-              # 'EM0220',
-              # 'EM0223',
-              # 'EM0229',
-              # 'EM0240',
-              # 'EM0291',
-              # 'EM0304',
-              # 'EM0381',
-              # 'EM0360',
-              # 'EM0400',
-              # 'EM0500',
-              # 'EM0519',
-              # 'EM0565',
-              # 'EM0588',
-              # 'EM0560',
-              # 'EM0569',
-              # 'EM0812',
-              # 'EM0787',
-              # 'EM0880',
-              # 'EM1050'
-              #  ]
 
 
-# runs_to_run = ['3', '4']
-runs_to_run = ['1', '2', '3', '4']
+runs_to_run = ['2']
+# runs_to_run = ['1', '2', '3', '4']
 # rois_to_run = ['amy', 'dACC', 'dlPFC', 'infPar', 'vlPFC', 'vmPFC']
 # rois_to_run = [ ['dlPFCsphere', 'dist'] , ['vlPFCsphere', 'reap'] ]
 # rois_to_run = ['dlPFCsphere', 'vlPFCsphere']
