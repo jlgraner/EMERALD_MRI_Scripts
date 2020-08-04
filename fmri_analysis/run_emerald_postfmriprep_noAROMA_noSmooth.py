@@ -49,7 +49,6 @@ good_runs = []
 failed_runs = []
 
 # base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
-# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/fmri/Smooth_testing')
 
 for sub in subs_to_run:

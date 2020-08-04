@@ -12,11 +12,13 @@ this_env = os.environ
 overwrite = 1
 skip = 0
 
-subs_to_run = [
-               'EM0001'
-              ]
+subs_to_run = ['EM0179', 'EM0184', 'EM0187']
 
 # subs_to_run = [
+#                # 'EM0033',
+#                # 'EM0066',
+#                'EM0071',
+#                'EM0088',
 #                'EM0126',
 #                'EM0153',
 #                'EM0155',
@@ -25,6 +27,7 @@ subs_to_run = [
 #                'EM0174',
 #                'EM0179',
 #                'EM0184',
+#                'EM0187',
 #                'EM0192',
 #                'EM0202',
 #                'EM0206',
@@ -36,20 +39,23 @@ subs_to_run = [
 #                'EM0240',
 #                'EM0291',
 #                'EM0304',
+#                'EM0381',
 #                'EM0360',
-#                'EM0400',
-#                'EM0500',
-#                'EM0519'
+#                # 'EM0500',
+#                # 'EM0519',
+#                'EM0565',
+#                'EM0588',
+#                'EM0560',
+#                'EM0569'
 #               ]
 
-# runs_to_run = ['1','2','3','4']
-runs_to_run = ['2','3','4']
+runs_to_run = ['1','2','3','4']
+# runs_to_run = ['3', '4']
 
 good_runs = []
 failed_runs = []
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
-# base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep_UT/fmriprep/fmriprep/sub-{s}/ses-day3/func/')
 # base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/Test_area/fmri/Smooth_testing')
 
 for sub in subs_to_run:
