@@ -41,8 +41,8 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-# subs_to_run = ['EM0036', 'EM0038']
-subs_to_run = [
+subs_to_run = ['EM0126']
+# subs_to_run = [
                # 'EM0033',
                # 'EM0066',
                # 'EM0071',
@@ -75,22 +75,22 @@ subs_to_run = [
                # 'EM0588',
                # 'EM0560',
                # 'EM0569'
-               'EM0812',
-               'EM0787',
-               'EM0880',
-               'EM1050',
-               'EM0946',
-               'EM1201',
-               'EM1657',
-               'EM1611',
-               'EM1569',
-               'EM1708',
-               'EM1655'
-              ]
+              #  'EM0812',
+              #  'EM0787',
+              #  'EM0880',
+              #  'EM1050',
+              #  'EM0946',
+              #  'EM1201',
+              #  'EM1657',
+              #  'EM1611',
+              #  'EM1569',
+              #  'EM1708',
+              #  'EM1655'
+              # ]
 
 ses_to_run = ['day3']
-runs_to_run = ['01', '02', '03', '04']
-# runs_to_run = ['01', '02', '03']
+# runs_to_run = ['01', '02', '03', '04']
+runs_to_run = ['03']
 tasks_to_run = ['emoreg']
 
 rows_to_remove = 4
@@ -163,7 +163,12 @@ for sub in subs_to_run:
                                 match_list = fpc.match_columns(data, element)
                                 print('Confound label matched with list: {}'.format(match_list))
                                 #Add them all to the full list
-                                include_list = include_list + match_list
+                                #If dealing with compcor columns, only add the first 10 so as
+                                #not to overwhelm FSL later on
+                                if element in ['t_comp_cor', 'a_comp_cor']:
+                                  include_list = include_list + match_list[:10]
+                                else:
+                                  include_list = include_list + match_list
                             #Deal with labels that don't have multiple confound columns
                             else:
                                 include_list.append(element)
