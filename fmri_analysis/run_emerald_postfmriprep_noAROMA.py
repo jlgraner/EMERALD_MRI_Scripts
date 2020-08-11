@@ -12,7 +12,7 @@ this_env = os.environ
 overwrite = 1
 skip = 0
 
-subs_to_run = ['EM0519', 'EM0565', 'EM0588']
+subs_to_run = ['EM0569', 'EM0812', 'EM0880', 'EM1050', 'EM1201']
 
 # subs_to_run = [
 #                # 'EM0033',

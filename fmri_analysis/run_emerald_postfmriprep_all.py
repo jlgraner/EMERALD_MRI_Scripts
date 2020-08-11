@@ -12,7 +12,7 @@ this_env = os.environ
 overwrite = 1
 skip = 0
 
-subs_to_run = ['EM1655']
+subs_to_run = ['EM0569']
 
 # subs_to_run = [
 #                'EM0126',
@@ -68,7 +68,7 @@ for sub in subs_to_run:
 
             #See if the full output image name is already there
             full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
-            if os.exists(full_output_image):
+            if os.path.exists(full_output_image):
                 print('Final output image already exists!')
                 raise RuntimeError('Image already there')
 
@@ -120,13 +120,13 @@ for sub in subs_to_run:
             skip_smooth = 0
             skip_nosmooth = 0
             smooth_output_image = new_image[:-7]+'_short_tempfilt_smooth_brain.nii.gz'
-            if os.exists(smooth_output_image):
+            if os.path.exists(smooth_output_image):
                 skip_smooth = 1
                 print('------------------------------')
                 print('Smoothed output already there!')
                 print('------------------------------')
             full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
-            if os.exists(full_output_image):
+            if os.path.exists(full_output_image):
                 skip_nosmooth = 1
                 print('------------------------------')
                 print('Non-smoothed output already there!')
