@@ -13,7 +13,7 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0174', 'EM0179'
+               'EM0184', 'EM0192'
                ]
 
 # subs_to_run = [

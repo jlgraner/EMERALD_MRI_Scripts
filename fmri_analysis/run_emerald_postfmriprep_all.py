@@ -12,7 +12,7 @@ this_env = os.environ
 overwrite = 1
 skip = 0
 
-subs_to_run = ['EM0569']
+subs_to_run = ['EM1611', 'EM1569', 'EM1708', 'EM1655']
 
 # subs_to_run = [
 #                'EM0126',
@@ -44,6 +44,7 @@ runs_to_run = ['1','2','3','4']
 # runs_to_run = ['1', '2', '3']
 
 good_runs = []
+skipped_runs = []
 failed_runs = []
 
 base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}/ses-day3/func/')
@@ -51,27 +52,29 @@ base_input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/fmriprep/sub-{s}
 
 for sub in subs_to_run:
     for run in runs_to_run:
+        
+        #Run the AROMA version
+        #Put together the input file
+        print('---------------------------------------')
+        input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-smoothAROMAnonaggr_bold.nii.gz'
+        full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
+
+        #Put together the mask file
+        mask_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-brain_mask.nii.gz'
+        full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
+
+        #Put together base output image name
+        new_file = 'sub-{s}_emoreg_run{r}_AROMApreproc.nii.gz'
+        new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
+
+        #See if the full output image name is already there
+        full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
+        if os.path.exists(full_output_image):
+            print('Final AROMA output already exists')
+            skipped_runs.append([sub,run,'AROMA'])
+            continue
+                
         try:
-            #Run the AROMA version
-            #Put together the input file
-            print('---------------------------------------')
-            input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-smoothAROMAnonaggr_bold.nii.gz'
-            full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
-
-            #Put together the mask file
-            mask_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-brain_mask.nii.gz'
-            full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
-
-            #Put together base output image name
-            new_file = 'sub-{s}_emoreg_run{r}_AROMApreproc.nii.gz'
-            new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
-
-            #See if the full output image name is already there
-            full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
-            if os.path.exists(full_output_image):
-                print('Final output image already exists!')
-                raise RuntimeError('Image already there')
-
             #Rename the image
             new_output = epl.rename_file(full_input, new_image)
             if new_output is None:
@@ -101,39 +104,41 @@ for sub in subs_to_run:
         except Exception as ex:
             failed_runs.append([sub,run,'AROMA',ex])
 
+for sub in subs_to_run:
+    for run in runs_to_run:
+        
+        #Run the non-AROMA version both with smoothing and without smoothing
+        #Put together the input file
+        print('---------------------------------------')
+        input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-preproc_bold.nii.gz'
+        full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
+
+        #Put together the mask file
+        mask_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-brain_mask.nii.gz'
+        full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
+
+        #Put together base output image name
+        new_file = 'sub-{s}_emoreg_run{r}_preproc.nii.gz'
+        new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
+
+        #See if the full output image name is already there
+        skip_smooth = 0
+        skip_nosmooth = 0
+        smooth_output_image = new_image[:-7]+'_short_tempfilt_smooth_brain.nii.gz'
+        if os.path.exists(smooth_output_image):
+            skip_smooth = 1
+            print('Smoothed output already there!')
+            skipped_runs.append([sub,run,'noAROMA smooth'])
+        full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
+        if os.path.exists(full_output_image):
+            skip_nosmooth = 1
+            print('Non-smoothed output already there!')
+            skipped_runs.append([sub,run,'noAROMA nosmooth'])
+        if skip_smooth and skip_nosmooth:
+            print('Both non-AROMA outputs already there!')
+            continue
+
         try:
-            #Run the non-AROMA version both with smoothing and without smoothing
-            #Put together the input file
-            print('---------------------------------------')
-            input_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-preproc_bold.nii.gz'
-            full_input = os.path.join(base_input_dir, input_file).format(s=sub,r=run)
-
-            #Put together the mask file
-            mask_file = 'sub-{s}_ses-day3_task-emoreg_run-0{r}_space-MNI152NLin6Asym_desc-brain_mask.nii.gz'
-            full_mask = os.path.join(base_input_dir, mask_file).format(s=sub,r=run)
-
-            #Put together base output image name
-            new_file = 'sub-{s}_emoreg_run{r}_preproc.nii.gz'
-            new_image = os.path.join(base_input_dir, new_file).format(s=sub,r=run)
-
-            #See if the full output image name is already there
-            skip_smooth = 0
-            skip_nosmooth = 0
-            smooth_output_image = new_image[:-7]+'_short_tempfilt_smooth_brain.nii.gz'
-            if os.path.exists(smooth_output_image):
-                skip_smooth = 1
-                print('------------------------------')
-                print('Smoothed output already there!')
-                print('------------------------------')
-            full_output_image = new_image[:-7]+'_short_tempfilt_brain.nii.gz'
-            if os.path.exists(full_output_image):
-                skip_nosmooth = 1
-                print('------------------------------')
-                print('Non-smoothed output already there!')
-                print('------------------------------')
-            if skip_smooth and skip_nosmooth:
-                raise RuntimeError('Both non-AROMA outputs already there!')
-
             #Rename the image
             new_output = epl.rename_file(full_input, new_image)
             if new_output is None:
@@ -172,5 +177,6 @@ for sub in subs_to_run:
 
 print('---------------------------------------')
 print('Good Runs: {}'.format(good_runs))
+print('Skipped Runs: {}'.format(skipped_runs))
 print('Bad Runs: {}'.format(failed_runs))
 print('---------------------------------------')
