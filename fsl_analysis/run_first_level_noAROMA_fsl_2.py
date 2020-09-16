@@ -13,30 +13,11 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0184', 'EM0192'
+               'EM0184'#, 'EM0192'
                ]
 
-# subs_to_run = [
-#               'EM0184',
-#               'EM0187',
-#               'EM0192',
-#               'EM0202',
-#               'EM0206',
-#               'EM0217',
-#               'EM0219',
-#               'EM0220',
-#               'EM0223',
-#               'EM0229',
-#               'EM0240',
-#               'EM0291',
-#               'EM0304',
-#               'EM0381',
-#               'EM0360',
-#               'EM0400',
-#               'EM0500'
-#               ]
 
-runs_to_run = ['1','2','3','4']
+runs_to_run = ['3','4']
 # runs_to_run = ['1','2','3','4']
 
 
@@ -57,20 +38,26 @@ for sub in subs_to_run:
         new_list = [sub, trs,run]
         eft.read_replace_copy_design(full_template, template_string_list, new_list, run_template_file)
 
-        #Call FEAT with this new run file
-        feat_call = 'feat {}'.format(run_template_file)
-        print('System call: {}'.format(feat_call))
         try:
+            #If the output feat directory already exists, skip this run
+            #TODO: read in the output directory from the .fsf file!!!
+            this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}_noAROMA.feat'.format(sub=sub,run=run))
+            if os.path.exists(this_feat_dir):
+                raise RuntimeError('Output FEAT dir already exists!')
+
+            #Call FEAT with this new run file
+            feat_call = 'feat {}'.format(run_template_file)
+            print('System call: {}'.format(feat_call))
+
             os.system(feat_call)
             #Create a fake reg directory for higher-level analysis
-            #TODO: read in the output directory from the .fsf that was run!!!
-            this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}_noAROMA.feat'.format(sub=sub,run=run))
+            
             eft.create_fake_reg(this_feat_dir)
-            good_runs.append('{}-run{}'.format(sub,run))
+            good_runs.append([sub,run])
         except Exception as ex:
             print('Subject {}, run {} did NOT run!'.format(sub,run))
             print(ex)
-            bad_runs.append('{}-run{}'.format(sub,run))
+            bad_runs.append([sub,run,ex])
 
 print('-------------------------------------')
 print('Runs that ran: {}'.format(good_runs))
