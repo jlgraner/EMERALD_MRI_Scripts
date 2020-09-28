@@ -1,7 +1,8 @@
 
 import subprocess
-import os
+import os, shutil
 import string
+import time
 
 this_env = os.environ
 
@@ -9,7 +10,8 @@ input_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS/EMERALD')
 output_dir = os.path.join(this_env['EMDIR'], 'Data/MRI/BIDS')
 fs_license = '/usr/local/freesurfer/license.txt'
 
-
+retry = 0
+#If retry is set to 1, the script will repeat up to 5 times upon erroring out.
 
 subs_to_run = [
                'EM2562',
@@ -20,6 +22,8 @@ good_runs = []
 bad_runs = []
 
 for sub in subs_to_run:
+  call_try = 1
+  while call_try < 6:
        call_parts = [
                      'docker',
                      'run',
@@ -55,10 +59,21 @@ for sub in subs_to_run:
        if error_flag:
               print('-------------------------------------')
               print('Subject failed to run: {}'.format(sub))
+              if retry:
+                print('Waiting for 1 minute, then retrying.')
+                time.sleep(60)
+                call_try = call_try + 1
+                #Delete failed attempt
+                full_out_dir = os.path.join(output_dir, 'fmriprep', 'sub-{}'.format(sub))
+                shutil.rmtree(full_out_dir)
+                #From here, if call_try is less than 6, we loop back to the "while" above.
+              else:
+                call_try = 6
               print('-------------------------------------')
-              bad_runs.append(sub)
+              bad_runs.append([sub])
        else:
               good_runs.append(sub)
+              call_try = 6
 
 print('--------------------------------------')
 print('good_runs: {}'.format(good_runs))
