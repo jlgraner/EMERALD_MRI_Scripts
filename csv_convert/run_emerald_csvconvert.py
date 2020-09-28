@@ -13,48 +13,10 @@ with open(em_to_biac_file) as fd:
     em_to_biac = json.loads(fd.read())
 
 em_to_run = [
-            'EM1655'
+            'EM2562',
+            'EM2569'
             ]
 
-# em_to_run = [
-              # 'EM0001',
-              # 'EM0033',
-              # 'EM0036',
-              # 'EM0038',
-              # 'EM0066',
-              # 'EM0071',
-              # 'EM0088',
-              # 'EM0126',
-              # 'EM0153',
-              # 'EM0155',
-              # 'EM0162',
-              # 'EM0164',
-              # 'EM0174',
-              # 'EM0179',
-              # 'EM0184',
-              # 'EM0187',
-              # # 'EM0188',
-              # 'EM0192',
-              # 'EM0202',
-              # 'EM0206',
-              # 'EM0217',
-              # 'EM0219',
-              # 'EM0220',
-              # 'EM0223',
-              # 'EM0229',
-              # 'EM0240',
-              # 'EM0291',
-              # 'EM0304',
-              # 'EM0381',
-              # 'EM0360',
-              # 'EM0400',
-              # 'EM0500',
-              # 'EM0519',
-              # 'EM0565',
-              # 'EM0588',
-              # 'EM0560',
-              # 'EM0569'
-              #     ]
 
 for em_id in em_to_run:
     biac_ses = em_to_biac['em_to_biac'][em_id]
