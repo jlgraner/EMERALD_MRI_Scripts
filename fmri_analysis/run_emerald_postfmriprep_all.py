@@ -11,11 +11,12 @@ this_env = os.environ
 
 overwrite = 1
 skip = 0
+retry = 0
 
 subs_to_run = ['EM2569']
 
-runs_to_run = ['1','2','3','4']
-# runs_to_run = ['1', '2', '3']
+# runs_to_run = ['1','2','3','4']
+runs_to_run = ['1']
 
 good_runs = []
 skipped_runs = []
@@ -50,9 +51,9 @@ for sub in subs_to_run:
                 
         try:
             #Rename the image
-            new_output = epl.rename_file(full_input, new_image)
+            new_output = epl.rename_file(full_input, new_image, overwrite=0, skip=skip)
             if new_output is None:
-              raise RuntimeError('Renaming')
+                raise RuntimeError('Renaming')
 
             #Remove the first 4 TRs from the data
             short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=skip)
@@ -130,7 +131,7 @@ for sub in subs_to_run:
 
             if not skip_smooth:
                 #Smooth and mask the image
-                smoothed_image = epl.smooth(temp_image, full_mask, overwrite=0)
+                smoothed_image = epl.smooth(temp_image, full_mask, overwrite=0, skip=skip)
                 if smoothed_image is None:
                     raise RuntimeError('Smoothing')
 

@@ -26,7 +26,7 @@ def remove_file(file_to_delete):
         os.remove(file_to_delete)
 
 
-def rename_file(input_file, output_file):
+def rename_file(input_file, output_image, overwrite=0, skip=0):
     #This function copies an image file with a new name
     print('-------Starting: rename_file-------')
     try:
@@ -34,14 +34,18 @@ def rename_file(input_file, output_file):
             print('Passed input_file not found: {}'.format(input_file))
             raise RuntimeError()
 
-        if os.path.exists(output_file):
-            print('Output file already exists...')
+        #Check to see if passed output image is already there
+        if os.path.exists(output_image):
+            print('output_image already exists!')
+            if skip:
+                print('Skip set, returning...')
+                return output_image
             if overwrite:
-                print('Overwrite set to 1, DELETING: {}'.format(output_file))
-                os.remove(output_file)
+                print('Overwrite set to 1, deleting...')
+                os.remove(output_image)
             else:
-                print('Overwrite not set! EXITTING!')
-                raise RuntimeError()
+                print('Overwrite not set, exitting...')
+                return None
         copy_call = [
                      '3dcopy',
                      input_file,
@@ -53,7 +57,7 @@ def rename_file(input_file, output_file):
             print('Output file should be there but is not! {}'.format(output_file))
             raise RuntimeError()
 
-        print('-------Done: apply_mask-------')
+        print('-------Done: rename_file-------')
         return output_file
     except:
         print('ERROR renaming file!')
@@ -120,7 +124,7 @@ def remove_trs(input_image, output_image=None, cut_trs=4, overwrite=0, skip=0):
     return output_image
 
 
-def smooth(input_image, input_mask, output_image=None, fwhm='5', overwrite=0):
+def smooth(input_image, input_mask, output_image=None, fwhm='5', overwrite=0, skip=0):
     #This function applies spatial smoothing to a passed image.
 
     print('------Starting: smooth------')
