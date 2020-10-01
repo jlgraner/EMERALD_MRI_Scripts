@@ -49,18 +49,18 @@ def rename_file(input_file, output_image, overwrite=0, skip=0):
         copy_call = [
                      '3dcopy',
                      input_file,
-                     output_file
+                     output_image
                     ]
 
         os.system(' '.join(copy_call))
-        if not os.path.exists(output_file):
-            print('Output file should be there but is not! {}'.format(output_file))
+        if not os.path.exists(output_image):
+            print('Output file should be there but is not! {}'.format(output_image))
             raise RuntimeError()
 
         print('-------Done: rename_file-------')
-        return output_file
-    except:
-        print('ERROR renaming file!')
+        return output_image
+    except Exception as err:
+        print('ERROR renaming file: {}'.format(err))
         return None
 
 

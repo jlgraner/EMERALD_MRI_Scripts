@@ -10,13 +10,13 @@ import emerald_preproc_lib as epl
 this_env = os.environ
 
 overwrite = 1
-skip = 0
+skip = 1
 retry = 0
 
 subs_to_run = ['EM2569']
 
 # runs_to_run = ['1','2','3','4']
-runs_to_run = ['1']
+runs_to_run = ['3', '4']
 
 good_runs = []
 skipped_runs = []
@@ -51,12 +51,12 @@ for sub in subs_to_run:
                 
         try:
             #Rename the image
-            new_output = epl.rename_file(full_input, new_image, overwrite=0, skip=skip)
+            new_output = epl.rename_file(full_input, new_image, overwrite=overwrite, skip=skip)
             if new_output is None:
                 raise RuntimeError('Renaming')
 
             #Remove the first 4 TRs from the data
-            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=skip)
+            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=overwrite, skip=skip)
             if short_image is None:
               raise RuntimeError('TR removal')
 
@@ -66,7 +66,7 @@ for sub in subs_to_run:
               raise RuntimeError('Temporal filter')
 
             #Mask the image
-            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=skip)
+            masked_image = epl.apply_mask(temp_image, full_mask, overwrite=overwrite, skip=skip)
             if masked_image is None:
               raise RuntimeError('Masking')
 
@@ -115,12 +115,12 @@ for sub in subs_to_run:
 
         try:
             #Rename the image
-            new_output = epl.rename_file(full_input, new_image)
+            new_output = epl.rename_file(full_input, new_image, overwrite=overwrite, skip=skip)
             if new_output is None:
               raise RuntimeError('Renaming')
 
             #Remove the first 4 TRs from the data
-            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=0, skip=skip)
+            short_image = epl.remove_trs(new_image, cut_trs=4, overwrite=overwrite, skip=skip)
             if short_image is None:
               raise RuntimeError('TR removal')
 
@@ -131,13 +131,13 @@ for sub in subs_to_run:
 
             if not skip_smooth:
                 #Smooth and mask the image
-                smoothed_image = epl.smooth(temp_image, full_mask, overwrite=0, skip=skip)
+                smoothed_image = epl.smooth(temp_image, full_mask, overwrite=overwrite, skip=skip)
                 if smoothed_image is None:
                     raise RuntimeError('Smoothing')
 
             if not skip_nosmooth:
                 #Mask the image
-                masked_image = epl.apply_mask(temp_image, full_mask, overwrite=0, skip=skip)
+                masked_image = epl.apply_mask(temp_image, full_mask, overwrite=overwrite, skip=skip)
                 if masked_image is None:
                   raise RuntimeError('Masking')
 
