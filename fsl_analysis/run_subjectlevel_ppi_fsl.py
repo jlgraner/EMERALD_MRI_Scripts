@@ -19,7 +19,7 @@ full_template = os.path.join(template_directory, template_file)
 #                'EM1708'
 #                ]
 
-subs_to_run = ['EM1655']
+subs_to_run = ['EM2562','EM2569']
 
 good_runs = []
 bad_runs = []

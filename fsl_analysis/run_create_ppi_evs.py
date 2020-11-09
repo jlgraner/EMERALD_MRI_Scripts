@@ -23,14 +23,7 @@ masks_to_apply = ['amy']
 
 # contrasts_to_make = [ ['diststrategycues', 'negflowstrategycues'], ['reapstrategycues', 'negflowstrategycues'] ]
 
-subs_to_run = ['EM0946',
-               'EM1201',
-               'EM1657',
-               'EM1611',
-               'EM1569',
-               'EM1708',
-               'EM1655'
-              ]
+subs_to_run = ['EM2562', 'EM2569']
 
 # subs_to_run = [
 #               # 'EM0001'

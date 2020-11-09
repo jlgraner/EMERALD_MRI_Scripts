@@ -11,13 +11,7 @@ import subprocess
 this_env = os.environ
 
 sub_list = [
-            'EM0946',
-            'EM1201',
-            'EM1657',
-            'EM1611',
-            'EM1569',
-            'EM1708',
-            'EM1655'
+            'EM2562', 'EM2569'
             ]
 
 run_list = ['1', '2', '3', '4']
