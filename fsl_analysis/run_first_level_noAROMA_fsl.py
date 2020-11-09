@@ -1,6 +1,7 @@
 
 
 import os
+import time
 import emerald_fsl_tools as eft
 
 this_env = os.environ
@@ -21,6 +22,8 @@ subs_to_run = [
 # runs_to_run = ['3','4']
 runs_to_run = ['1','2','3','4']
 
+retry = 1
+max_retry = 6
 
 good_runs = []
 bad_runs = []
@@ -39,26 +42,36 @@ for sub in subs_to_run:
         new_list = [sub, trs,run]
         eft.read_replace_copy_design(full_template, template_string_list, new_list, run_template_file)
 
-        try:
-            #If the output feat directory already exists, skip this run
-            #TODO: read in the output directory from the .fsf file!!!
-            this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}_noAROMA.feat'.format(sub=sub,run=run))
-            if os.path.exists(this_feat_dir):
-                raise RuntimeError('Output FEAT dir already exists!')
+        if retry:
+            try_count = 1
+            wait_time = 120 #seconds
+        else:
+            try_count = max_retry - 1
+            wait_time = 1
+        while try_count < max_retry:
+            try:
+                #If the output feat directory already exists, skip this run
+                #TODO: read in the output directory from the .fsf file!!!
+                this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}_noAROMA.feat'.format(sub=sub,run=run))
+                if os.path.exists(this_feat_dir):
+                    raise RuntimeError('Output FEAT dir already exists!')
 
-            #Call FEAT with this new run file
-            feat_call = 'feat {}'.format(run_template_file)
-            print('System call: {}'.format(feat_call))
+                #Call FEAT with this new run file
+                feat_call = 'feat {}'.format(run_template_file)
+                print('System call: {}'.format(feat_call))
 
-            os.system(feat_call)
-            #Create a fake reg directory for higher-level analysis
-            
-            eft.create_fake_reg(this_feat_dir)
-            good_runs.append([sub,run])
-        except Exception as ex:
-            print('Subject {}, run {} did NOT run!'.format(sub,run))
-            print(ex)
-            bad_runs.append([sub,run,ex])
+                os.system(feat_call)
+                #Create a fake reg directory for higher-level analysis
+                
+                eft.create_fake_reg(this_feat_dir)
+                good_runs.append([sub,run])
+                try_count = max_retry
+            except Exception as ex:
+                print('Subject {}, run {} did NOT run!'.format(sub,run))
+                print(ex)
+                bad_runs.append([sub,run,ex])
+                try_count = try_count + 1
+                time.sleep(wait_time)
 
 print('-------------------------------------')
 print('Runs that ran: {}'.format(good_runs))
