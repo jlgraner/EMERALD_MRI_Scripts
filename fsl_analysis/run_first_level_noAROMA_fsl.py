@@ -54,6 +54,7 @@ for sub in subs_to_run:
                 #TODO: read in the output directory from the .fsf file!!!
                 this_feat_dir = os.path.join(this_env['EMDIR'], 'Analysis/MRI/sub-{sub}/Func/First_level_run{run}_noAROMA.feat'.format(sub=sub,run=run))
                 if os.path.exists(this_feat_dir):
+                    try_count = max_retry
                     raise RuntimeError('Output FEAT dir already exists!')
 
                 #Call FEAT with this new run file
