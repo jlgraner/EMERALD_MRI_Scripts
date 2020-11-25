@@ -481,9 +481,9 @@ def csv2fsl(input_file=None, output_dir=None):
     # start_times, durations = __create_fsl_condition(['negStrategyOnset'], ['negStrategyOffset'], all_line_parts, time_to_ignore)
     # __write_fsl('negstrategycues', start_times, durations, output_dir, subid, runid)
 
-    # #Write a condition file for the neutral strategy cue words
-    # start_times, durations = __create_fsl_condition(['neuStrategyOnset'], ['neuStrategyOffset'], all_line_parts, time_to_ignore)
-    # __write_fsl('neustrategycues', start_times, durations, output_dir, subid, runid)
+    #Write a condition file for the neutral strategy cue words
+    start_times, durations = __create_fsl_condition(['neuStrategyOnset'], ['neuStrategyOffset'], all_line_parts, time_to_ignore)
+    __write_fsl('neustrategycues', start_times, durations, output_dir, subid, runid)
 
     #Write a condition file for the reappraisal strategy cue words
     start_times, durations = __create_fsl_condition(['negStrategyOnset'], ['negStrategyOffset'], all_line_parts, time_to_ignore, stimdescrip_select='REAPPRAISE')
