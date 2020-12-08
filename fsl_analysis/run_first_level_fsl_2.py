@@ -23,12 +23,17 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 full_template = os.path.join(template_directory, template_file)
 
 subs_to_run = [
-               'EM0220',
-               'EM0223',
-               'EM0229',
-               'EM0240',
-               'EM0291',
-               'EM0304'
+               # 'EM0880',
+               'EM1050',
+               'EM0946',
+               'EM1201',
+               'EM1657',
+               'EM1611',
+               'EM1569',
+               'EM1708',
+               'EM1655',
+               'EM2562',
+               'EM2569'
                ]
 
 
@@ -74,7 +79,7 @@ for sub in subs_to_run:
                         print('Deleting: {}'.format(this_feat_dir))
                         shutil.rmtree(this_feat_dir)
                     else:
-                        raise RunTimeError('Overwrite not set! Skipping!')
+                        raise RuntimeError('Overwrite not set! Skipping!')
 
                 #Call FEAT with this new run file
                 feat_call = 'feat {}'.format(run_template_file)
