@@ -21,7 +21,7 @@ fid.write('----------------------------------\n')
 fid.write('NEW RUN: {}\n'.format(time_stamp))
 fid.close()
 
-subs_to_run = ['EM0291']
+subs_to_run = ['EM0787']
 
 # subs_to_run = [
 #                'EM1050',

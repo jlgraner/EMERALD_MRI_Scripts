@@ -14,8 +14,8 @@ retry = 0
 #If retry is set to 1, the script will repeat up to 5 times upon erroring out.
 
 subs_to_run = [
-               'EM2562',
-               'EM2569'
+               'EM2577',
+               'EM2586'
                ]
 
 good_runs = []

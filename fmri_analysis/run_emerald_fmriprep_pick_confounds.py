@@ -41,7 +41,7 @@ this_env = os.environ
 ##                          before a censor regressor is created for it.
 ###################################################
 
-subs_to_run = ['EM2569', 'EM2562']
+subs_to_run = ['EM2577', 'EM2586']
 
 
 ses_to_run = ['day3']

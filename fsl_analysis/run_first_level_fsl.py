@@ -22,7 +22,7 @@ template_string_list = ['[[SUBID]]', '[[TRS]]', '[[RUN]]']
 
 full_template = os.path.join(template_directory, template_file)
 
-subs_to_run = ['EM0291']
+subs_to_run = ['EM0560']
 
 # subs_to_run = [
 #                'EM0381',
@@ -38,8 +38,8 @@ subs_to_run = ['EM0291']
 #                ]
 
 
-# runs_to_run = ['2']
-runs_to_run = ['1','2','3','4']
+runs_to_run = ['1','2','3']
+# runs_to_run = ['1','2','3','4']
 
 overwrite = 1
 retry = 1

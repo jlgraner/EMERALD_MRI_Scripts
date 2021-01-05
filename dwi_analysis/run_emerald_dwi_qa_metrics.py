@@ -26,7 +26,7 @@ overwrite = 1
 
 
 subs_to_run = [
-                'EM2562','EM2569'
+                'EM2577'
                 ]
 
 good_runs = []

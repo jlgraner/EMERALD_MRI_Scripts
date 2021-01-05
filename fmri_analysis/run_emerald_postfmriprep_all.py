@@ -13,7 +13,7 @@ overwrite = 1
 skip = 1
 retry = 0
 
-subs_to_run = ['EM2569']
+subs_to_run = ['EM2577', 'EM2586']
 
 runs_to_run = ['1','2','3','4']
 # runs_to_run = ['3', '4']

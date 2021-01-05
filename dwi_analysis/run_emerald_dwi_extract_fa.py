@@ -7,7 +7,46 @@ import pandas
 
 this_env = os.environ
 
+sub_list = [
+            'EM2562',
+            'EM2569'
+            ]
+
 # sub_list = [
+#             'EM0001',
+#             'EM0033',
+#             'EM0036',
+#             'EM0038',
+#             'EM0066',
+#             'EM0071',
+#             'EM0088',
+#             'EM0126',
+#             'EM0153',
+#             'EM0155',
+#             'EM0162',
+#             'EM0164',
+#             'EM0174',
+#             'EM0179',
+#             # 'EM0182',
+#             'EM0184',
+#             'EM0187',
+#             # 'EM0188',
+#             'EM0192',
+#             'EM0202',
+#             'EM0206',
+#             'EM0217',
+#             'EM0219',
+#             'EM0220',
+#             'EM0223',
+#             'EM0229',
+#             'EM0240',
+#             'EM0291',
+#             'EM0304',
+#             'EM0381',
+#             'EM0360',
+#             'EM0400',
+#             'EM0500',
+#             'EM0519',
 #             'EM0565',
 #             'EM0588',
 #             'EM0560',
@@ -18,63 +57,15 @@ this_env = os.environ
 #             'EM0787',
 #             'EM0880',
 #             'EM1050',
-#             'EM0946'
+#             'EM0946',
+#             'EM1201',
+#             'EM1657',
+#             'EM1611',
+#             'EM1569',
+#             'EM1708',
+#             'EM2562',
+#             'EM2569'
 #             ]
-
-sub_list = [
-            'EM0001',
-            'EM0033',
-            'EM0036',
-            'EM0038',
-            'EM0066',
-            'EM0071',
-            'EM0088',
-            'EM0126',
-            'EM0153',
-            'EM0155',
-            'EM0162',
-            'EM0164',
-            'EM0174',
-            'EM0179',
-            # 'EM0182',
-            'EM0184',
-            'EM0187',
-            # 'EM0188',
-            'EM0192',
-            'EM0202',
-            'EM0206',
-            'EM0217',
-            'EM0219',
-            'EM0220',
-            'EM0223',
-            'EM0229',
-            'EM0240',
-            'EM0291',
-            'EM0304',
-            'EM0381',
-            'EM0360',
-            'EM0400',
-            'EM0500',
-            'EM0519',
-            'EM0565',
-            'EM0588',
-            'EM0560',
-            'EM0673',
-            'EM0573',
-            'EM0643',
-            'EM0812',
-            'EM0787',
-            'EM0880',
-            'EM1050',
-            'EM0946',
-            'EM1201',
-            'EM1657',
-            'EM1611',
-            'EM1569',
-            'EM1708',
-            'EM2562',
-            'EM2569'
-            ]
 
 tract_list = [
               'L_SLFII',
@@ -86,7 +77,7 @@ tract_list = [
 bad_runs = []
 good_runs = []
 
-base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_06172020')
+base_output_dir = os.path.join(this_env['EMDIR'], 'Analysis', 'MRI', 'DTI_FA_12152020')
 #If the output directory does not exist, create it
 if not os.path.exists(base_output_dir):
     print('Output directory not found; creating it: {}'.format(base_output_dir))

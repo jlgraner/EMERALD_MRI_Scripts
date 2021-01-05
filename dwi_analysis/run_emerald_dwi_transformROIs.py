@@ -9,8 +9,7 @@ this_env = os.environ
 ses = 'day3'
 
 sub_list = [
-            'EM2562',
-            'EM2569'
+            'EM2577'
             ]
 
 
